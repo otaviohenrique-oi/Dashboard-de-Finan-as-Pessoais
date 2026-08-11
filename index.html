@@ -1,428 +1,3700 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Extrato — Dashboard de Finanças Pessoais</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<title>Desenha & Adivinha</title>
+
 <style>
-  :root{
-    --paper:#F1F3EE;
-    --panel:#FFFFFF;
-    --ink:#1E2A22;
-    --muted:#6B756D;
-    --line:#DBDFD5;
-    --income:#1F7A5C;
-    --expense:#B23A48;
-    --gold:#B9902A;
-    --display:'Fraunces', serif;
-    --body:'IBM Plex Sans', sans-serif;
-    --mono:'IBM Plex Mono', monospace;
-  }
-  *{ box-sizing:border-box; margin:0; padding:0; }
-  body{
-    background:var(--paper); color:var(--ink);
-    font-family:var(--body); line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-  }
-  .num{ font-family:var(--mono); font-variant-numeric:tabular-nums; }
-  section{ padding:0 32px; }
-  @media (max-width:640px){ section{ padding:0 18px; } }
-  a{ color:inherit; }
-  button{ font-family:inherit; cursor:pointer; }
-  *:focus-visible{ outline:2px solid var(--income); outline-offset:2px; }
-  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+@import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap');
 
-  /* ---------- Header / hero ---------- */
-  header.top{
-    max-width:1180px; margin:0 auto; padding:36px 32px 0;
-    display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:20px;
-  }
-  @media (max-width:640px){ header.top{ padding:28px 18px 0; } }
-  .brand{ font-family:var(--display); font-weight:600; font-size:22px; }
-  .brand span{ color:var(--income); }
-  .export-actions{ display:flex; gap:10px; }
-  .btn{
-    font-family:var(--mono); font-size:11.5px; letter-spacing:.02em;
-    padding:10px 16px; border:1px solid var(--line); background:var(--panel);
-    display:inline-flex; align-items:center; gap:7px;
-    transition:border-color .15s, background .15s;
-  }
-  .btn:hover{ border-color:var(--income); color:var(--income); }
-  .btn.primary{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
-  .btn.primary:hover{ background:var(--income); border-color:var(--income); color:#fff; }
+:root {
+  --bg: #16232C;
+  --bg-2: #1F323D;
+  --bg-3: #263F4C;
+  --canvas-bg: #FDFBF3;
+  --ink: #EDEAE0;
+  --ink-dim: #9FB2BA;
+  --yellow: #FFC53D;
+  --pink: #FF5C8A;
+  --teal: #2FD4C4;
+  --purple: #B490F0;
+  --line: rgba(255,255,255,0.10);
+  --radius: 14px;
+}
 
-  .hero{
-    max-width:1180px; margin:28px auto 0; padding:0 32px;
-  }
-  @media (max-width:640px){ .hero{ padding:0 18px; } }
-  .hero .eyebrow{ font-family:var(--mono); font-size:11.5px; color:var(--muted); margin-bottom:10px; }
-  .balance-row{ display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
-  .balance-row .big{
-    font-family:var(--display); font-weight:600; font-size:clamp(40px,7vw,68px);
-    letter-spacing:-.01em;
-  }
-  .balance-row .big.positive{ color:var(--income); }
-  .balance-row .big.negative{ color:var(--expense); }
-  .balance-row .sub{ font-family:var(--mono); font-size:13px; color:var(--muted); }
+* {
+  box-sizing: border-box;
+}
 
-  .ledger-rule{
-    max-width:1180px; margin:26px auto 0; padding:0 32px;
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: radial-gradient(
+    circle at 20% -10%,
+    #223744 0%,
+    var(--bg) 55%
+  );
+  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  min-height: 100vh;
+  padding: 20px 14px 60px;
+}
+
+h1,
+h2,
+h3,
+.marker {
+  font-family: 'Kalam', cursive;
+}
+
+.wrap {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+/* BRAND */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.brand .dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--pink);
+  box-shadow:
+    18px 0 0 var(--yellow),
+    36px 0 0 var(--teal);
+}
+
+.brand h1 {
+  font-size: 30px;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.brand p {
+  margin: 2px 0 0;
+  color: var(--ink-dim);
+  font-size: 13px;
+}
+
+/* CARDS */
+
+.card {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  margin-bottom: 16px;
+}
+
+/* JOIN */
+
+.join-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+input[type="text"] {
+  flex: 1;
+  min-width: 180px;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+input[type="text"]:focus {
+  outline: 2px solid var(--teal);
+}
+
+button {
+  font-family: 'Kalam', cursive;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 20px;
+  cursor: pointer;
+  background: var(--yellow);
+  color: #22160A;
+  transition: transform 0.12s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: var(--bg-3);
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+button.pink {
+  background: var(--pink);
+  color: #2A0A16;
+}
+
+button.teal {
+  background: var(--teal);
+  color: #052824;
+}
+
+.player-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  padding: 7px 12px 7px 7px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+.avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Kalam', cursive;
+  font-weight: 700;
+  font-size: 13px;
+  color: #1a1a1a;
+  flex-shrink: 0;
+}
+
+.host-badge {
+  font-size: 10px;
+  color: var(--yellow);
+  margin-left: 2px;
+}
+
+.hint {
+  color: var(--ink-dim);
+  font-size: 13px;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* GAME */
+
+.game-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.round-info {
+  font-size: 14px;
+  color: var(--ink-dim);
+}
+
+.round-info b {
+  color: var(--ink);
+}
+
+.timer {
+  font-family: 'Kalam', cursive;
+  font-size: 26px;
+  font-weight: 700;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  padding: 4px 16px;
+  border-radius: 10px;
+  min-width: 64px;
+  text-align: center;
+}
+
+.timer.low {
+  color: var(--pink);
+}
+
+.word-banner {
+  text-align: center;
+  font-family: 'Kalam', cursive;
+  font-size: 22px;
+  letter-spacing: 4px;
+  padding: 10px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+}
+
+.word-banner.drawer {
+  color: var(--yellow);
+  letter-spacing: 1px;
+}
+
+.play-area {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.canvas-col {
+  flex: 2 1 420px;
+  min-width: 300px;
+}
+
+.side-col {
+  flex: 1 1 260px;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.canvas-frame {
+  position: relative;
+  padding: 10px;
+}
+
+.canvas-frame svg.wobble {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 700 / 440;
+  background: var(--canvas-bg);
+  border-radius: 8px;
+  touch-action: none;
+  cursor: crosshair;
+  position: relative;
+  z-index: 1;
+}
+
+/* TOOLS */
+
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.swatch.active {
+  border-color: var(--ink);
+  transform: scale(1.12);
+}
+
+.size-dot {
+  border-radius: 50%;
+  background: var(--ink);
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.size-dot.active {
+  border-color: var(--yellow);
+}
+
+/* SCORE */
+
+.scoreboard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.score-row .name {
+  flex: 1;
+}
+
+.score-row .pts {
+  font-family: 'Kalam', cursive;
+  font-weight: 700;
+  color: var(--yellow);
+}
+
+.score-row.drawing {
+  outline: 1px solid var(--teal);
+}
+
+/* CHAT */
+
+.chat {
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-log {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 4px;
+}
+
+.chat-msg {
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.chat-msg .who {
+  font-weight: 700;
+}
+
+.chat-msg.correct {
+  color: var(--teal);
+  font-family: 'Kalam', cursive;
+  font-size: 14.5px;
+}
+
+.chat-msg.system {
+  color: var(--ink-dim);
+  font-style: italic;
+}
+
+.chat-form {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.chat-form input {
+  padding: 9px 10px;
+  font-size: 13.5px;
+}
+
+.chat-form button {
+  padding: 9px 14px;
+  font-size: 13.5px;
+}
+
+/* REVEAL */
+
+.reveal {
+  text-align: center;
+  padding: 26px 10px;
+}
+
+.reveal .w {
+  font-family: 'Kalam', cursive;
+  font-size: 34px;
+  color: var(--yellow);
+  margin: 6px 0 2px;
+}
+
+.reveal .sub {
+  color: var(--ink-dim);
+  font-size: 14px;
+}
+
+.winner-banner {
+  text-align: center;
+  padding: 10px 0 20px;
+}
+
+.winner-banner .w {
+  font-family: 'Kalam', cursive;
+  font-size: 30px;
+  color: var(--yellow);
+}
+
+.empty-note {
+  color: var(--ink-dim);
+  font-size: 13px;
+  text-align: center;
+  padding: 10px;
+}
+
+.status-box {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(47, 212, 196, 0.08);
+  border: 1px solid rgba(47, 212, 196, 0.18);
+  color: var(--ink-dim);
+  font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  .brand h1 {
+    font-size: 24px;
   }
-  @media (max-width:640px){ .ledger-rule{ padding:0 18px; } }
-  .ledger-rule .line{ border-top:1.5px dashed var(--line); }
 
-  /* ---------- Stat cards ---------- */
-  .stats-grid{
-    max-width:1180px; margin:28px auto 0;
-    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
-    background:var(--line); border:1px solid var(--line);
+  .word-banner {
+    font-size: 18px;
+    letter-spacing: 2px;
   }
-  @media (max-width:820px){ .stats-grid{ grid-template-columns:repeat(2,1fr); } }
-  .stat{ background:var(--panel); padding:22px 24px; }
-  .stat .label{ font-family:var(--mono); font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px; }
-  .stat .val{ font-family:var(--display); font-size:26px; font-weight:600; }
-  .stat.income .val{ color:var(--income); }
-  .stat.expense .val{ color:var(--expense); }
-  .stat .goal-bar{ height:6px; background:var(--paper); border:1px solid var(--line); margin-top:12px; overflow:hidden; }
-  .stat .goal-fill{ height:100%; background:var(--gold); }
-  .stat .goal-note{ font-family:var(--mono); font-size:10px; color:var(--muted); margin-top:6px; }
 
-  /* ---------- Main grid: charts + form/ledger ---------- */
-  .main-grid{
-    max-width:1180px; margin:56px auto 0;
-    display:grid; grid-template-columns:1.1fr 0.9fr; gap:24px;
+  .card {
+    padding: 16px;
   }
-  @media (max-width:980px){ .main-grid{ grid-template-columns:1fr; } }
-
-  .panel{ background:var(--panel); border:1px solid var(--line); padding:26px; }
-  .panel h2{ font-family:var(--display); font-size:19px; font-weight:600; margin-bottom:18px; }
-
-  .chart-wrap{ position:relative; height:260px; }
-  .chart-row{ display:grid; grid-template-columns:1fr; gap:22px; }
-
-  .legend{ display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
-  .legend .item{ font-family:var(--mono); font-size:11px; color:var(--muted); display:flex; align-items:center; gap:6px; }
-  .legend .sw{ width:9px; height:9px; border-radius:2px; }
-
-  /* ---------- Add transaction form ---------- */
-  form.add-form{ display:flex; flex-direction:column; gap:14px; }
-  .type-toggle{ display:flex; border:1px solid var(--line); }
-  .type-toggle button{
-    flex:1; padding:10px; border:none; background:var(--panel);
-    font-family:var(--mono); font-size:12px; color:var(--muted);
-  }
-  .type-toggle button.active[data-type="income"]{ background:var(--income); color:#fff; }
-  .type-toggle button.active[data-type="expense"]{ background:var(--expense); color:#fff; }
-
-  .field{ display:flex; flex-direction:column; gap:6px; }
-  .field label{ font-family:var(--mono); font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
-  .field input, .field select{
-    border:1px solid var(--line); background:var(--paper);
-    padding:10px 12px; font-family:var(--body); font-size:13.5px; color:var(--ink);
-  }
-  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-
-  /* ---------- Ledger / receipt list ---------- */
-  .ledger-panel{ grid-column:1 / -1; }
-  .receipt{
-    max-height:360px; overflow-y:auto;
-    border-top:1.5px dashed var(--line);
-    margin-top:6px;
-  }
-  .receipt-row{
-    display:grid; grid-template-columns:90px 1fr 120px 90px 28px;
-    gap:12px; align-items:center;
-    padding:13px 4px; border-bottom:1px dashed var(--line);
-    font-size:13px;
-  }
-  @media (max-width:700px){ .receipt-row{ grid-template-columns:70px 1fr 90px 26px; } .receipt-row .cat-col{ display:none; } }
-  .receipt-row .date-col{ font-family:var(--mono); font-size:11px; color:var(--muted); }
-  .receipt-row .desc-col{ font-weight:500; }
-  .receipt-row .cat-col{ font-family:var(--mono); font-size:10.5px; color:var(--muted); }
-  .receipt-row .amt-col{ font-family:var(--mono); font-size:13.5px; text-align:right; }
-  .receipt-row .amt-col.income{ color:var(--income); }
-  .receipt-row .amt-col.expense{ color:var(--expense); }
-  .receipt-row .del-btn{ background:none; border:none; color:var(--muted); font-size:14px; }
-  .receipt-row .del-btn:hover{ color:var(--expense); }
-  .empty-note{ padding:30px 4px; font-family:var(--mono); font-size:12px; color:var(--muted); text-align:center; }
-
-  footer{
-    max-width:1180px; margin:70px auto 0; padding:22px 32px 40px;
-    border-top:1px solid var(--line);
-    font-family:var(--mono); font-size:10.5px; color:var(--muted);
-    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
-  }
-  @media (max-width:640px){ footer{ padding:22px 18px 32px; } }
-
-  @media print{
-    .export-actions, form.add-form, .del-btn, .type-toggle{ display:none !important; }
-    body{ background:#fff; }
-  }
+}
 </style>
 </head>
+
 <body>
 
-<header class="top">
-  <div class="brand">Extrato<span>.</span></div>
-  <div class="export-actions">
-    <button class="btn" id="exportCsv">↓ Exportar CSV</button>
-    <button class="btn primary" id="exportPdf">↓ Exportar relatório (PDF)</button>
-  </div>
-</header>
+<div class="wrap">
 
-<div class="hero">
-  <p class="eyebrow">DASHBOARD DE FINANÇAS PESSOAIS — AGOSTO 2026</p>
-  <div class="balance-row">
-    <span class="big num" id="balanceValue">R$ 0,00</span>
-    <span class="sub">saldo atual</span>
-  </div>
-</div>
+  <div class="brand">
+    <div class="dot"></div>
 
-<div class="ledger-rule"><div class="line"></div></div>
-
-<div class="stats-grid">
-  <div class="stat income">
-    <div class="label">Entradas no mês</div>
-    <div class="val num" id="totalIncome">R$ 0,00</div>
-  </div>
-  <div class="stat expense">
-    <div class="label">Saídas no mês</div>
-    <div class="val num" id="totalExpense">R$ 0,00</div>
-  </div>
-  <div class="stat">
-    <div class="label">Meta de economia</div>
-    <div class="val num"><span id="goalCurrent">R$ 0</span> <span style="font-size:14px;color:var(--muted)">/ <span id="goalTarget">R$ 3.000</span></span></div>
-    <div class="goal-bar"><div class="goal-fill" id="goalFill" style="width:0%"></div></div>
-    <div class="goal-note" id="goalNote">0% da meta</div>
-  </div>
-  <div class="stat">
-    <div class="label">Definir meta</div>
-    <input type="number" id="goalInput" placeholder="3000" style="width:100%;border:1px solid var(--line);background:var(--paper);padding:8px 10px;font-family:var(--mono);font-size:13px;margin-top:4px;">
-  </div>
-</div>
-
-<div class="main-grid">
-
-  <div class="panel">
-    <h2>Despesas por categoria</h2>
-    <div class="chart-wrap"><canvas id="categoryChart"></canvas></div>
-    <div class="legend" id="categoryLegend"></div>
+    <div>
+      <h1>Desenha &amp; Adivinha</h1>
+      <p>
+        até 4 jogadores · todo mundo desenha, todo mundo adivinha
+      </p>
+    </div>
   </div>
 
-  <div class="panel">
-    <h2>Nova transação</h2>
-    <form class="add-form" id="addForm">
-      <div class="type-toggle">
-        <button type="button" data-type="income" class="active">Entrada</button>
-        <button type="button" data-type="expense">Saída</button>
-      </div>
-      <div class="field">
-        <label>Descrição</label>
-        <input type="text" id="descInput" placeholder="Ex: Salário, Supermercado..." required>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Valor (R$)</label>
-          <input type="number" step="0.01" id="amountInput" placeholder="0,00" required>
-        </div>
-        <div class="field">
-          <label>Data</label>
-          <input type="date" id="dateInput" required>
-        </div>
-      </div>
-      <div class="field">
-        <label>Categoria</label>
-        <select id="categoryInput"></select>
-      </div>
-      <button class="btn primary" type="submit" style="justify-content:center;">Adicionar transação</button>
-    </form>
-  </div>
-
-  <div class="panel ledger-panel">
-    <h2>Extrato de transações</h2>
-    <div class="receipt" id="receiptList"></div>
-  </div>
+  <div id="app"></div>
 
 </div>
-
-<footer>
-  <span>Dados de demonstração — em memória, não persistem ao recarregar a página.</span>
-  <span>EXTRATO / DASHBOARD FINANCEIRO</span>
-</footer>
 
 <script>
-const CATEGORIES = {
-  income: ["Salário","Freelance","Investimentos","Outros (entrada)"],
-  expense: ["Moradia","Alimentação","Transporte","Lazer","Saúde","Educação","Outros (saída)"]
-};
+(function () {
 
-const CATEGORY_COLORS = {
-  "Moradia":"#B23A48", "Alimentação":"#C9714F", "Transporte":"#B9902A",
-  "Lazer":"#6B8F6E", "Saúde":"#5C7A99", "Educação":"#8B6BA8", "Outros (saída)":"#7A7A7A"
-};
+  /* =========================
+     PALAVRAS
+  ========================= */
 
-let transactions = [
-  { type:"income",  desc:"Salário",             amount:4200, date:"2026-08-01", category:"Salário" },
-  { type:"income",  desc:"Freelance — site",     amount:850,  date:"2026-08-05", category:"Freelance" },
-  { type:"expense", desc:"Aluguel",              amount:1500, date:"2026-08-02", category:"Moradia" },
-  { type:"expense", desc:"Supermercado",         amount:620,  date:"2026-08-06", category:"Alimentação" },
-  { type:"expense", desc:"Combustível",          amount:280,  date:"2026-08-07", category:"Transporte" },
-  { type:"expense", desc:"Academia",             amount:120,  date:"2026-08-03", category:"Saúde" },
-  { type:"expense", desc:"Cinema",               amount:90,   date:"2026-08-09", category:"Lazer" },
-  { type:"expense", desc:"Curso online",         amount:200,  date:"2026-08-04", category:"Educação" },
-];
+  const WORDS = [
+    "gato",
+    "cachorro",
+    "sol",
+    "lua",
+    "estrela",
+    "árvore",
+    "casa",
+    "carro",
+    "bicicleta",
+    "avião",
+    "barco",
+    "guarda-chuva",
+    "chapéu",
+    "óculos",
+    "relógio",
+    "coração",
+    "flor",
+    "peixe",
+    "pássaro",
+    "borboleta",
+    "elefante",
+    "girafa",
+    "leão",
+    "macaco",
+    "cobra",
+    "aranha",
+    "robô",
+    "foguete",
+    "castelo",
+    "coroa",
+    "chave",
+    "porta",
+    "janela",
+    "escada",
+    "ponte",
+    "montanha",
+    "praia",
+    "ilha",
+    "vulcão",
+    "arco-íris",
+    "nuvem",
+    "raio",
+    "fogo",
+    "gelo",
+    "neve",
+    "pizza",
+    "hambúrguer",
+    "sorvete",
+    "bolo",
+    "maçã",
+    "banana",
+    "uva",
+    "café",
+    "futebol",
+    "violão",
+    "piano",
+    "câmera",
+    "telefone",
+    "computador",
+    "livro",
+    "lápis",
+    "tesoura",
+    "sapato",
+    "camiseta",
+    "bandeira",
+    "fantasma",
+    "bruxa",
+    "dinossauro",
+    "dragão",
+    "sereia",
+    "unicórnio",
+    "pirata",
+    "astronauta",
+    "palhaço",
+    "abelha",
+    "coelho",
+    "urso",
+    "tubarão",
+    "polvo",
+    "caracol"
+  ];
 
-let savingsGoal = 3000;
-let currentType = "income";
-let categoryChart;
 
-function formatBRL(v){
-  return v.toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
-}
+  /* =========================
+     CORES
+  ========================= */
 
-function populateCategorySelect(){
-  const sel = document.getElementById('categoryInput');
-  sel.innerHTML = '';
-  CATEGORIES[currentType].forEach(c=>{
-    const opt = document.createElement('option');
-    opt.value = c; opt.textContent = c;
-    sel.appendChild(opt);
-  });
-}
+  const COLORS = [
+    { name: "preto", hex: "#20211D" },
+    { name: "vermelho", hex: "#E23B3B" },
+    { name: "laranja", hex: "#FF8A3D" },
+    { name: "amarelo", hex: "#FFC53D" },
+    { name: "verde", hex: "#39B36B" },
+    { name: "azul", hex: "#3E8AE0" },
+    { name: "rosa", hex: "#FF5C8A" },
+    { name: "roxo", hex: "#B490F0" }
+  ];
 
-document.querySelectorAll('.type-toggle button').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.type-toggle button').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    currentType = btn.dataset.type;
-    populateCategorySelect();
-  });
-});
+  const AVATAR_COLORS = [
+    "#FFC53D",
+    "#FF5C8A",
+    "#2FD4C4",
+    "#B490F0",
+    "#FF8A3D",
+    "#3E8AE0",
+    "#39B36B",
+    "#E23B3B"
+  ];
 
-document.getElementById('dateInput').value = new Date().toISOString().slice(0,10);
-populateCategorySelect();
+  const SIZES = [
+    { name: "fino", v: 0.006 },
+    { name: "médio", v: 0.012 },
+    { name: "grosso", v: 0.024 }
+  ];
 
-document.getElementById('addForm').addEventListener('submit', (e)=>{
-  e.preventDefault();
-  const desc = document.getElementById('descInput').value.trim();
-  const amount = parseFloat(document.getElementById('amountInput').value);
-  const date = document.getElementById('dateInput').value;
-  const category = document.getElementById('categoryInput').value;
-  if(!desc || !amount || amount <= 0) return;
+  const ERASER_COLOR = "#FDFBF3";
 
-  transactions.unshift({ type: currentType, desc, amount, date, category });
-  document.getElementById('descInput').value = '';
-  document.getElementById('amountInput').value = '';
-  render();
-});
+  const ROUND_DURATION = 70;
+  const ROUND_END_PAUSE = 5;
 
-document.getElementById('goalInput').addEventListener('input', (e)=>{
-  const v = parseFloat(e.target.value);
-  savingsGoal = (v && v > 0) ? v : savingsGoal;
-  render();
-});
+  // Firebase Realtime Database
+  const FIREBASE_DB_URL =
+    "https://desenha-e-adivinha-19968-default-rtdb.firebaseio.com";
 
-function renderReceipt(){
-  const list = document.getElementById('receiptList');
-  list.innerHTML = '';
-  if(transactions.length === 0){
-    list.innerHTML = '<div class="empty-note">Nenhuma transação ainda. Adicione a primeira ao lado.</div>';
-    return;
-  }
-  const sorted = [...transactions].sort((a,b)=> new Date(b.date) - new Date(a.date));
-  sorted.forEach((t)=>{
-    const idx = transactions.indexOf(t);
-    const row = document.createElement('div');
-    row.className = 'receipt-row';
-    const d = new Date(t.date + 'T00:00:00');
-    const dateStr = d.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' });
-    row.innerHTML = `
-      <div class="date-col">${dateStr}</div>
-      <div class="desc-col">${t.desc}</div>
-      <div class="cat-col">${t.category}</div>
-      <div class="amt-col ${t.type}">${t.type === 'income' ? '+' : '−'} ${formatBRL(t.amount)}</div>
-      <button class="del-btn" data-idx="${idx}" aria-label="Excluir">✕</button>
-    `;
-    list.appendChild(row);
-  });
-  list.querySelectorAll('.del-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      transactions.splice(parseInt(btn.dataset.idx), 1);
-      render();
-    });
-  });
-}
+  const META_PATH = "/game/meta.json";
+  const STROKES_PATH = "/game/strokes.json";
 
-function renderStats(){
-  const income = transactions.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
-  const expense = transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
-  const balance = income - expense;
+  const POLL_MS = 1100;
 
-  document.getElementById('totalIncome').textContent = formatBRL(income);
-  document.getElementById('totalExpense').textContent = formatBRL(expense);
-  const balEl = document.getElementById('balanceValue');
-  balEl.textContent = formatBRL(balance);
-  balEl.className = 'big num ' + (balance >= 0 ? 'positive' : 'negative');
+  /* =========================
+     JOGADOR
+  ========================= */
 
-  const goalPct = Math.min(100, Math.max(0, (Math.max(balance,0) / savingsGoal) * 100));
-  document.getElementById('goalCurrent').textContent = formatBRL(Math.max(balance,0));
-  document.getElementById('goalTarget').textContent = formatBRL(savingsGoal);
-  document.getElementById('goalFill').style.width = goalPct.toFixed(0) + '%';
-  document.getElementById('goalNote').textContent = goalPct.toFixed(0) + '% da meta atingida';
-}
+  function uid() {
 
-function renderChart(){
-  const expenseByCategory = {};
-  transactions.filter(t=>t.type==='expense').forEach(t=>{
-    expenseByCategory[t.category] = (expenseByCategory[t.category] || 0) + t.amount;
-  });
-  const labels = Object.keys(expenseByCategory);
-  const data = Object.values(expenseByCategory);
-  const colors = labels.map(l => CATEGORY_COLORS[l] || '#999');
-
-  const legend = document.getElementById('categoryLegend');
-  legend.innerHTML = labels.map((l,i)=>`<span class="item"><span class="sw" style="background:${colors[i]}"></span>${l}</span>`).join('');
-
-  if(categoryChart) categoryChart.destroy();
-  const ctx = document.getElementById('categoryChart');
-  categoryChart = new Chart(ctx, {
-    type: 'doughnut',
-    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 2, borderColor: '#FFFFFF' }] },
-    options: {
-      responsive:true, maintainAspectRatio:false,
-      plugins: { legend: { display:false }, tooltip: { callbacks: { label: (c)=> c.label + ': ' + formatBRL(c.raw) } } },
-      cutout: '62%'
+    if (
+      window.crypto &&
+      crypto.randomUUID
+    ) {
+      return crypto.randomUUID();
     }
-  });
-}
 
-function render(){
-  renderStats();
-  renderReceipt();
-  renderChart();
-}
+    return "p-" +
+      Math.random()
+        .toString(36)
+        .slice(2, 10);
+  }
 
-document.getElementById('exportCsv').addEventListener('click', ()=>{
-  let csv = 'Data,Tipo,Descrição,Categoria,Valor\n';
-  transactions.forEach(t=>{
-    csv += `${t.date},${t.type === 'income' ? 'Entrada' : 'Saída'},"${t.desc}",${t.category},${t.amount.toFixed(2)}\n`;
-  });
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'extrato.csv';
-  a.click();
-  URL.revokeObjectURL(url);
-});
 
-document.getElementById('exportPdf').addEventListener('click', ()=>{
-  window.print();
-});
+  function hashColor(str) {
 
-render();
+    let h = 0;
+
+    for (
+      let i = 0;
+      i < str.length;
+      i++
+    ) {
+      h =
+        (h * 31 +
+          str.charCodeAt(i)) >>> 0;
+    }
+
+    return AVATAR_COLORS[
+      h % AVATAR_COLORS.length
+    ];
+  }
+
+
+  function initials(name) {
+
+    return (
+      name || "?"
+    )
+      .trim()
+      .slice(0, 2)
+      .toUpperCase();
+  }
+
+
+  function escapeHtml(s) {
+
+    return (s || "")
+      .replace(
+        /[&<>"']/g,
+        function (c) {
+
+          return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+          }[c];
+
+        }
+      );
+  }
+
+
+  const me = {
+    id: uid(),
+    name: null
+  };
+
+
+  let meta = null;
+  let strokes = null;
+
+  let metaVersionSeen = null;
+  let strokesVersionSeen = null;
+
+  let isDrawing = false;
+  let currentStroke = null;
+
+  let activeColor = COLORS[0].hex;
+  let activeSize = SIZES[1].v;
+
+  let lastStrokeWrite = 0;
+  let transitioning = false;
+  let strokesWriteInFlight = false;
+
+  let pollTimer = null;
+
+  const app =
+    document.getElementById("app");
+
+
+  /* =========================
+     FIREBASE REALTIME DATABASE
+  ========================= */
+
+  async function firebaseRequest(path, options = {}) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+
+    try {
+      const response = await fetch(
+        FIREBASE_DB_URL + path,
+        {
+          ...options,
+          headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+          },
+          signal: controller.signal
+        }
+      );
+
+      if (!response.ok) {
+        const text = await response.text().catch(() => "");
+        throw new Error(
+          `Firebase HTTP ${response.status}${text ? `: ${text}` : ""}`
+        );
+      }
+
+      return await response.json();
+    } catch (e) {
+      if (e.name === "AbortError") {
+        throw new Error("O Firebase demorou mais de 8 segundos para responder.");
+      }
+      throw e;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  async function readMeta() {
+    try {
+      const remote = await firebaseRequest(META_PATH);
+      const base = defaultMeta();
+
+      // O banco pode já ter sido criado com apenas parte dos campos
+      // (por exemplo: phase, round e maxRounds).
+      // Combinamos os valores existentes com a estrutura padrão para
+      // garantir que players, drawOrder etc. nunca fiquem undefined.
+      if (!remote || typeof remote !== "object") {
+        return base;
+      }
+
+      return {
+        ...base,
+        ...remote,
+        players: remote.players && typeof remote.players === "object"
+          ? remote.players
+          : {},
+        drawOrder: Array.isArray(remote.drawOrder)
+          ? remote.drawOrder
+          : [],
+        lastWords: Array.isArray(remote.lastWords)
+          ? remote.lastWords
+          : []
+      };
+    } catch (e) {
+      console.error("Erro ao ler meta do Firebase:", e);
+      throw e;
+    }
+  }
+
+  async function writeMeta(next) {
+    try {
+      return await firebaseRequest(META_PATH, {
+        method: "PUT",
+        body: JSON.stringify(next)
+      });
+    } catch (e) {
+      console.error("Erro ao salvar meta no Firebase:", e);
+      return null;
+    }
+  }
+
+  async function readStrokes() {
+    try {
+      return await firebaseRequest(STROKES_PATH);
+    } catch (e) {
+      console.error("Erro ao ler strokes do Firebase:", e);
+      return null;
+    }
+  }
+
+  async function writeStrokes(next) {
+    try {
+      return await firebaseRequest(STROKES_PATH, {
+        method: "PUT",
+        body: JSON.stringify(next)
+      });
+    } catch (e) {
+      console.error("Erro ao salvar strokes no Firebase:", e);
+      return null;
+    }
+  }
+
+
+  /* =========================
+     META PADRÃO
+  ========================= */
+
+  function defaultMeta() {
+
+    return {
+      players: {},
+
+      phase: "lobby",
+
+      round: 0,
+
+      maxRounds: 0,
+
+      drawOrder: [],
+
+      currentDrawerId: null,
+
+      currentWord: null,
+
+      lastWords: [],
+
+      roundStartAt: 0,
+
+      roundEndAt: 0,
+
+      correctGuessers: [],
+
+      chat: []
+    };
+  }
+
+
+  /* =========================
+     PALAVRAS
+  ========================= */
+
+  function pickWord(avoid) {
+
+    const pool =
+      WORDS.filter(
+        function (word) {
+          return !avoid.includes(word);
+        }
+      );
+
+    const list =
+      pool.length
+        ? pool
+        : WORDS;
+
+    return list[
+      Math.floor(
+        Math.random() *
+        list.length
+      )
+    ];
+  }
+
+
+  /* =========================
+     JOGADORES
+  ========================= */
+
+  function playerIds() {
+
+    return Object.keys(
+      meta.players || {}
+    );
+  }
+
+
+  function sortedByJoin() {
+
+    return playerIds()
+      .sort(function (a, b) {
+
+        return (
+          (meta.players[a].joinedAt || 0) -
+          (meta.players[b].joinedAt || 0)
+        );
+
+      });
+  }
+
+
+  function hostId() {
+
+    const s =
+      sortedByJoin();
+
+    return s.length
+      ? s[0]
+      : null;
+  }
+
+
+  function isHost() {
+
+    return hostId() === me.id;
+  }
+
+
+  function playerNameFromMeta(
+    m,
+    id
+  ) {
+
+    return m.players[id]
+      ? m.players[id].name
+      : "???";
+  }
+
+
+  /* =========================
+     ENTRAR
+  ========================= */
+
+  async function joinGame(name) {
+
+    let fresh =
+      await readMeta();
+
+    if (!fresh) {
+      fresh = defaultMeta();
+    }
+
+    // Segurança extra: versões antigas do banco podem não ter players.
+    if (!fresh.players || typeof fresh.players !== "object") {
+      fresh.players = {};
+    }
+
+    /*
+      Limite de 4 jogadores.
+    */
+
+    const existingIds =
+      Object.keys(
+        fresh.players || {}
+      );
+
+    if (
+      !fresh.players[me.id] &&
+      existingIds.length >= 4
+    ) {
+
+      alert(
+        "A sala já está cheia. Máximo de 4 jogadores."
+      );
+
+      me.name = null;
+
+      render();
+
+      return;
+    }
+
+
+    fresh.players[me.id] = {
+
+      name: name,
+
+      score:
+        fresh.players[me.id]?.score ||
+        0,
+
+      joinedAt:
+        fresh.players[me.id]?.joinedAt ||
+        Date.now()
+    };
+
+
+    meta =
+      await writeMeta(fresh);
+
+
+    if (!meta) {
+
+      alert(
+        "Não foi possível salvar o jogador."
+      );
+
+      me.name = null;
+
+      render();
+
+      return;
+    }
+
+
+    render();
+
+    startPolling();
+  }
+
+
+  /* =========================
+     SAIR
+  ========================= */
+
+  async function leaveGame() {
+
+    let fresh =
+      await readMeta();
+
+    if (!fresh) {
+      return;
+    }
+
+
+    delete fresh.players[me.id];
+
+
+    if (fresh.drawOrder) {
+
+      fresh.drawOrder =
+        fresh.drawOrder.filter(
+          function (id) {
+            return id !== me.id;
+          }
+        );
+    }
+
+
+    meta =
+      await writeMeta(fresh);
+
+    me.name = null;
+
+    render();
+  }
+
+
+  /* =========================
+     INICIAR JOGO
+  ========================= */
+
+  async function startGame() {
+
+    let fresh =
+      await readMeta();
+
+    if (!fresh) {
+      return;
+    }
+
+
+    const ids =
+      Object.keys(
+        fresh.players
+      );
+
+
+    if (ids.length < 2) {
+
+      alert(
+        "É necessário pelo menos 2 jogadores."
+      );
+
+      return;
+    }
+
+
+    if (ids.length > 4) {
+
+      alert(
+        "O jogo permite no máximo 4 jogadores."
+      );
+
+      return;
+    }
+
+
+    const order =
+      ids.slice().sort(
+        function () {
+          return Math.random() - 0.5;
+        }
+      );
+
+
+    const word =
+      pickWord([]);
+
+
+    fresh.phase =
+      "playing";
+
+    fresh.round =
+      1;
+
+    fresh.maxRounds =
+      order.length * 2;
+
+    fresh.drawOrder =
+      order;
+
+    fresh.currentDrawerId =
+      order[0];
+
+    fresh.currentWord =
+      word;
+
+    fresh.lastWords =
+      [word];
+
+    fresh.roundStartAt =
+      Date.now();
+
+    fresh.roundEndAt =
+      0;
+
+    fresh.correctGuessers =
+      [];
+
+    fresh.chat = [
+      {
+        system: true,
+
+        text:
+          "Rodada 1: " +
+          playerNameFromMeta(
+            fresh,
+            order[0]
+          ) +
+          " vai desenhar!",
+
+        ts: Date.now()
+      }
+    ];
+
+
+    Object.values(
+      fresh.players
+    ).forEach(
+      function (p) {
+        p.score = 0;
+      }
+    );
+
+
+    meta =
+      await writeMeta(fresh);
+
+
+    await writeStrokes({
+
+      round: 1,
+
+      strokes: [],
+
+      drawerId:
+        order[0]
+    });
+
+
+    strokes = {
+      round: 1,
+
+      strokes: [],
+
+      drawerId:
+        order[0]
+    };
+
+
+    render();
+  }
+
+
+  /* =========================
+     FINALIZAR RODADA
+  ========================= */
+
+  async function endRoundNow(reason) {
+
+    if (transitioning) {
+      return;
+    }
+
+    transitioning = true;
+
+    try {
+
+      let fresh =
+        await readMeta();
+
+      if (
+        !fresh ||
+        fresh.phase !== "playing"
+      ) {
+        return;
+      }
+
+
+      fresh.phase =
+        "round-end";
+
+
+      fresh.roundEndAt =
+        Date.now() +
+        ROUND_END_PAUSE * 1000;
+
+
+      fresh.chat =
+        (fresh.chat || [])
+          .concat([
+            {
+              system: true,
+              text: reason,
+              ts: Date.now()
+            }
+          ])
+          .slice(-40);
+
+
+      meta =
+        await writeMeta(
+          fresh
+        );
+
+
+      render();
+
+    } finally {
+
+      transitioning = false;
+    }
+  }
+
+
+  /* =========================
+     PRÓXIMA RODADA
+  ========================= */
+
+  async function advanceRound() {
+
+    if (transitioning) {
+      return;
+    }
+
+    transitioning = true;
+
+    try {
+
+      let fresh =
+        await readMeta();
+
+      if (
+        !fresh ||
+        fresh.phase !== "round-end"
+      ) {
+        return;
+      }
+
+
+      const nextRound =
+        fresh.round + 1;
+
+
+      if (
+        nextRound >
+        fresh.maxRounds
+      ) {
+
+        fresh.phase =
+          "game-end";
+
+        meta =
+          await writeMeta(
+            fresh
+          );
+
+        render();
+
+        return;
+      }
+
+
+      const order =
+        fresh.drawOrder;
+
+
+      const nextDrawer =
+        order[
+          (nextRound - 1) %
+          order.length
+        ];
+
+
+      const word =
+        pickWord(
+          (fresh.lastWords || [])
+            .slice(-6)
+        );
+
+
+      fresh.round =
+        nextRound;
+
+      fresh.currentDrawerId =
+        nextDrawer;
+
+      fresh.currentWord =
+        word;
+
+      fresh.lastWords =
+        (fresh.lastWords || [])
+          .concat([word])
+          .slice(-8);
+
+      fresh.roundStartAt =
+        Date.now();
+
+      fresh.roundEndAt =
+        0;
+
+      fresh.correctGuessers =
+        [];
+
+
+      fresh.chat =
+        (fresh.chat || [])
+          .concat([
+            {
+              system: true,
+
+              text:
+                "Rodada " +
+                nextRound +
+                ": " +
+                playerNameFromMeta(
+                  fresh,
+                  nextDrawer
+                ) +
+                " vai desenhar!",
+
+              ts: Date.now()
+            }
+          ])
+          .slice(-40);
+
+
+      meta =
+        await writeMeta(
+          fresh
+        );
+
+
+      await writeStrokes({
+
+        round: nextRound,
+
+        strokes: [],
+
+        drawerId:
+          nextDrawer
+      });
+
+
+      strokes = {
+
+        round: nextRound,
+
+        strokes: [],
+
+        drawerId:
+          nextDrawer
+      };
+
+
+      render();
+
+    } finally {
+
+      transitioning = false;
+    }
+  }
+
+
+  /* =========================
+     JOGAR NOVAMENTE
+  ========================= */
+
+  async function playAgain() {
+
+    let fresh =
+      await readMeta();
+
+    if (!fresh) {
+      return;
+    }
+
+
+    fresh.phase =
+      "lobby";
+
+    fresh.round =
+      0;
+
+    fresh.maxRounds =
+      0;
+
+    fresh.drawOrder =
+      [];
+
+    fresh.currentDrawerId =
+      null;
+
+    fresh.currentWord =
+      null;
+
+    fresh.roundStartAt =
+      0;
+
+    fresh.roundEndAt =
+      0;
+
+    fresh.correctGuessers =
+      [];
+
+    fresh.chat =
+      [];
+
+
+    Object.values(
+      fresh.players
+    ).forEach(
+      function (p) {
+        p.score = 0;
+      }
+    );
+
+
+    meta =
+      await writeMeta(
+        fresh
+      );
+
+
+    await writeStrokes({
+      round: 0,
+      strokes: [],
+      drawerId: null
+    });
+
+
+    render();
+  }
+
+
+  /* =========================
+     PALPITE
+  ========================= */
+
+  async function sendGuess(text) {
+
+    text =
+      text.trim();
+
+
+    if (!text) {
+      return;
+    }
+
+
+    let fresh =
+      await readMeta();
+
+
+    if (
+      !fresh ||
+      fresh.phase !== "playing"
+    ) {
+      return;
+    }
+
+
+    if (
+      fresh.currentDrawerId ===
+      me.id
+    ) {
+      return;
+    }
+
+
+    if (
+      (fresh.correctGuessers || [])
+        .includes(me.id)
+    ) {
+      return;
+    }
+
+
+    const normalizedText =
+      text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(
+          /[\u0300-\u036f]/g,
+          ""
+        );
+
+
+    const normalizedWord =
+      (fresh.currentWord || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(
+          /[\u0300-\u036f]/g,
+          "");
+
+
+    const isCorrect =
+      normalizedText ===
+      normalizedWord;
+
+
+    const myName =
+      fresh.players[me.id]?.name ||
+      "Alguém";
+
+
+    if (isCorrect) {
+
+      const elapsed =
+        (Date.now() -
+          fresh.roundStartAt) /
+        1000;
+
+
+      const remaining =
+        Math.max(
+          0,
+          ROUND_DURATION -
+          elapsed
+        );
+
+
+      const pts =
+        Math.max(
+          15,
+          Math.round(
+            100 *
+            (
+              remaining /
+              ROUND_DURATION
+            )
+          )
+        );
+
+
+      fresh.players[me.id].score =
+        (
+          fresh.players[me.id]
+            .score || 0
+        ) + pts;
+
+
+      if (
+        fresh.players[
+          fresh.currentDrawerId
+        ]
+      ) {
+
+        fresh.players[
+          fresh.currentDrawerId
+        ].score =
+          (
+            fresh.players[
+              fresh.currentDrawerId
+            ].score || 0
+          ) +
+          Math.round(
+            pts / 2
+          );
+      }
+
+
+      fresh.correctGuessers =
+        (
+          fresh.correctGuessers ||
+          []
+        ).concat([
+          me.id
+        ]);
+
+
+      fresh.chat =
+        (
+          fresh.chat || []
+        )
+          .concat([
+            {
+              correct: true,
+
+              text:
+                "🎉 " +
+                myName +
+                " acertou!",
+
+              ts: Date.now()
+            }
+          ])
+          .slice(-40);
+
+    } else {
+
+      fresh.chat =
+        (
+          fresh.chat || []
+        )
+          .concat([
+            {
+              playerId: me.id,
+
+              who: myName,
+
+              text: text,
+
+              ts: Date.now()
+            }
+          ])
+          .slice(-40);
+    }
+
+
+    meta =
+      await writeMeta(
+        fresh
+      );
+
+
+    render();
+
+
+    if (isCorrect) {
+
+      const nonDrawers =
+        Object.keys(
+          fresh.players
+        ).filter(
+          function (id) {
+            return (
+              id !==
+              fresh.currentDrawerId
+            );
+          }
+        );
+
+
+      if (
+        nonDrawers.length > 0 &&
+        nonDrawers.every(
+          function (id) {
+
+            return (
+              fresh.correctGuessers ||
+              []
+            ).includes(id);
+
+          }
+        )
+      ) {
+
+        endRoundNow(
+          "Todo mundo acertou! 🎉"
+        );
+      }
+    }
+  }
+
+
+  /* =========================
+     POLLING
+  ========================= */
+
+  function startPolling() {
+
+    if (pollTimer) {
+      return;
+    }
+
+
+    pollTimer =
+      setInterval(
+        pollTick,
+        POLL_MS
+      );
+  }
+
+
+  async function pollTick() {
+
+    const [
+      m,
+      s
+    ] = await Promise.all([
+      readMeta(),
+      readStrokes()
+    ]);
+
+
+    let changed = false;
+
+
+    if (m) {
+
+      const v =
+        JSON.stringify(m);
+
+
+      if (
+        v !==
+        metaVersionSeen
+      ) {
+
+        metaVersionSeen =
+          v;
+
+        meta =
+          m;
+
+        changed = true;
+      }
+    }
+
+
+    if (s) {
+
+      const v =
+        JSON.stringify(
+          s.strokes || []
+        );
+
+
+      if (
+        v !==
+        strokesVersionSeen
+      ) {
+
+        strokesVersionSeen =
+          v;
+
+        strokes =
+          s;
+
+        changed = true;
+
+        drawAllStrokes();
+      }
+    }
+
+
+    if (changed) {
+      render();
+    }
+
+
+    checkTimers();
+  }
+
+
+  /* =========================
+     TIMER
+  ========================= */
+
+  function checkTimers() {
+
+    if (!meta) {
+      return;
+    }
+
+
+    const now =
+      Date.now();
+
+
+    if (
+      meta.phase ===
+      "playing"
+    ) {
+
+      const remaining =
+        (
+          meta.roundStartAt +
+          ROUND_DURATION * 1000
+        ) - now;
+
+
+      if (
+        remaining <= 0
+      ) {
+
+        endRoundNow(
+          "Tempo esgotado!"
+        );
+      }
+
+    } else if (
+      meta.phase ===
+      "round-end"
+    ) {
+
+      if (
+        meta.roundEndAt &&
+        now >=
+        meta.roundEndAt
+      ) {
+
+        advanceRound();
+      }
+    }
+
+
+    updateTimerDisplay();
+  }
+
+
+  function updateTimerDisplay() {
+
+    const el =
+      document.getElementById(
+        "timer-val"
+      );
+
+
+    if (
+      !el ||
+      !meta ||
+      meta.phase !==
+      "playing"
+    ) {
+      return;
+    }
+
+
+    const remaining =
+      Math.max(
+        0,
+        Math.ceil(
+          (
+            meta.roundStartAt +
+            ROUND_DURATION * 1000 -
+            Date.now()
+          ) / 1000
+        )
+      );
+
+
+    el.textContent =
+      remaining;
+
+
+    if (
+      el.parentElement
+    ) {
+
+      el.parentElement
+        .classList
+        .toggle(
+          "low",
+          remaining <= 12
+        );
+    }
+  }
+
+
+  setInterval(
+    function () {
+
+      if (
+        meta &&
+        meta.phase ===
+        "playing"
+      ) {
+
+        updateTimerDisplay();
+      }
+
+    },
+    1000
+  );
+
+
+  /* =========================
+     CANVAS
+  ========================= */
+
+  function getCanvas() {
+
+    return document.getElementById(
+      "board"
+    );
+  }
+
+
+  function canvasPos(
+    evt,
+    canvas
+  ) {
+
+    const rect =
+      canvas.getBoundingClientRect();
+
+
+    const cx =
+      evt.touches
+        ? evt.touches[0].clientX
+        : evt.clientX;
+
+
+    const cy =
+      evt.touches
+        ? evt.touches[0].clientY
+        : evt.clientY;
+
+
+    let x =
+      (cx - rect.left) /
+      rect.width;
+
+
+    let y =
+      (cy - rect.top) /
+      rect.height;
+
+
+    x =
+      Math.min(
+        1,
+        Math.max(
+          0,
+          x
+        )
+      );
+
+
+    y =
+      Math.min(
+        1,
+        Math.max(
+          0,
+          y
+        )
+      );
+
+
+    return {
+      x: x,
+      y: y
+    };
+  }
+
+
+  function drawAllStrokes() {
+
+    const canvas =
+      getCanvas();
+
+
+    if (!canvas) {
+      return;
+    }
+
+
+    const ctx =
+      canvas.getContext(
+        "2d"
+      );
+
+
+    const W =
+      canvas.width;
+
+    const H =
+      canvas.height;
+
+
+    ctx.clearRect(
+      0,
+      0,
+      W,
+      H
+    );
+
+
+    ctx.fillStyle =
+      ERASER_COLOR;
+
+
+    ctx.fillRect(
+      0,
+      0,
+      W,
+      H
+    );
+
+
+    const list =
+      (
+        strokes &&
+        strokes.strokes
+      ) || [];
+
+
+    list.forEach(
+      function (st) {
+
+        if (
+          !st.points ||
+          st.points.length === 0
+        ) {
+          return;
+        }
+
+
+        ctx.beginPath();
+
+        ctx.lineJoin =
+          "round";
+
+        ctx.lineCap =
+          "round";
+
+        ctx.strokeStyle =
+          st.color;
+
+        ctx.lineWidth =
+          Math.max(
+            1,
+            st.size * W
+          );
+
+
+        ctx.moveTo(
+          st.points[0].x * W,
+          st.points[0].y * H
+        );
+
+
+        if (
+          st.points.length === 1
+        ) {
+
+          ctx.lineTo(
+            st.points[0].x * W +
+            0.1,
+
+            st.points[0].y * H
+          );
+
+        } else {
+
+          for (
+            let i = 1;
+            i < st.points.length;
+            i++
+          ) {
+
+            ctx.lineTo(
+              st.points[i].x * W,
+              st.points[i].y * H
+            );
+          }
+        }
+
+
+        ctx.stroke();
+
+      }
+    );
+  }
+
+
+  function resizeCanvasBacking() {
+
+    const canvas =
+      getCanvas();
+
+
+    if (!canvas) {
+      return;
+    }
+
+
+    canvas.width =
+      700;
+
+    canvas.height =
+      440;
+
+
+    drawAllStrokes();
+  }
+
+
+  function amIDrawer() {
+
+    return (
+      meta &&
+      meta.currentDrawerId ===
+      me.id
+    );
+  }
+
+
+  /* =========================
+     DESENHO
+  ========================= */
+
+  function setupCanvasEvents() {
+
+    const canvas =
+      getCanvas();
+
+
+    if (!canvas) {
+      return;
+    }
+
+
+    const start =
+      function (e) {
+
+        if (
+          !amIDrawer() ||
+          !meta ||
+          meta.phase !==
+          "playing"
+        ) {
+          return;
+        }
+
+
+        e.preventDefault();
+
+
+        isDrawing =
+          true;
+
+
+        const p =
+          canvasPos(
+            e,
+            canvas
+          );
+
+
+        currentStroke = {
+
+          color:
+            activeColor,
+
+          size:
+            activeSize,
+
+          points:
+            [p]
+        };
+
+
+        if (
+          !strokes ||
+          strokes.round !==
+          meta.round
+        ) {
+
+          strokes = {
+
+            round:
+              meta.round,
+
+            strokes:
+              [],
+
+            drawerId:
+              me.id
+          };
+        }
+
+
+        strokes.strokes =
+          (
+            strokes.strokes ||
+            []
+          ).concat([
+            currentStroke
+          ]);
+
+
+        drawAllStrokes();
+      };
+
+
+    const move =
+      function (e) {
+
+        if (
+          !isDrawing ||
+          !currentStroke
+        ) {
+          return;
+        }
+
+
+        e.preventDefault();
+
+
+        const p =
+          canvasPos(
+            e,
+            canvas
+          );
+
+
+        currentStroke.points.push(
+          p
+        );
+
+
+        drawAllStrokes();
+
+
+        const now =
+          Date.now();
+
+
+        if (
+          now -
+          lastStrokeWrite >
+            110 &&
+          !strokesWriteInFlight
+        ) {
+
+          lastStrokeWrite =
+            now;
+
+          flushStrokes();
+        }
+      };
+
+
+    const end =
+      function () {
+
+        if (!isDrawing) {
+          return;
+        }
+
+
+        isDrawing =
+          false;
+
+        currentStroke =
+          null;
+
+
+        flushStrokes();
+      };
+
+
+    canvas.addEventListener(
+      "mousedown",
+      start
+    );
+
+    canvas.addEventListener(
+      "mousemove",
+      move
+    );
+
+    window.addEventListener(
+      "mouseup",
+      end
+    );
+
+
+    canvas.addEventListener(
+      "touchstart",
+      start,
+      {
+        passive: false
+      }
+    );
+
+    canvas.addEventListener(
+      "touchmove",
+      move,
+      {
+        passive: false
+      }
+    );
+
+    canvas.addEventListener(
+      "touchend",
+      end
+    );
+  }
+
+
+  async function flushStrokes() {
+
+    if (!strokes) {
+      return;
+    }
+
+
+    strokesWriteInFlight =
+      true;
+
+
+    try {
+
+      await writeStrokes({
+
+        round:
+          strokes.round,
+
+        strokes:
+          strokes.strokes,
+
+        drawerId:
+          me.id
+      });
+
+
+      strokesVersionSeen =
+        JSON.stringify(
+          strokes.strokes || []
+        );
+
+    } finally {
+
+      strokesWriteInFlight =
+        false;
+    }
+  }
+
+
+  async function clearCanvas() {
+
+    if (!amIDrawer()) {
+      return;
+    }
+
+
+    strokes = {
+
+      round:
+        meta.round,
+
+      strokes:
+        [],
+
+      drawerId:
+        me.id
+    };
+
+
+    drawAllStrokes();
+
+
+    await writeStrokes(
+      strokes
+    );
+  }
+
+
+  /* =========================
+     FRAME
+  ========================= */
+
+  function wobbleFrame() {
+
+    return `
+      <svg
+        class="wobble"
+        viewBox="0 0 700 440"
+        preserveAspectRatio="none"
+      >
+        <rect
+          x="4"
+          y="4"
+          width="692"
+          height="432"
+          rx="10"
+          fill="none"
+          stroke="#FFC53D"
+          stroke-width="3"
+          opacity="0.55"
+        />
+      </svg>
+    `;
+  }
+
+
+  /* =========================
+     RENDER PRINCIPAL
+  ========================= */
+
+  function render() {
+
+    if (!me.name) {
+
+      renderLanding();
+
+      return;
+    }
+
+
+    if (!meta) {
+
+      renderLanding();
+
+      return;
+    }
+
+
+    if (
+      meta.phase ===
+      "lobby"
+    ) {
+
+      renderLobby();
+
+      return;
+    }
+
+
+    if (
+      meta.phase ===
+      "playing"
+    ) {
+
+      renderPlaying();
+
+      return;
+    }
+
+
+    if (
+      meta.phase ===
+      "round-end"
+    ) {
+
+      renderRoundEnd();
+
+      return;
+    }
+
+
+    if (
+      meta.phase ===
+      "game-end"
+    ) {
+
+      renderGameEnd();
+
+      return;
+    }
+  }
+
+
+  /* =========================
+     TELA INICIAL
+  ========================= */
+
+  function renderLanding() {
+
+    app.innerHTML = `
+
+      <div class="card">
+
+        <h2 style="margin-top:0;">
+          Entrar na sala
+        </h2>
+
+        <p class="hint">
+          Digite seu nome para entrar.
+          Depois você poderá iniciar
+          uma partida com os jogadores
+          disponíveis neste navegador.
+        </p>
+
+        <div class="join-row">
+
+          <input
+            type="text"
+            id="name-input"
+            placeholder="Seu nome"
+            maxlength="16"
+            autocomplete="off"
+          />
+
+          <button id="join-btn">
+            Entrar
+          </button>
+
+        </div>
+
+        <div class="status-box">
+          🌐 Multiplayer online: os dados da sala são sincronizados pelo Firebase.
+        </div>
+
+      </div>
+    `;
+
+
+    const input =
+      document.getElementById(
+        "name-input"
+      );
+
+
+    const btn =
+      document.getElementById(
+        "join-btn"
+      );
+
+
+    const go =
+      async function () {
+
+        const v =
+          input.value.trim();
+
+
+        if (!v) {
+
+          input.focus();
+
+          return;
+        }
+
+
+        btn.disabled =
+          true;
+
+        btn.textContent =
+          "Entrando...";
+
+        me.name = v;
+
+        try {
+          await joinGame(v);
+        } catch (error) {
+          console.error("Erro ao entrar:", error);
+          me.name = null;
+          alert(
+            "Não foi possível entrar no jogo. Verifique a conexão com o Firebase e tente novamente.\n\n" +
+            (error?.message || "Erro desconhecido")
+          );
+          render();
+        } finally {
+          btn.disabled = false;
+          btn.textContent = "Entrar";
+        }
+      };
+
+
+    btn.addEventListener(
+      "click",
+      go
+    );
+
+
+    input.addEventListener(
+      "keydown",
+      function (e) {
+
+        if (
+          e.key ===
+          "Enter"
+        ) {
+
+          go();
+        }
+      }
+    );
+
+
+    input.focus();
+  }
+
+
+  /* =========================
+     LOBBY
+  ========================= */
+
+  function renderLobby() {
+
+    const ids =
+      sortedByJoin();
+
+
+    const host =
+      hostId();
+
+
+    const playersHtml =
+      ids.map(
+        function (id) {
+
+          const p =
+            meta.players[id];
+
+
+          const color =
+            hashColor(id);
+
+
+          return `
+            <div class="chip">
+
+              <div
+                class="avatar"
+                style="background:${color}"
+              >
+                ${escapeHtml(
+                  initials(p.name)
+                )}
+              </div>
+
+              <span>
+                ${escapeHtml(p.name)}
+                ${id === me.id
+                  ? " (você)"
+                  : ""}
+              </span>
+
+              ${
+                id === host
+                  ? `
+                    <span class="host-badge">
+                      ★ anfitrião
+                    </span>
+                  `
+                  : ""
+              }
+
+            </div>
+          `;
+        }
+      ).join("");
+
+
+    app.innerHTML = `
+
+      <div class="card">
+
+        <h2 style="margin-top:0;">
+          Sala de espera
+        </h2>
+
+        <div class="player-list">
+
+          ${
+            playersHtml ||
+            `
+              <span class="hint">
+                Ninguém entrou ainda.
+              </span>
+            `
+          }
+
+        </div>
+
+
+        <div
+          class="join-row"
+          style="margin-top:20px;"
+        >
+
+          ${
+            isHost()
+
+              ? `
+                <button
+                  id="start-btn"
+                  ${
+                    ids.length < 2
+                      ? "disabled"
+                      : ""
+                  }
+                >
+                  Iniciar jogo
+                </button>
+              `
+
+              : `
+                <span class="hint">
+                  Aguardando o anfitrião
+                  (
+                  ${escapeHtml(
+                    meta.players[host]?.name ||
+                    ""
+                  )}
+                  )
+                  iniciar...
+                </span>
+              `
+          }
+
+
+          <button
+            class="secondary"
+            id="leave-btn"
+          >
+            Sair
+          </button>
+
+        </div>
+
+
+        ${
+          ids.length < 2
+
+            ? `
+              <p class="hint">
+                Precisa de pelo menos
+                2 jogadores para começar.
+              </p>
+            `
+
+            : `
+              <p class="hint">
+                ${ids.length}
+                jogador(es) prontos.
+                Cada jogador desenha
+                2 vezes.
+              </p>
+            `
+        }
+
+      </div>
+    `;
+
+
+    const startBtn =
+      document.getElementById(
+        "start-btn"
+      );
+
+
+    if (startBtn) {
+
+      startBtn.addEventListener(
+        "click",
+        startGame
+      );
+    }
+
+
+    const leaveBtn =
+      document.getElementById(
+        "leave-btn"
+      );
+
+
+    if (leaveBtn) {
+
+      leaveBtn.addEventListener(
+        "click",
+        leaveGame
+      );
+    }
+  }
+
+
+  /* =========================
+     PLACAR
+  ========================= */
+
+  function scoreboardHtml() {
+
+    const ids =
+      playerIds()
+        .slice()
+        .sort(
+          function (a, b) {
+
+            return (
+              (
+                meta.players[b]
+                  .score || 0
+              ) -
+              (
+                meta.players[a]
+                  .score || 0
+              )
+            );
+          }
+        );
+
+
+    return `
+      <div class="scoreboard">
+
+        ${
+          ids.map(
+            function (id) {
+
+              const p =
+                meta.players[id];
+
+
+              const color =
+                hashColor(id);
+
+
+              const drawing =
+                meta.currentDrawerId ===
+                id;
+
+
+              return `
+
+                <div
+                  class="
+                    score-row
+                    ${
+                      drawing
+                        ? "drawing"
+                        : ""
+                    }
+                  "
+                >
+
+                  <div
+                    class="avatar"
+                    style="
+                      background:${color};
+                      width:22px;
+                      height:22px;
+                      font-size:11px;
+                    "
+                  >
+                    ${escapeHtml(
+                      initials(p.name)
+                    )}
+                  </div>
+
+                  <div class="name">
+
+                    ${escapeHtml(
+                      p.name
+                    )}
+
+                    ${
+                      id === me.id
+                        ? " (você)"
+                        : ""
+                    }
+
+                    ${
+                      drawing
+                        ? " ✏️"
+                        : ""
+                    }
+
+                  </div>
+
+                  <div class="pts">
+                    ${p.score || 0}
+                  </div>
+
+                </div>
+              `;
+            }
+          ).join("")
+        }
+
+      </div>
+    `;
+  }
+
+
+  /* =========================
+     CHAT
+  ========================= */
+
+  function chatHtml() {
+
+    const list =
+      meta.chat || [];
+
+
+    return list.map(
+      function (m) {
+
+        if (m.system) {
+
+          return `
+            <div class="chat-msg system">
+              ${escapeHtml(m.text)}
+            </div>
+          `;
+        }
+
+
+        if (m.correct) {
+
+          return `
+            <div class="chat-msg correct">
+              ${escapeHtml(m.text)}
+            </div>
+          `;
+        }
+
+
+        return `
+          <div class="chat-msg">
+
+            <span class="who">
+              ${escapeHtml(m.who)}:
+            </span>
+
+            ${escapeHtml(m.text)}
+
+          </div>
+        `;
+      }
+    ).join("");
+  }
+
+
+  /* =========================
+     JOGO
+  ========================= */
+
+  function renderPlaying() {
+
+    const drawer =
+      amIDrawer();
+
+
+    const drawerName =
+      meta.players[
+        meta.currentDrawerId
+      ]?.name ||
+      "???";
+
+
+    const remaining =
+      Math.max(
+        0,
+        Math.ceil(
+          (
+            meta.roundStartAt +
+            ROUND_DURATION * 1000 -
+            Date.now()
+          ) / 1000
+        )
+      );
+
+
+    const alreadyCorrect =
+      (
+        meta.correctGuessers ||
+        []
+      ).includes(
+        me.id
+      );
+
+
+    let wordDisplay;
+
+
+    if (drawer) {
+
+      wordDisplay =
+        meta.currentWord;
+
+    } else {
+
+      wordDisplay =
+        (meta.currentWord || "")
+          .split("")
+          .map(
+            function (ch) {
+
+              return ch === " "
+                ? "  "
+                : "_";
+            }
+          )
+          .join(" ");
+    }
+
+
+    app.innerHTML = `
+
+      <div class="game-top">
+
+        <div class="round-info">
+
+          Rodada
+          <b>${meta.round}</b>
+
+          de
+
+          <b>${meta.maxRounds}</b>
+
+          ·
+
+          ${
+            drawer
+              ? "Sua vez de desenhar!"
+              : escapeHtml(
+                  drawerName
+                ) +
+                " está desenhando"
+          }
+
+        </div>
+
+
+        <div class="timer">
+
+          <span id="timer-val">
+            ${remaining}
+          </span>
+
+          s
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="
+          word-banner
+          ${drawer ? "drawer" : ""}
+        "
+      >
+        ${escapeHtml(
+          wordDisplay
+        )}
+      </div>
+
+
+      <div class="play-area">
+
+        <div class="canvas-col">
+
+          <div
+            class="card"
+            style="padding:12px;"
+          >
+
+            <div class="canvas-frame">
+
+              ${wobbleFrame()}
+
+              <canvas
+                id="board"
+                width="700"
+                height="440"
+              ></canvas>
+
+            </div>
+
+
+            ${
+              drawer
+
+                ? `
+
+                  <div class="tools">
+
+                    ${
+                      COLORS.map(
+                        function (c) {
+
+                          return `
+                            <div
+                              class="
+                                swatch
+                                ${
+                                  c.hex ===
+                                  activeColor
+                                    ? "active"
+                                    : ""
+                                }
+                              "
+                              data-color="${c.hex}"
+                              style="
+                                background:${c.hex}
+                              "
+                              title="${c.name}"
+                            ></div>
+                          `;
+                        }
+                      ).join("")
+                    }
+
+
+                    <div
+                      style="
+                        width:1px;
+                        height:22px;
+                        background:var(--line);
+                        margin:0 4px;
+                      "
+                    ></div>
+
+
+                    ${
+                      SIZES.map(
+                        function (s) {
+
+                          const size =
+                            10 +
+                            s.v * 300;
+
+
+                          return `
+                            <div
+                              class="
+                                size-dot
+                                ${
+                                  s.v ===
+                                  activeSize
+                                    ? "active"
+                                    : ""
+                                }
+                              "
+                              data-size="${s.v}"
+                              style="
+                                width:${size}px;
+                                height:${size}px;
+                              "
+                              title="${s.name}"
+                            ></div>
+                          `;
+                        }
+                      ).join("")
+                    }
+
+
+                    <div
+                      style="
+                        flex:1
+                      "
+                    ></div>
+
+
+                    <button
+                      class="secondary"
+                      id="clear-btn"
+                    >
+                      Limpar
+                    </button>
+
+                  </div>
+
+                `
+
+                : `
+
+                  <p class="hint">
+                    Só quem está desenhando
+                    pode usar o quadro.
+                    Tente adivinhar no chat! →
+                  </p>
+
+                `
+            }
+
+          </div>
+
+        </div>
+
+
+        <div class="side-col">
+
+          <div
+            class="card"
+            style="padding:12px;"
+          >
+
+            <h3
+              style="
+                margin:0 0 8px;
+                font-size:15px;
+              "
+            >
+              Placar
+            </h3>
+
+            ${scoreboardHtml()}
+
+          </div>
+
+
+          <div class="chat">
+
+            <div
+              class="chat-log"
+              id="chat-log"
+            >
+              ${chatHtml()}
+            </div>
+
+
+            ${
+              drawer
+
+                ? `
+                  <p
+                    class="hint"
+                    style="
+                      margin:8px 0 0;
+                    "
+                  >
+                    Você está desenhando —
+                    não pode enviar palpites.
+                  </p>
+                `
+
+                : alreadyCorrect
+
+                  ? `
+                    <p
+                      class="hint"
+                      style="
+                        margin:8px 0 0;
+                      "
+                    >
+                      Você acertou!
+                      Aguarde a próxima rodada. 🎉
+                    </p>
+                  `
+
+                  : `
+
+                    <div class="chat-form">
+
+                      <input
+                        type="text"
+                        id="guess-input"
+                        placeholder="Digite seu palpite..."
+                        maxlength="40"
+                        autocomplete="off"
+                      />
+
+                      <button
+                        id="guess-btn"
+                      >
+                        Enviar
+                      </button>
+
+                    </div>
+
+                  `
+            }
+
+          </div>
+
+        </div>
+
+      </div>
+    `;
+
+
+    resizeCanvasBacking();
+
+    setupCanvasEvents();
+
+
+    if (drawer) {
+
+      document
+        .querySelectorAll(
+          ".swatch"
+        )
+        .forEach(
+          function (el) {
+
+            el.addEventListener(
+              "click",
+              function () {
+
+                activeColor =
+                  el.dataset.color;
+
+                render();
+              }
+            );
+          }
+        );
+
+
+      document
+        .querySelectorAll(
+          ".size-dot"
+        )
+        .forEach(
+          function (el) {
+
+            el.addEventListener(
+              "click",
+              function () {
+
+                activeSize =
+                  parseFloat(
+                    el.dataset.size
+                  );
+
+                render();
+              }
+            );
+          }
+        );
+
+
+      document
+        .getElementById(
+          "clear-btn"
+        )
+        .addEventListener(
+          "click",
+          clearCanvas
+        );
+
+    } else if (
+      !alreadyCorrect
+    ) {
+
+      const input =
+        document.getElementById(
+          "guess-input"
+        );
+
+
+      const btn =
+        document.getElementById(
+          "guess-btn"
+        );
+
+
+      const go =
+        function () {
+
+          const v =
+            input.value;
+
+          input.value =
+            "";
+
+          sendGuess(v);
+        };
+
+
+      btn.addEventListener(
+        "click",
+        go
+      );
+
+
+      input.addEventListener(
+        "keydown",
+        function (e) {
+
+          if (
+            e.key ===
+            "Enter"
+          ) {
+
+            go();
+          }
+        }
+      );
+    }
+
+
+    const log =
+      document.getElementById(
+        "chat-log"
+      );
+
+
+    if (log) {
+
+      log.scrollTop =
+        log.scrollHeight;
+    }
+  }
+
+
+  /* =========================
+     FINAL DA RODADA
+  ========================= */
+
+  function renderRoundEnd() {
+
+    app.innerHTML = `
+
+      <div class="card reveal">
+
+        <div class="hint">
+          A palavra era
+        </div>
+
+        <div class="w">
+          ${escapeHtml(
+            meta.currentWord || ""
+          )}
+        </div>
+
+        <div class="sub">
+          Próxima rodada em instantes...
+        </div>
+
+      </div>
+
+
+      <div
+        class="card"
+        style="padding:12px;"
+      >
+
+        <h3
+          style="
+            margin:0 0 8px;
+            font-size:15px;
+          "
+        >
+          Placar
+        </h3>
+
+        ${scoreboardHtml()}
+
+      </div>
+    `;
+  }
+
+
+  /* =========================
+     FIM DE JOGO
+  ========================= */
+
+  function renderGameEnd() {
+
+    const ids =
+      playerIds()
+        .slice()
+        .sort(
+          function (a, b) {
+
+            return (
+              (
+                meta.players[b]
+                  .score || 0
+              ) -
+              (
+                meta.players[a]
+                  .score || 0
+              )
+            );
+          }
+        );
+
+
+    const winner =
+      ids[0]
+        ? meta.players[ids[0]]
+        : null;
+
+
+    app.innerHTML = `
+
+      <div
+        class="card winner-banner"
+      >
+
+        <div class="hint">
+          Fim de jogo!
+        </div>
+
+        <div class="w">
+
+          ${
+            winner
+              ? "🏆 " +
+                escapeHtml(
+                  winner.name
+                ) +
+                " venceu!"
+              : ""
+          }
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="card"
+        style="padding:12px;"
+      >
+
+        <h3
+          style="
+            margin:0 0 8px;
+            font-size:15px;
+          "
+        >
+          Placar final
+        </h3>
+
+        ${scoreboardHtml()}
+
+      </div>
+
+
+      <div class="join-row">
+
+        ${
+          isHost()
+
+            ? `
+              <button id="again-btn">
+                Jogar novamente
+              </button>
+            `
+
+            : `
+              <span class="hint">
+                Aguardando o anfitrião
+                reiniciar...
+              </span>
+            `
+        }
+
+
+        <button
+          class="secondary"
+          id="leave-btn2"
+        >
+          Sair
+        </button>
+
+      </div>
+    `;
+
+
+    const again =
+      document.getElementById(
+        "again-btn"
+      );
+
+
+    if (again) {
+
+      again.addEventListener(
+        "click",
+        playAgain
+      );
+    }
+
+
+    const leave =
+      document.getElementById(
+        "leave-btn2"
+      );
+
+
+    if (leave) {
+
+      leave.addEventListener(
+        "click",
+        leaveGame
+      );
+    }
+  }
+
+
+  /* =========================
+     LIMPAR SALA
+     PARA TESTES
+  ========================= */
+
+  /*
+    Para limpar a sala de testes, use o Firebase Console:
+    Realtime Database -> Dados -> game -> excluir.
+  */
+
+
+  /* =========================
+     BOOT
+  ========================= */
+
+  async function boot() {
+
+    meta =
+      await readMeta();
+
+
+    if (!meta) {
+
+      meta =
+        defaultMeta();
+    }
+
+
+    metaVersionSeen =
+      JSON.stringify(
+        meta
+      );
+
+
+    strokes =
+      await readStrokes();
+
+
+    if (strokes) {
+
+      strokesVersionSeen =
+        JSON.stringify(
+          strokes.strokes || []
+        );
+    }
+
+
+    render();
+
+    startPolling();
+  }
+
+
+  boot();
+
+})();
 </script>
 
 </body>
