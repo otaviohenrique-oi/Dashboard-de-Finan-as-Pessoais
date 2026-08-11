@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -10,489 +9,462 @@
 @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap');
 
 :root {
-  --bg: #16232C;
-  --bg-2: #1F323D;
-  --bg-3: #263F4C;
-  --canvas-bg: #FDFBF3;
-  --ink: #EDEAE0;
-  --ink-dim: #9FB2BA;
-  --yellow: #FFC53D;
-  --pink: #FF5C8A;
-  --teal: #2FD4C4;
-  --purple: #B490F0;
-  --line: rgba(255,255,255,0.10);
-  --radius: 14px;
+  --bg:#16232C;
+  --bg-2:#1F323D;
+  --bg-3:#263F4C;
+  --canvas-bg:#FDFBF3;
+  --ink:#EDEAE0;
+  --ink-dim:#9FB2BA;
+  --yellow:#FFC53D;
+  --pink:#FF5C8A;
+  --teal:#2FD4C4;
+  --purple:#B490F0;
+  --line:rgba(255,255,255,.10);
+  --radius:14px;
 }
 
 * {
-  box-sizing: border-box;
+  box-sizing:border-box;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
+html,body {
+  margin:0;
+  padding:0;
 }
 
 body {
-  background: radial-gradient(
+  background:radial-gradient(
     circle at 20% -10%,
     #223744 0%,
     var(--bg) 55%
   );
-  color: var(--ink);
-  font-family: 'Space Grotesk', sans-serif;
-  min-height: 100vh;
-  padding: 20px 14px 60px;
+  color:var(--ink);
+  font-family:'Space Grotesk',sans-serif;
+  min-height:100vh;
+  padding:20px 14px 60px;
 }
 
-h1,
-h2,
-h3,
-.marker {
-  font-family: 'Kalam', cursive;
+h1,h2,h3,.marker {
+  font-family:'Kalam',cursive;
 }
 
 .wrap {
-  max-width: 980px;
-  margin: 0 auto;
+  max-width:980px;
+  margin:0 auto;
 }
 
-/* BRAND */
-
 .brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 18px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
 }
 
 .brand .dot {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--pink);
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:var(--pink);
   box-shadow:
     18px 0 0 var(--yellow),
     36px 0 0 var(--teal);
 }
 
 .brand h1 {
-  font-size: 30px;
-  margin: 0;
-  letter-spacing: 0.5px;
+  font-size:30px;
+  margin:0;
+  letter-spacing:.5px;
 }
 
 .brand p {
-  margin: 2px 0 0;
-  color: var(--ink-dim);
-  font-size: 13px;
+  margin:2px 0 0;
+  color:var(--ink-dim);
+  font-size:13px;
 }
-
-/* CARDS */
 
 .card {
-  background: var(--bg-2);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 22px;
-  margin-bottom: 16px;
+  background:var(--bg-2);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:22px;
+  margin-bottom:16px;
 }
 
-/* JOIN */
-
 .join-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 14px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:14px;
 }
 
 input[type="text"] {
-  flex: 1;
-  min-width: 180px;
-  background: var(--bg-3);
-  border: 1px solid var(--line);
-  color: var(--ink);
-  padding: 12px 14px;
-  border-radius: 10px;
-  font-size: 15px;
-  font-family: inherit;
+  flex:1;
+  min-width:180px;
+  background:var(--bg-3);
+  border:1px solid var(--line);
+  color:var(--ink);
+  padding:12px 14px;
+  border-radius:10px;
+  font-size:15px;
+  font-family:inherit;
 }
 
 input[type="text"]:focus {
-  outline: 2px solid var(--teal);
+  outline:2px solid var(--teal);
 }
 
 button {
-  font-family: 'Kalam', cursive;
-  font-size: 16px;
-  font-weight: 700;
-  border: none;
-  border-radius: 10px;
-  padding: 11px 20px;
-  cursor: pointer;
-  background: var(--yellow);
-  color: #22160A;
-  transition: transform 0.12s ease;
+  font-family:'Kalam',cursive;
+  font-size:16px;
+  font-weight:700;
+  border:none;
+  border-radius:10px;
+  padding:11px 20px;
+  cursor:pointer;
+  background:var(--yellow);
+  color:#22160A;
+  transition:transform .12s ease;
 }
 
 button:hover:not(:disabled) {
-  transform: translateY(-1px);
+  transform:translateY(-1px);
 }
 
 button:active:not(:disabled) {
-  transform: translateY(0) scale(0.98);
+  transform:translateY(0) scale(.98);
 }
 
 button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+  opacity:.4;
+  cursor:not-allowed;
 }
 
 button.secondary {
-  background: var(--bg-3);
-  color: var(--ink);
-  border: 1px solid var(--line);
+  background:var(--bg-3);
+  color:var(--ink);
+  border:1px solid var(--line);
 }
 
 button.pink {
-  background: var(--pink);
-  color: #2A0A16;
+  background:var(--pink);
+  color:#2A0A16;
 }
 
 button.teal {
-  background: var(--teal);
-  color: #052824;
+  background:var(--teal);
+  color:#052824;
 }
 
 .player-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 16px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:16px;
 }
 
 .chip {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-3);
-  border: 1px solid var(--line);
-  padding: 7px 12px 7px 7px;
-  border-radius: 999px;
-  font-size: 14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:var(--bg-3);
+  border:1px solid var(--line);
+  padding:7px 12px 7px 7px;
+  border-radius:999px;
+  font-size:14px;
 }
 
 .avatar {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Kalam', cursive;
-  font-weight: 700;
-  font-size: 13px;
-  color: #1a1a1a;
-  flex-shrink: 0;
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Kalam',cursive;
+  font-weight:700;
+  font-size:13px;
+  color:#1a1a1a;
+  flex-shrink:0;
 }
 
 .host-badge {
-  font-size: 10px;
-  color: var(--yellow);
-  margin-left: 2px;
+  font-size:10px;
+  color:var(--yellow);
+  margin-left:2px;
 }
 
 .hint {
-  color: var(--ink-dim);
-  font-size: 13px;
-  margin-top: 10px;
-  line-height: 1.5;
+  color:var(--ink-dim);
+  font-size:13px;
+  margin-top:10px;
+  line-height:1.5;
 }
 
-/* GAME */
-
 .game-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:14px;
 }
 
 .round-info {
-  font-size: 14px;
-  color: var(--ink-dim);
+  font-size:14px;
+  color:var(--ink-dim);
 }
 
 .round-info b {
-  color: var(--ink);
+  color:var(--ink);
 }
 
 .timer {
-  font-family: 'Kalam', cursive;
-  font-size: 26px;
-  font-weight: 700;
-  background: var(--bg-3);
-  border: 1px solid var(--line);
-  padding: 4px 16px;
-  border-radius: 10px;
-  min-width: 64px;
-  text-align: center;
+  font-family:'Kalam',cursive;
+  font-size:26px;
+  font-weight:700;
+  background:var(--bg-3);
+  border:1px solid var(--line);
+  padding:4px 16px;
+  border-radius:10px;
+  min-width:64px;
+  text-align:center;
 }
 
 .timer.low {
-  color: var(--pink);
+  color:var(--pink);
 }
 
 .word-banner {
-  text-align: center;
-  font-family: 'Kalam', cursive;
-  font-size: 22px;
-  letter-spacing: 4px;
-  padding: 10px;
-  margin-bottom: 14px;
-  border-radius: 10px;
-  background: var(--bg-3);
-  border: 1px solid var(--line);
+  text-align:center;
+  font-family:'Kalam',cursive;
+  font-size:22px;
+  letter-spacing:4px;
+  padding:10px;
+  margin-bottom:14px;
+  border-radius:10px;
+  background:var(--bg-3);
+  border:1px solid var(--line);
 }
 
 .word-banner.drawer {
-  color: var(--yellow);
-  letter-spacing: 1px;
+  color:var(--yellow);
+  letter-spacing:1px;
 }
 
 .play-area {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  align-items:flex-start;
 }
 
 .canvas-col {
-  flex: 2 1 420px;
-  min-width: 300px;
+  flex:2 1 420px;
+  min-width:300px;
 }
 
 .side-col {
-  flex: 1 1 260px;
-  min-width: 240px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex:1 1 260px;
+  min-width:240px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
 }
 
 .canvas-frame {
-  position: relative;
-  padding: 10px;
+  position:relative;
+  padding:10px;
 }
 
 .canvas-frame svg.wobble {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
 }
 
 canvas {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 700 / 440;
-  background: var(--canvas-bg);
-  border-radius: 8px;
-  touch-action: none;
-  cursor: crosshair;
-  position: relative;
-  z-index: 1;
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:700 / 440;
+  background:var(--canvas-bg);
+  border-radius:8px;
+  touch-action:none;
+  cursor:crosshair;
+  position:relative;
+  z-index:1;
 }
 
-/* TOOLS */
-
 .tools {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
 }
 
 .swatch {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  cursor: pointer;
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  border:2px solid transparent;
+  cursor:pointer;
 }
 
 .swatch.active {
-  border-color: var(--ink);
-  transform: scale(1.12);
+  border-color:var(--ink);
+  transform:scale(1.12);
 }
 
 .size-dot {
-  border-radius: 50%;
-  background: var(--ink);
-  cursor: pointer;
-  border: 2px solid transparent;
+  border-radius:50%;
+  background:var(--ink);
+  cursor:pointer;
+  border:2px solid transparent;
 }
 
 .size-dot.active {
-  border-color: var(--yellow);
+  border-color:var(--yellow);
 }
 
-/* SCORE */
-
 .scoreboard {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
 
 .score-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg-3);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 8px 10px;
-  font-size: 14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:var(--bg-3);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:8px 10px;
+  font-size:14px;
 }
 
 .score-row .name {
-  flex: 1;
+  flex:1;
 }
 
 .score-row .pts {
-  font-family: 'Kalam', cursive;
-  font-weight: 700;
-  color: var(--yellow);
+  font-family:'Kalam',cursive;
+  font-weight:700;
+  color:var(--yellow);
 }
 
 .score-row.drawing {
-  outline: 1px solid var(--teal);
+  outline:1px solid var(--teal);
 }
 
-/* CHAT */
-
 .chat {
-  background: var(--bg-3);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 10px;
-  height: 220px;
-  display: flex;
-  flex-direction: column;
+  background:var(--bg-3);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:10px;
+  height:220px;
+  display:flex;
+  flex-direction:column;
 }
 
 .chat-log {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding-right: 4px;
+  flex:1;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  padding-right:4px;
 }
 
 .chat-msg {
-  font-size: 13.5px;
-  line-height: 1.4;
+  font-size:13.5px;
+  line-height:1.4;
 }
 
 .chat-msg .who {
-  font-weight: 700;
+  font-weight:700;
 }
 
 .chat-msg.correct {
-  color: var(--teal);
-  font-family: 'Kalam', cursive;
-  font-size: 14.5px;
+  color:var(--teal);
+  font-family:'Kalam',cursive;
+  font-size:14.5px;
 }
 
 .chat-msg.system {
-  color: var(--ink-dim);
-  font-style: italic;
+  color:var(--ink-dim);
+  font-style:italic;
 }
 
 .chat-form {
-  display: flex;
-  gap: 6px;
-  margin-top: 8px;
+  display:flex;
+  gap:6px;
+  margin-top:8px;
 }
 
 .chat-form input {
-  padding: 9px 10px;
-  font-size: 13.5px;
+  padding:9px 10px;
+  font-size:13.5px;
 }
 
 .chat-form button {
-  padding: 9px 14px;
-  font-size: 13.5px;
+  padding:9px 14px;
+  font-size:13.5px;
 }
 
-/* REVEAL */
-
 .reveal {
-  text-align: center;
-  padding: 26px 10px;
+  text-align:center;
+  padding:26px 10px;
 }
 
 .reveal .w {
-  font-family: 'Kalam', cursive;
-  font-size: 34px;
-  color: var(--yellow);
-  margin: 6px 0 2px;
+  font-family:'Kalam',cursive;
+  font-size:34px;
+  color:var(--yellow);
+  margin:6px 0 2px;
 }
 
 .reveal .sub {
-  color: var(--ink-dim);
-  font-size: 14px;
+  color:var(--ink-dim);
+  font-size:14px;
 }
 
 .winner-banner {
-  text-align: center;
-  padding: 10px 0 20px;
+  text-align:center;
+  padding:10px 0 20px;
 }
 
 .winner-banner .w {
-  font-family: 'Kalam', cursive;
-  font-size: 30px;
-  color: var(--yellow);
-}
-
-.empty-note {
-  color: var(--ink-dim);
-  font-size: 13px;
-  text-align: center;
-  padding: 10px;
+  font-family:'Kalam',cursive;
+  font-size:30px;
+  color:var(--yellow);
 }
 
 .status-box {
-  margin-top: 12px;
-  padding: 10px;
-  border-radius: 8px;
-  background: rgba(47, 212, 196, 0.08);
-  border: 1px solid rgba(47, 212, 196, 0.18);
-  color: var(--ink-dim);
-  font-size: 13px;
+  margin-top:12px;
+  padding:10px;
+  border-radius:8px;
+  background:rgba(47,212,196,.08);
+  border:1px solid rgba(47,212,196,.18);
+  color:var(--ink-dim);
+  font-size:13px;
 }
 
-@media (max-width: 640px) {
+@media(max-width:640px) {
   .brand h1 {
-    font-size: 24px;
+    font-size:24px;
   }
 
   .word-banner {
-    font-size: 18px;
-    letter-spacing: 2px;
+    font-size:18px;
+    letter-spacing:2px;
   }
 
   .card {
-    padding: 16px;
+    padding:16px;
   }
 }
 </style>
@@ -520,9 +492,27 @@ canvas {
 <script>
 (function () {
 
-  /* =========================
+  /* =========================================================
+     CONFIGURAÇÃO
+  ========================================================= */
+
+  const FIREBASE_DB_URL =
+    "https://desenha-e-adivinha-19968-default-rtdb.firebaseio.com";
+
+  const META_PATH = "/game/meta.json";
+  const STROKES_PATH = "/game/strokes.json";
+
+  const POLL_MS = 1100;
+
+  const ROUND_DURATION = 70;
+  const ROUND_END_PAUSE = 5;
+
+  const MAX_PLAYERS = 4;
+
+
+  /* =========================================================
      PALAVRAS
-  ========================= */
+  ========================================================= */
 
   const WORDS = [
     "gato",
@@ -608,19 +598,19 @@ canvas {
   ];
 
 
-  /* =========================
+  /* =========================================================
      CORES
-  ========================= */
+  ========================================================= */
 
   const COLORS = [
-    { name: "preto", hex: "#20211D" },
-    { name: "vermelho", hex: "#E23B3B" },
-    { name: "laranja", hex: "#FF8A3D" },
-    { name: "amarelo", hex: "#FFC53D" },
-    { name: "verde", hex: "#39B36B" },
-    { name: "azul", hex: "#3E8AE0" },
-    { name: "rosa", hex: "#FF5C8A" },
-    { name: "roxo", hex: "#B490F0" }
+    { name:"preto", hex:"#20211D" },
+    { name:"vermelho", hex:"#E23B3B" },
+    { name:"laranja", hex:"#FF8A3D" },
+    { name:"amarelo", hex:"#FFC53D" },
+    { name:"verde", hex:"#39B36B" },
+    { name:"azul", hex:"#3E8AE0" },
+    { name:"rosa", hex:"#FF5C8A" },
+    { name:"roxo", hex:"#B490F0" }
   ];
 
   const AVATAR_COLORS = [
@@ -635,28 +625,17 @@ canvas {
   ];
 
   const SIZES = [
-    { name: "fino", v: 0.006 },
-    { name: "médio", v: 0.012 },
-    { name: "grosso", v: 0.024 }
+    { name:"fino", v:0.006 },
+    { name:"médio", v:0.012 },
+    { name:"grosso", v:0.024 }
   ];
 
   const ERASER_COLOR = "#FDFBF3";
 
-  const ROUND_DURATION = 70;
-  const ROUND_END_PAUSE = 5;
 
-  // Firebase Realtime Database
-  const FIREBASE_DB_URL =
-    "https://desenha-e-adivinha-19968-default-rtdb.firebaseio.com";
-
-  const META_PATH = "/game/meta.json";
-  const STROKES_PATH = "/game/strokes.json";
-
-  const POLL_MS = 1100;
-
-  /* =========================
+  /* =========================================================
      JOGADOR
-  ========================= */
+  ========================================================= */
 
   function uid() {
 
@@ -670,7 +649,7 @@ canvas {
     return "p-" +
       Math.random()
         .toString(36)
-        .slice(2, 10);
+        .slice(2,10);
   }
 
 
@@ -685,7 +664,7 @@ canvas {
     ) {
       h =
         (h * 31 +
-          str.charCodeAt(i)) >>> 0;
+        str.charCodeAt(i)) >>> 0;
     }
 
     return AVATAR_COLORS[
@@ -700,24 +679,24 @@ canvas {
       name || "?"
     )
       .trim()
-      .slice(0, 2)
+      .slice(0,2)
       .toUpperCase();
   }
 
 
   function escapeHtml(s) {
 
-    return (s || "")
+    return String(s || "")
       .replace(
         /[&<>"']/g,
         function (c) {
 
           return {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#39;"
+            "&":"&amp;",
+            "<":"&lt;",
+            ">":"&gt;",
+            '"':"&quot;",
+            "'":"&#39;"
           }[c];
 
         }
@@ -726,16 +705,24 @@ canvas {
 
 
   const me = {
-    id: uid(),
-    name: null
+    id:uid(),
+    name:null
   };
 
+
+  /* =========================================================
+     ESTADO LOCAL
+  ========================================================= */
 
   let meta = null;
   let strokes = null;
 
   let metaVersionSeen = null;
   let strokesVersionSeen = null;
+
+  let pollTimer = null;
+
+  let transitioning = false;
 
   let isDrawing = false;
   let currentStroke = null;
@@ -744,159 +731,282 @@ canvas {
   let activeSize = SIZES[1].v;
 
   let lastStrokeWrite = 0;
-  let transitioning = false;
   let strokesWriteInFlight = false;
-
-  let pollTimer = null;
 
   const app =
     document.getElementById("app");
 
 
-  /* =========================
-     FIREBASE REALTIME DATABASE
-  ========================= */
+  /* =========================================================
+     FIREBASE
+  ========================================================= */
 
-  async function firebaseRequest(path, options = {}) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
+  async function firebaseRequest(
+    path,
+    options = {}
+  ) {
 
-    try {
-      const response = await fetch(
-        FIREBASE_DB_URL + path,
-        {
-          ...options,
-          headers: {
-            "Content-Type": "application/json",
-            ...(options.headers || {})
-          },
-          signal: controller.signal
-        }
+    const controller =
+      new AbortController();
+
+    const timeout =
+      setTimeout(
+        () => controller.abort(),
+        8000
       );
 
+    try {
+
+      const response =
+        await fetch(
+          FIREBASE_DB_URL + path,
+          {
+            ...options,
+            headers:{
+              "Content-Type":
+                "application/json",
+              ...(options.headers || {})
+            },
+            signal:
+              controller.signal
+          }
+        );
+
       if (!response.ok) {
-        const text = await response.text().catch(() => "");
+
+        const text =
+          await response
+            .text()
+            .catch(() => "");
+
         throw new Error(
-          `Firebase HTTP ${response.status}${text ? `: ${text}` : ""}`
+          "Firebase HTTP " +
+          response.status +
+          (
+            text
+              ? ": " + text
+              : ""
+          )
         );
       }
 
       return await response.json();
+
     } catch (e) {
-      if (e.name === "AbortError") {
-        throw new Error("O Firebase demorou mais de 8 segundos para responder.");
+
+      if (
+        e.name ===
+        "AbortError"
+      ) {
+        throw new Error(
+          "O Firebase demorou mais de 8 segundos para responder."
+        );
       }
+
       throw e;
+
     } finally {
+
       clearTimeout(timeout);
     }
   }
 
-  async function readMeta() {
-    try {
-      const remote = await firebaseRequest(META_PATH);
-      const base = defaultMeta();
-
-      // O banco pode já ter sido criado com apenas parte dos campos
-      // (por exemplo: phase, round e maxRounds).
-      // Combinamos os valores existentes com a estrutura padrão para
-      // garantir que players, drawOrder etc. nunca fiquem undefined.
-      if (!remote || typeof remote !== "object") {
-        return base;
-      }
-
-      return {
-        ...base,
-        ...remote,
-        players: remote.players && typeof remote.players === "object"
-          ? remote.players
-          : {},
-        drawOrder: Array.isArray(remote.drawOrder)
-          ? remote.drawOrder
-          : [],
-        lastWords: Array.isArray(remote.lastWords)
-          ? remote.lastWords
-          : []
-      };
-    } catch (e) {
-      console.error("Erro ao ler meta do Firebase:", e);
-      throw e;
-    }
-  }
-
-  async function writeMeta(next) {
-    try {
-      return await firebaseRequest(META_PATH, {
-        method: "PUT",
-        body: JSON.stringify(next)
-      });
-    } catch (e) {
-      console.error("Erro ao salvar meta no Firebase:", e);
-      return null;
-    }
-  }
-
-  async function readStrokes() {
-    try {
-      return await firebaseRequest(STROKES_PATH);
-    } catch (e) {
-      console.error("Erro ao ler strokes do Firebase:", e);
-      return null;
-    }
-  }
-
-  async function writeStrokes(next) {
-    try {
-      return await firebaseRequest(STROKES_PATH, {
-        method: "PUT",
-        body: JSON.stringify(next)
-      });
-    } catch (e) {
-      console.error("Erro ao salvar strokes no Firebase:", e);
-      return null;
-    }
-  }
-
-
-  /* =========================
-     META PADRÃO
-  ========================= */
 
   function defaultMeta() {
 
     return {
-      players: {},
+      players:{},
 
-      phase: "lobby",
+      phase:"lobby",
 
-      round: 0,
+      round:0,
 
-      maxRounds: 0,
+      maxRounds:0,
 
-      drawOrder: [],
+      drawOrder:[],
 
-      currentDrawerId: null,
+      currentDrawerId:null,
 
-      currentWord: null,
+      currentWord:null,
 
-      lastWords: [],
+      lastWords:[],
 
-      roundStartAt: 0,
+      roundStartAt:0,
 
-      roundEndAt: 0,
+      roundEndAt:0,
 
-      correctGuessers: [],
+      correctGuessers:[],
 
-      chat: []
+      chat:[]
     };
   }
 
 
-  /* =========================
-     PALAVRAS
-  ========================= */
+  async function readMeta() {
 
-  function pickWord(avoid) {
+    const remote =
+      await firebaseRequest(
+        META_PATH
+      );
+
+    const base =
+      defaultMeta();
+
+    if (
+      !remote ||
+      typeof remote !== "object"
+    ) {
+      return base;
+    }
+
+    return {
+      ...base,
+      ...remote,
+
+      players:
+        remote.players &&
+        typeof remote.players === "object"
+          ? remote.players
+          : {},
+
+      drawOrder:
+        Array.isArray(remote.drawOrder)
+          ? remote.drawOrder
+          : [],
+
+      lastWords:
+        Array.isArray(remote.lastWords)
+          ? remote.lastWords
+          : [],
+
+      correctGuessers:
+        Array.isArray(
+          remote.correctGuessers
+        )
+          ? remote.correctGuessers
+          : [],
+
+      chat:
+        Array.isArray(remote.chat)
+          ? remote.chat
+          : []
+    };
+  }
+
+
+  async function writeMeta(next) {
+
+    return await firebaseRequest(
+      META_PATH,
+      {
+        method:"PUT",
+        body:JSON.stringify(next)
+      }
+    );
+  }
+
+
+  async function readStrokes() {
+
+    return await firebaseRequest(
+      STROKES_PATH
+    );
+  }
+
+
+  async function writeStrokes(next) {
+
+    return await firebaseRequest(
+      STROKES_PATH,
+      {
+        method:"PUT",
+        body:JSON.stringify(next)
+      }
+    );
+  }
+
+
+  /* =========================================================
+     JOGADORES
+  ========================================================= */
+
+  function playerIds() {
+
+    return Object.keys(
+      (meta && meta.players) || {}
+    );
+  }
+
+
+  function sortedByJoin() {
+
+    return playerIds()
+      .sort(
+        function (a,b) {
+
+          return (
+            (
+              meta.players[a]
+                .joinedAt || 0
+            ) -
+            (
+              meta.players[b]
+                .joinedAt || 0
+            )
+          );
+        }
+      );
+  }
+
+
+  function hostId() {
+
+    const ids =
+      sortedByJoin();
+
+    return ids.length
+      ? ids[0]
+      : null;
+  }
+
+
+  function isHost() {
+
+    return (
+      me.id === hostId()
+    );
+  }
+
+
+  function amIDrawer() {
+
+    return !!(
+      meta &&
+      meta.currentDrawerId ===
+      me.id
+    );
+  }
+
+
+  function playerNameFromMeta(
+    m,
+    id
+  ) {
+
+    return (
+      m.players &&
+      m.players[id]
+    )
+      ? m.players[id].name
+      : "???";
+  }
+
+
+  /* =========================================================
+     PALAVRAS
+  ========================================================= */
+
+  function pickWord(avoid = []) {
 
     const pool =
       WORDS.filter(
@@ -919,90 +1029,23 @@ canvas {
   }
 
 
-  /* =========================
-     JOGADORES
-  ========================= */
-
-  function playerIds() {
-
-    return Object.keys(
-      meta.players || {}
-    );
-  }
-
-
-  function sortedByJoin() {
-
-    return playerIds()
-      .sort(function (a, b) {
-
-        return (
-          (meta.players[a].joinedAt || 0) -
-          (meta.players[b].joinedAt || 0)
-        );
-
-      });
-  }
-
-
-  function hostId() {
-
-    const s =
-      sortedByJoin();
-
-    return s.length
-      ? s[0]
-      : null;
-  }
-
-
-  function isHost() {
-
-    return hostId() === me.id;
-  }
-
-
-  function playerNameFromMeta(
-    m,
-    id
-  ) {
-
-    return m.players[id]
-      ? m.players[id].name
-      : "???";
-  }
-
-
-  /* =========================
+  /* =========================================================
      ENTRAR
-  ========================= */
+  ========================================================= */
 
   async function joinGame(name) {
 
-    let fresh =
+    const fresh =
       await readMeta();
 
-    if (!fresh) {
-      fresh = defaultMeta();
-    }
-
-    // Segurança extra: versões antigas do banco podem não ter players.
-    if (!fresh.players || typeof fresh.players !== "object") {
-      fresh.players = {};
-    }
-
-    /*
-      Limite de 4 jogadores.
-    */
-
-    const existingIds =
+    const ids =
       Object.keys(
         fresh.players || {}
       );
 
     if (
       !fresh.players[me.id] &&
-      existingIds.length >= 4
+      ids.length >= MAX_PLAYERS
     ) {
 
       alert(
@@ -1019,7 +1062,7 @@ canvas {
 
     fresh.players[me.id] = {
 
-      name: name,
+      name:name,
 
       score:
         fresh.players[me.id]?.score ||
@@ -1032,21 +1075,13 @@ canvas {
 
 
     meta =
-      await writeMeta(fresh);
-
-
-    if (!meta) {
-
-      alert(
-        "Não foi possível salvar o jogador."
+      await writeMeta(
+        fresh
       );
 
-      me.name = null;
 
-      render();
-
-      return;
-    }
+    metaVersionSeen =
+      JSON.stringify(meta);
 
 
     render();
@@ -1055,185 +1090,72 @@ canvas {
   }
 
 
-  /* =========================
+  /* =========================================================
      SAIR
-  ========================= */
+  ========================================================= */
 
   async function leaveGame() {
 
-    let fresh =
-      await readMeta();
+    try {
 
-    if (!fresh) {
-      return;
-    }
+      const fresh =
+        await readMeta();
 
+      if (!fresh) {
+        return;
+      }
 
-    delete fresh.players[me.id];
-
-
-    if (fresh.drawOrder) {
+      delete fresh.players[
+        me.id
+      ];
 
       fresh.drawOrder =
-        fresh.drawOrder.filter(
-          function (id) {
-            return id !== me.id;
-          }
+        (
+          fresh.drawOrder || []
+        ).filter(
+          id => id !== me.id
         );
+
+      if (
+        fresh.currentDrawerId ===
+        me.id
+      ) {
+        fresh.currentDrawerId =
+          null;
+      }
+
+      await writeMeta(
+        fresh
+      );
+
+    } catch (e) {
+
+      console.error(
+        "Erro ao sair:",
+        e
+      );
+
+    } finally {
+
+      me.name = null;
+      meta = null;
+      strokes = null;
+
+      render();
     }
-
-
-    meta =
-      await writeMeta(fresh);
-
-    me.name = null;
-
-    render();
   }
 
 
-  /* =========================
+  /* =========================================================
      INICIAR JOGO
-  ========================= */
+     SOMENTE O HOST
+  ========================================================= */
 
   async function startGame() {
 
-    let fresh =
-      await readMeta();
-
-    if (!fresh) {
+    if (!isHost()) {
       return;
     }
-
-
-    const ids =
-      Object.keys(
-        fresh.players
-      );
-
-
-    if (ids.length < 2) {
-
-      alert(
-        "É necessário pelo menos 2 jogadores."
-      );
-
-      return;
-    }
-
-
-    if (ids.length > 4) {
-
-      alert(
-        "O jogo permite no máximo 4 jogadores."
-      );
-
-      return;
-    }
-
-
-    const order =
-      ids.slice().sort(
-        function () {
-          return Math.random() - 0.5;
-        }
-      );
-
-
-    const word =
-      pickWord([]);
-
-
-    fresh.phase =
-      "playing";
-
-    fresh.round =
-      1;
-
-    fresh.maxRounds =
-      order.length * 2;
-
-    fresh.drawOrder =
-      order;
-
-    fresh.currentDrawerId =
-      order[0];
-
-    fresh.currentWord =
-      word;
-
-    fresh.lastWords =
-      [word];
-
-    fresh.roundStartAt =
-      Date.now();
-
-    fresh.roundEndAt =
-      0;
-
-    fresh.correctGuessers =
-      [];
-
-    fresh.chat = [
-      {
-        system: true,
-
-        text:
-          "Rodada 1: " +
-          playerNameFromMeta(
-            fresh,
-            order[0]
-          ) +
-          " vai desenhar!",
-
-        ts: Date.now()
-      }
-    ];
-
-
-    Object.values(
-      fresh.players
-    ).forEach(
-      function (p) {
-        p.score = 0;
-      }
-    );
-
-
-    meta =
-      await writeMeta(fresh);
-
-
-    await writeStrokes({
-
-      round: 1,
-
-      strokes: [],
-
-      drawerId:
-        order[0]
-    });
-
-
-    strokes = {
-      round: 1,
-
-      strokes: [],
-
-      drawerId:
-        order[0]
-    };
-
-
-    render();
-  }
-
-
-  /* =========================
-     FINALIZAR RODADA
-  ========================= */
-
-  async function endRoundNow(reason) {
 
     if (transitioning) {
       return;
@@ -1243,7 +1165,184 @@ canvas {
 
     try {
 
-      let fresh =
+      const fresh =
+        await readMeta();
+
+      const ids =
+        Object.keys(
+          fresh.players || {}
+        );
+
+      if (ids.length < 2) {
+
+        alert(
+          "É necessário pelo menos 2 jogadores."
+        );
+
+        return;
+      }
+
+      if (ids.length > MAX_PLAYERS) {
+
+        alert(
+          "O jogo permite no máximo 4 jogadores."
+        );
+
+        return;
+      }
+
+
+      const order =
+        ids.slice().sort(
+          () =>
+            Math.random() - 0.5
+        );
+
+
+      const word =
+        pickWord([]);
+
+
+      /*
+       * IMPORTANTE:
+       * A palavra é escolhida UMA ÚNICA VEZ.
+       * Todos os jogadores recebem esta mesma
+       * informação através de meta.currentWord.
+       */
+
+      fresh.phase =
+        "playing";
+
+      fresh.round =
+        1;
+
+      fresh.maxRounds =
+        order.length * 2;
+
+      fresh.drawOrder =
+        order;
+
+      fresh.currentDrawerId =
+        order[0];
+
+      fresh.currentWord =
+        word;
+
+      fresh.lastWords =
+        [word];
+
+      fresh.roundStartAt =
+        Date.now();
+
+      fresh.roundEndAt =
+        0;
+
+      fresh.correctGuessers =
+        [];
+
+      fresh.chat = [
+        {
+          system:true,
+          text:
+            "Rodada 1: " +
+            playerNameFromMeta(
+              fresh,
+              order[0]
+            ) +
+            " vai desenhar!",
+          ts:Date.now()
+        }
+      ];
+
+
+      Object.values(
+        fresh.players
+      ).forEach(
+        function (p) {
+          p.score = 0;
+        }
+      );
+
+
+      await writeStrokes({
+        round:1,
+        strokes:[],
+        drawerId:order[0]
+      });
+
+
+      await writeMeta(
+        fresh
+      );
+
+
+      meta = fresh;
+
+      strokes = {
+        round:1,
+        strokes:[],
+        drawerId:order[0]
+      };
+
+      metaVersionSeen =
+        JSON.stringify(meta);
+
+      strokesVersionSeen =
+        JSON.stringify(
+          strokes.strokes
+        );
+
+      render();
+
+    } catch (e) {
+
+      console.error(
+        "Erro ao iniciar:",
+        e
+      );
+
+      alert(
+        "Não foi possível iniciar a partida."
+      );
+
+    } finally {
+
+      transitioning = false;
+    }
+  }
+
+
+  /* =========================================================
+     FINALIZAR RODADA
+     SOMENTE O HOST
+  ========================================================= */
+
+  async function endRoundNow(
+    reason
+  ) {
+
+    /*
+     * ESTA É UMA DAS CORREÇÕES PRINCIPAIS.
+     *
+     * Antes, todos os jogadores podiam executar
+     * esta função ao mesmo tempo.
+     *
+     * Agora somente o host pode alterar a fase.
+     */
+
+    if (!isHost()) {
+      return;
+    }
+
+    if (transitioning) {
+      return;
+    }
+
+    transitioning = true;
+
+    try {
+
+      const fresh =
         await readMeta();
 
       if (
@@ -1254,9 +1353,15 @@ canvas {
       }
 
 
+      /*
+       * Não escolhemos uma nova palavra aqui.
+       *
+       * currentWord continua sendo exatamente
+       * a palavra daquela rodada.
+       */
+
       fresh.phase =
         "round-end";
-
 
       fresh.roundEndAt =
         Date.now() +
@@ -1264,24 +1369,38 @@ canvas {
 
 
       fresh.chat =
-        (fresh.chat || [])
+        (
+          fresh.chat || []
+        )
           .concat([
             {
-              system: true,
-              text: reason,
-              ts: Date.now()
+              system:true,
+              text:reason,
+              ts:Date.now()
             }
           ])
           .slice(-40);
 
 
-      meta =
-        await writeMeta(
-          fresh
-        );
+      await writeMeta(
+        fresh
+      );
 
+
+      meta =
+        fresh;
+
+      metaVersionSeen =
+        JSON.stringify(meta);
 
       render();
+
+    } catch (e) {
+
+      console.error(
+        "Erro ao finalizar rodada:",
+        e
+      );
 
     } finally {
 
@@ -1290,11 +1409,22 @@ canvas {
   }
 
 
-  /* =========================
+  /* =========================================================
      PRÓXIMA RODADA
-  ========================= */
+     SOMENTE O HOST
+  ========================================================= */
 
   async function advanceRound() {
+
+    /*
+     * SOMENTE O HOST pode avançar.
+     * Isso impede que 2, 3 ou 4 navegadores
+     * escolham palavras diferentes.
+     */
+
+    if (!isHost()) {
+      return;
+    }
 
     if (transitioning) {
       return;
@@ -1304,7 +1434,7 @@ canvas {
 
     try {
 
-      let fresh =
+      const fresh =
         await readMeta();
 
       if (
@@ -1316,8 +1446,13 @@ canvas {
 
 
       const nextRound =
-        fresh.round + 1;
+        (fresh.round || 0) + 1;
 
+
+      /*
+       * Se acabou o número de rodadas,
+       * termina o jogo.
+       */
 
       if (
         nextRound >
@@ -1327,10 +1462,15 @@ canvas {
         fresh.phase =
           "game-end";
 
+        fresh.roundEndAt =
+          0;
+
+        await writeMeta(
+          fresh
+        );
+
         meta =
-          await writeMeta(
-            fresh
-          );
+          fresh;
 
         render();
 
@@ -1339,8 +1479,24 @@ canvas {
 
 
       const order =
-        fresh.drawOrder;
+        fresh.drawOrder || [];
 
+
+      if (!order.length) {
+        return;
+      }
+
+
+      /*
+       * A ordem é fixa durante a partida.
+       *
+       * Rodada:
+       * 1 -> jogador 1
+       * 2 -> jogador 2
+       * 3 -> jogador 3
+       * ...
+       * depois volta para jogador 1.
+       */
 
       const nextDrawer =
         order[
@@ -1349,12 +1505,21 @@ canvas {
         ];
 
 
+      /*
+       * A NOVA palavra é criada somente aqui,
+       * uma vez, pelo host.
+       */
+
       const word =
         pickWord(
-          (fresh.lastWords || [])
-            .slice(-6)
+          (
+            fresh.lastWords || []
+          ).slice(-6)
         );
 
+
+      fresh.phase =
+        "playing";
 
       fresh.round =
         nextRound;
@@ -1366,7 +1531,9 @@ canvas {
         word;
 
       fresh.lastWords =
-        (fresh.lastWords || [])
+        (
+          fresh.lastWords || []
+        )
           .concat([word])
           .slice(-8);
 
@@ -1381,11 +1548,12 @@ canvas {
 
 
       fresh.chat =
-        (fresh.chat || [])
+        (
+          fresh.chat || []
+        )
           .concat([
             {
-              system: true,
-
+              system:true,
               text:
                 "Rodada " +
                 nextRound +
@@ -1395,42 +1563,57 @@ canvas {
                   nextDrawer
                 ) +
                 " vai desenhar!",
-
-              ts: Date.now()
+              ts:Date.now()
             }
           ])
           .slice(-40);
 
 
-      meta =
-        await writeMeta(
-          fresh
-        );
-
+      /*
+       * Primeiro limpamos o quadro.
+       */
 
       await writeStrokes({
-
-        round: nextRound,
-
-        strokes: [],
-
-        drawerId:
-          nextDrawer
+        round:nextRound,
+        strokes:[],
+        drawerId:nextDrawer
       });
 
 
+      /*
+       * Depois publicamos o estado da nova rodada.
+       */
+
+      await writeMeta(
+        fresh
+      );
+
+
+      meta =
+        fresh;
+
       strokes = {
-
-        round: nextRound,
-
-        strokes: [],
-
-        drawerId:
-          nextDrawer
+        round:nextRound,
+        strokes:[],
+        drawerId:nextDrawer
       };
 
+      metaVersionSeen =
+        JSON.stringify(meta);
+
+      strokesVersionSeen =
+        JSON.stringify(
+          strokes.strokes
+        );
 
       render();
+
+    } catch (e) {
+
+      console.error(
+        "Erro ao avançar rodada:",
+        e
+      );
 
     } finally {
 
@@ -1439,93 +1622,149 @@ canvas {
   }
 
 
-  /* =========================
+  /* =========================================================
      JOGAR NOVAMENTE
-  ========================= */
+     SOMENTE O HOST
+  ========================================================= */
 
   async function playAgain() {
 
-    let fresh =
-      await readMeta();
-
-    if (!fresh) {
+    if (!isHost()) {
       return;
     }
 
+    if (transitioning) {
+      return;
+    }
 
-    fresh.phase =
-      "lobby";
+    transitioning = true;
 
-    fresh.round =
-      0;
+    try {
 
-    fresh.maxRounds =
-      0;
+      const fresh =
+        await readMeta();
 
-    fresh.drawOrder =
-      [];
-
-    fresh.currentDrawerId =
-      null;
-
-    fresh.currentWord =
-      null;
-
-    fresh.roundStartAt =
-      0;
-
-    fresh.roundEndAt =
-      0;
-
-    fresh.correctGuessers =
-      [];
-
-    fresh.chat =
-      [];
-
-
-    Object.values(
-      fresh.players
-    ).forEach(
-      function (p) {
-        p.score = 0;
+      if (!fresh) {
+        return;
       }
-    );
 
 
-    meta =
+      /*
+       * Volta ao lobby.
+       * Os mesmos jogadores continuam na sala.
+       */
+
+      fresh.phase =
+        "lobby";
+
+      fresh.round =
+        0;
+
+      fresh.maxRounds =
+        0;
+
+      fresh.drawOrder =
+        [];
+
+      fresh.currentDrawerId =
+        null;
+
+      fresh.currentWord =
+        null;
+
+      fresh.lastWords =
+        [];
+
+      fresh.roundStartAt =
+        0;
+
+      fresh.roundEndAt =
+        0;
+
+      fresh.correctGuessers =
+        [];
+
+      fresh.chat =
+        [];
+
+
+      Object.values(
+        fresh.players || {}
+      ).forEach(
+        function (p) {
+          p.score = 0;
+        }
+      );
+
+
+      /*
+       * Limpa o desenho.
+       */
+
+      await writeStrokes({
+        round:0,
+        strokes:[],
+        drawerId:null
+      });
+
+
       await writeMeta(
         fresh
       );
 
 
-    await writeStrokes({
-      round: 0,
-      strokes: [],
-      drawerId: null
-    });
+      meta =
+        fresh;
 
+      strokes = {
+        round:0,
+        strokes:[],
+        drawerId:null
+      };
 
-    render();
+      metaVersionSeen =
+        JSON.stringify(meta);
+
+      strokesVersionSeen =
+        JSON.stringify(
+          strokes.strokes
+        );
+
+      render();
+
+    } catch (e) {
+
+      console.error(
+        "Erro ao reiniciar:",
+        e
+      );
+
+      alert(
+        "Não foi possível reiniciar a partida."
+      );
+
+    } finally {
+
+      transitioning = false;
+    }
   }
 
 
-  /* =========================
+  /* =========================================================
      PALPITE
-  ========================= */
+  ========================================================= */
 
   async function sendGuess(text) {
 
     text =
       text.trim();
 
-
     if (!text) {
       return;
     }
 
 
-    let fresh =
+    const fresh =
       await readMeta();
 
 
@@ -1537,6 +1776,10 @@ canvas {
     }
 
 
+    /*
+     * Desenhista não pode adivinhar.
+     */
+
     if (
       fresh.currentDrawerId ===
       me.id
@@ -1545,9 +1788,15 @@ canvas {
     }
 
 
+    /*
+     * Quem já acertou não pode mandar
+     * mais palpites.
+     */
+
     if (
-      (fresh.correctGuessers || [])
-        .includes(me.id)
+      (
+        fresh.correctGuessers || []
+      ).includes(me.id)
     ) {
       return;
     }
@@ -1564,12 +1813,15 @@ canvas {
 
 
     const normalizedWord =
-      (fresh.currentWord || "")
+      (
+        fresh.currentWord || ""
+      )
         .toLowerCase()
         .normalize("NFD")
         .replace(
           /[\u0300-\u036f]/g,
-          "");
+          ""
+        );
 
 
     const isCorrect =
@@ -1578,16 +1830,17 @@ canvas {
 
 
     const myName =
-      fresh.players[me.id]?.name ||
+      fresh.players?.[me.id]?.name ||
       "Alguém";
 
 
     if (isCorrect) {
 
       const elapsed =
-        (Date.now() -
-          fresh.roundStartAt) /
-        1000;
+        (
+          Date.now() -
+          fresh.roundStartAt
+        ) / 1000;
 
 
       const remaining =
@@ -1611,10 +1864,17 @@ canvas {
         );
 
 
+      if (
+        !fresh.players[me.id]
+      ) {
+        return;
+      }
+
+
       fresh.players[me.id].score =
         (
-          fresh.players[me.id]
-            .score || 0
+          fresh.players[me.id].score ||
+          0
         ) + pts;
 
 
@@ -1640,11 +1900,8 @@ canvas {
 
       fresh.correctGuessers =
         (
-          fresh.correctGuessers ||
-          []
-        ).concat([
-          me.id
-        ]);
+          fresh.correctGuessers || []
+        ).concat([me.id]);
 
 
       fresh.chat =
@@ -1653,14 +1910,12 @@ canvas {
         )
           .concat([
             {
-              correct: true,
-
+              correct:true,
               text:
                 "🎉 " +
                 myName +
                 " acertou!",
-
-              ts: Date.now()
+              ts:Date.now()
             }
           ])
           .slice(-40);
@@ -1673,75 +1928,80 @@ canvas {
         )
           .concat([
             {
-              playerId: me.id,
-
-              who: myName,
-
-              text: text,
-
-              ts: Date.now()
+              playerId:me.id,
+              who:myName,
+              text:text,
+              ts:Date.now()
             }
           ])
           .slice(-40);
     }
 
 
-    meta =
-      await writeMeta(
-        fresh
-      );
+    await writeMeta(
+      fresh
+    );
 
+
+    meta =
+      fresh;
+
+    metaVersionSeen =
+      JSON.stringify(meta);
 
     render();
 
+
+    /*
+     * Se todos os jogadores que não desenham
+     * acertaram, o host encerra a rodada.
+     */
 
     if (isCorrect) {
 
       const nonDrawers =
         Object.keys(
-          fresh.players
+          fresh.players || {}
         ).filter(
-          function (id) {
-            return (
-              id !==
-              fresh.currentDrawerId
-            );
-          }
+          id =>
+            id !==
+            fresh.currentDrawerId
         );
 
 
-      if (
+      const allCorrect =
         nonDrawers.length > 0 &&
         nonDrawers.every(
-          function (id) {
-
-            return (
-              fresh.correctGuessers ||
-              []
-            ).includes(id);
-
-          }
-        )
-      ) {
-
-        endRoundNow(
-          "Todo mundo acertou! 🎉"
+          id =>
+            (
+              fresh.correctGuessers || []
+            ).includes(id)
         );
+
+
+      if (allCorrect) {
+
+        if (isHost()) {
+
+          await endRoundNow(
+            "Todo mundo acertou! 🎉"
+          );
+
+        }
       }
     }
   }
 
 
-  /* =========================
+  /* =========================================================
      POLLING
-  ========================= */
+  ========================================================= */
 
   function startPolling() {
 
     if (pollTimer) {
       return;
     }
-
 
     pollTimer =
       setInterval(
@@ -1753,78 +2013,87 @@ canvas {
 
   async function pollTick() {
 
-    const [
-      m,
-      s
-    ] = await Promise.all([
-      readMeta(),
-      readStrokes()
-    ]);
+    try {
+
+      const [
+        m,
+        s
+      ] = await Promise.all([
+        readMeta(),
+        readStrokes()
+      ]);
 
 
-    let changed = false;
+      let changed = false;
 
 
-    if (m) {
+      if (m) {
 
-      const v =
-        JSON.stringify(m);
+        const v =
+          JSON.stringify(m);
 
+        if (
+          v !==
+          metaVersionSeen
+        ) {
 
-      if (
-        v !==
-        metaVersionSeen
-      ) {
+          metaVersionSeen =
+            v;
 
-        metaVersionSeen =
-          v;
+          meta =
+            m;
 
-        meta =
-          m;
-
-        changed = true;
+          changed = true;
+        }
       }
-    }
 
 
-    if (s) {
+      if (s) {
 
-      const v =
-        JSON.stringify(
-          s.strokes || []
-        );
+        const v =
+          JSON.stringify(
+            s.strokes || []
+          );
 
 
-      if (
-        v !==
-        strokesVersionSeen
-      ) {
+        if (
+          v !==
+          strokesVersionSeen
+        ) {
 
-        strokesVersionSeen =
-          v;
+          strokesVersionSeen =
+            v;
 
-        strokes =
-          s;
+          strokes =
+            s;
 
-        changed = true;
+          changed = true;
 
-        drawAllStrokes();
+          drawAllStrokes();
+        }
       }
+
+
+      if (changed) {
+        render();
+      }
+
+
+      checkTimers();
+
+    } catch (e) {
+
+      console.error(
+        "Erro no polling:",
+        e
+      );
     }
-
-
-    if (changed) {
-      render();
-    }
-
-
-    checkTimers();
   }
 
 
-  /* =========================
+  /* =========================================================
      TIMER
-  ========================= */
+  ========================================================= */
 
   function checkTimers() {
 
@@ -1849,8 +2118,14 @@ canvas {
         ) - now;
 
 
+      /*
+       * IMPORTANTE:
+       * somente o host pode finalizar.
+       */
+
       if (
-        remaining <= 0
+        remaining <= 0 &&
+        isHost()
       ) {
 
         endRoundNow(
@@ -1863,10 +2138,15 @@ canvas {
       "round-end"
     ) {
 
+      /*
+       * somente o host pode avançar.
+       */
+
       if (
         meta.roundEndAt &&
         now >=
-        meta.roundEndAt
+        meta.roundEndAt &&
+        isHost()
       ) {
 
         advanceRound();
@@ -1913,9 +2193,7 @@ canvas {
       remaining;
 
 
-    if (
-      el.parentElement
-    ) {
+    if (el.parentElement) {
 
       el.parentElement
         .classList
@@ -1935,7 +2213,6 @@ canvas {
         meta.phase ===
         "playing"
       ) {
-
         updateTimerDisplay();
       }
 
@@ -1944,9 +2221,9 @@ canvas {
   );
 
 
-  /* =========================
+  /* =========================================================
      CANVAS
-  ========================= */
+  ========================================================= */
 
   function getCanvas() {
 
@@ -2008,8 +2285,8 @@ canvas {
 
 
     return {
-      x: x,
-      y: y
+      x:x,
+      y:y
     };
   }
 
@@ -2070,7 +2347,7 @@ canvas {
 
         if (
           !st.points ||
-          st.points.length === 0
+          !st.points.length
         ) {
           return;
         }
@@ -2105,9 +2382,7 @@ canvas {
         ) {
 
           ctx.lineTo(
-            st.points[0].x * W +
-            0.1,
-
+            st.points[0].x * W + .1,
             st.points[0].y * H
           );
 
@@ -2128,7 +2403,6 @@ canvas {
 
 
         ctx.stroke();
-
       }
     );
   }
@@ -2156,19 +2430,9 @@ canvas {
   }
 
 
-  function amIDrawer() {
-
-    return (
-      meta &&
-      meta.currentDrawerId ===
-      me.id
-    );
-  }
-
-
-  /* =========================
+  /* =========================================================
      DESENHO
-  ========================= */
+  ========================================================= */
 
   function setupCanvasEvents() {
 
@@ -2216,8 +2480,7 @@ canvas {
           size:
             activeSize,
 
-          points:
-            [p]
+          points:[p]
         };
 
 
@@ -2232,8 +2495,7 @@ canvas {
             round:
               meta.round,
 
-            strokes:
-              [],
+            strokes:[],
 
             drawerId:
               me.id
@@ -2243,8 +2505,7 @@ canvas {
 
         strokes.strokes =
           (
-            strokes.strokes ||
-            []
+            strokes.strokes || []
           ).concat([
             currentStroke
           ]);
@@ -2290,7 +2551,7 @@ canvas {
         if (
           now -
           lastStrokeWrite >
-            110 &&
+          110 &&
           !strokesWriteInFlight
         ) {
 
@@ -2316,7 +2577,6 @@ canvas {
         currentStroke =
           null;
 
-
         flushStrokes();
       };
 
@@ -2340,17 +2600,13 @@ canvas {
     canvas.addEventListener(
       "touchstart",
       start,
-      {
-        passive: false
-      }
+      { passive:false }
     );
 
     canvas.addEventListener(
       "touchmove",
       move,
-      {
-        passive: false
-      }
+      { passive:false }
     );
 
     canvas.addEventListener(
@@ -2362,7 +2618,10 @@ canvas {
 
   async function flushStrokes() {
 
-    if (!strokes) {
+    if (
+      !strokes ||
+      !amIDrawer()
+    ) {
       return;
     }
 
@@ -2374,7 +2633,6 @@ canvas {
     try {
 
       await writeStrokes({
-
         round:
           strokes.round,
 
@@ -2390,6 +2648,13 @@ canvas {
         JSON.stringify(
           strokes.strokes || []
         );
+
+    } catch (e) {
+
+      console.error(
+        "Erro ao salvar desenho:",
+        e
+      );
 
     } finally {
 
@@ -2411,8 +2676,7 @@ canvas {
       round:
         meta.round,
 
-      strokes:
-        [],
+      strokes:[],
 
       drawerId:
         me.id
@@ -2428,9 +2692,9 @@ canvas {
   }
 
 
-  /* =========================
+  /* =========================================================
      FRAME
-  ========================= */
+  ========================================================= */
 
   function wobbleFrame() {
 
@@ -2449,83 +2713,60 @@ canvas {
           fill="none"
           stroke="#FFC53D"
           stroke-width="3"
-          opacity="0.55"
+          opacity=".55"
         />
       </svg>
     `;
   }
 
 
-  /* =========================
-     RENDER PRINCIPAL
-  ========================= */
+  /* =========================================================
+     RENDER
+  ========================================================= */
 
   function render() {
 
     if (!me.name) {
-
       renderLanding();
-
       return;
     }
 
 
     if (!meta) {
-
       renderLanding();
-
       return;
     }
 
 
-    if (
-      meta.phase ===
-      "lobby"
+    switch (
+      meta.phase
     ) {
 
-      renderLobby();
+      case "lobby":
+        renderLobby();
+        break;
 
-      return;
-    }
+      case "playing":
+        renderPlaying();
+        break;
 
+      case "round-end":
+        renderRoundEnd();
+        break;
 
-    if (
-      meta.phase ===
-      "playing"
-    ) {
+      case "game-end":
+        renderGameEnd();
+        break;
 
-      renderPlaying();
-
-      return;
-    }
-
-
-    if (
-      meta.phase ===
-      "round-end"
-    ) {
-
-      renderRoundEnd();
-
-      return;
-    }
-
-
-    if (
-      meta.phase ===
-      "game-end"
-    ) {
-
-      renderGameEnd();
-
-      return;
+      default:
+        renderLobby();
     }
   }
 
 
-  /* =========================
+  /* =========================================================
      TELA INICIAL
-  ========================= */
+  ========================================================= */
 
   function renderLanding() {
 
@@ -2539,9 +2780,6 @@ canvas {
 
         <p class="hint">
           Digite seu nome para entrar.
-          Depois você poderá iniciar
-          uma partida com os jogadores
-          disponíveis neste navegador.
         </p>
 
         <div class="join-row">
@@ -2561,7 +2799,8 @@ canvas {
         </div>
 
         <div class="status-box">
-          🌐 Multiplayer online: os dados da sala são sincronizados pelo Firebase.
+          🌐 Multiplayer online:
+          os dados são sincronizados pelo Firebase.
         </div>
 
       </div>
@@ -2580,44 +2819,64 @@ canvas {
       );
 
 
-    const go =
-      async function () {
+    async function go() {
 
-        const v =
-          input.value.trim();
+      const name =
+        input.value.trim();
 
 
-        if (!v) {
+      if (!name) {
 
-          input.focus();
+        input.focus();
 
-          return;
-        }
+        return;
+      }
 
+
+      btn.disabled =
+        true;
+
+      btn.textContent =
+        "Entrando...";
+
+
+      me.name =
+        name;
+
+
+      try {
+
+        await joinGame(
+          name
+        );
+
+      } catch (e) {
+
+        console.error(
+          "Erro ao entrar:",
+          e
+        );
+
+        me.name =
+          null;
+
+        alert(
+          "Não foi possível entrar no jogo.\n\n" +
+          (e.message ||
+            "Erro desconhecido")
+        );
+
+        render();
+
+      } finally {
 
         btn.disabled =
-          true;
+          false;
 
         btn.textContent =
-          "Entrando...";
-
-        me.name = v;
-
-        try {
-          await joinGame(v);
-        } catch (error) {
-          console.error("Erro ao entrar:", error);
-          me.name = null;
-          alert(
-            "Não foi possível entrar no jogo. Verifique a conexão com o Firebase e tente novamente.\n\n" +
-            (error?.message || "Erro desconhecido")
-          );
-          render();
-        } finally {
-          btn.disabled = false;
-          btn.textContent = "Entrar";
-        }
-      };
+          "Entrar";
+      }
+    }
 
 
     btn.addEventListener(
@@ -2634,7 +2893,6 @@ canvas {
           e.key ===
           "Enter"
         ) {
-
           go();
         }
       }
@@ -2645,9 +2903,9 @@ canvas {
   }
 
 
-  /* =========================
+  /* =========================================================
      LOBBY
-  ========================= */
+  ========================================================= */
 
   function renderLobby() {
 
@@ -2672,6 +2930,7 @@ canvas {
 
 
           return `
+
             <div class="chip">
 
               <div
@@ -2685,9 +2944,12 @@ canvas {
 
               <span>
                 ${escapeHtml(p.name)}
-                ${id === me.id
-                  ? " (você)"
-                  : ""}
+
+                ${
+                  id === me.id
+                    ? " (você)"
+                    : ""
+                }
               </span>
 
               ${
@@ -2727,7 +2989,6 @@ canvas {
 
         </div>
 
-
         <div
           class="join-row"
           style="margin-top:20px;"
@@ -2751,18 +3012,18 @@ canvas {
 
               : `
                 <span class="hint">
-                  Aguardando o anfitrião
-                  (
-                  ${escapeHtml(
-                    meta.players[host]?.name ||
-                    ""
-                  )}
-                  )
+                  Aguardando
+                  ${
+                    escapeHtml(
+                      meta.players[
+                        host
+                      ]?.name || ""
+                    )
+                  }
                   iniciar...
                 </span>
               `
           }
-
 
           <button
             class="secondary"
@@ -2772,7 +3033,6 @@ canvas {
           </button>
 
         </div>
-
 
         ${
           ids.length < 2
@@ -2798,30 +3058,30 @@ canvas {
     `;
 
 
-    const startBtn =
+    const start =
       document.getElementById(
         "start-btn"
       );
 
 
-    if (startBtn) {
+    if (start) {
 
-      startBtn.addEventListener(
+      start.addEventListener(
         "click",
         startGame
       );
     }
 
 
-    const leaveBtn =
+    const leave =
       document.getElementById(
         "leave-btn"
       );
 
 
-    if (leaveBtn) {
+    if (leave) {
 
-      leaveBtn.addEventListener(
+      leave.addEventListener(
         "click",
         leaveGame
       );
@@ -2829,9 +3089,9 @@ canvas {
   }
 
 
-  /* =========================
+  /* =========================================================
      PLACAR
-  ========================= */
+  ========================================================= */
 
   function scoreboardHtml() {
 
@@ -2839,7 +3099,7 @@ canvas {
       playerIds()
         .slice()
         .sort(
-          function (a, b) {
+          function (a,b) {
 
             return (
               (
@@ -2856,6 +3116,7 @@ canvas {
 
 
     return `
+
       <div class="scoreboard">
 
         ${
@@ -2880,11 +3141,7 @@ canvas {
                 <div
                   class="
                     score-row
-                    ${
-                      drawing
-                        ? "drawing"
-                        : ""
-                    }
+                    ${drawing ? "drawing" : ""}
                   "
                 >
 
@@ -2904,9 +3161,7 @@ canvas {
 
                   <div class="name">
 
-                    ${escapeHtml(
-                      p.name
-                    )}
+                    ${escapeHtml(p.name)}
 
                     ${
                       id === me.id
@@ -2937,58 +3192,58 @@ canvas {
   }
 
 
-  /* =========================
+  /* =========================================================
      CHAT
-  ========================= */
+  ========================================================= */
 
   function chatHtml() {
 
-    const list =
-      meta.chat || [];
+    return (
+      meta.chat || []
+    )
+      .map(
+        function (m) {
+
+          if (m.system) {
+
+            return `
+              <div class="chat-msg system">
+                ${escapeHtml(m.text)}
+              </div>
+            `;
+          }
 
 
-    return list.map(
-      function (m) {
+          if (m.correct) {
 
-        if (m.system) {
+            return `
+              <div class="chat-msg correct">
+                ${escapeHtml(m.text)}
+              </div>
+            `;
+          }
+
 
           return `
-            <div class="chat-msg system">
+            <div class="chat-msg">
+
+              <span class="who">
+                ${escapeHtml(m.who)}:
+              </span>
+
               ${escapeHtml(m.text)}
+
             </div>
           `;
         }
-
-
-        if (m.correct) {
-
-          return `
-            <div class="chat-msg correct">
-              ${escapeHtml(m.text)}
-            </div>
-          `;
-        }
-
-
-        return `
-          <div class="chat-msg">
-
-            <span class="who">
-              ${escapeHtml(m.who)}:
-            </span>
-
-            ${escapeHtml(m.text)}
-
-          </div>
-        `;
-      }
-    ).join("");
+      )
+      .join("");
   }
 
 
-  /* =========================
+  /* =========================================================
      JOGO
-  ========================= */
+  ========================================================= */
 
   function renderPlaying() {
 
@@ -3018,12 +3273,17 @@ canvas {
 
     const alreadyCorrect =
       (
-        meta.correctGuessers ||
-        []
+        meta.correctGuessers || []
       ).includes(
         me.id
       );
 
+
+    /*
+     * SOMENTE o desenhista vê currentWord.
+     *
+     * Os outros veem somente os espaços.
+     */
 
     let wordDisplay;
 
@@ -3031,12 +3291,14 @@ canvas {
     if (drawer) {
 
       wordDisplay =
-        meta.currentWord;
+        meta.currentWord || "";
 
     } else {
 
       wordDisplay =
-        (meta.currentWord || "")
+        (
+          meta.currentWord || ""
+        )
           .split("")
           .map(
             function (ch) {
@@ -3075,7 +3337,6 @@ canvas {
           }
 
         </div>
-
 
         <div class="timer">
 
@@ -3136,6 +3397,7 @@ canvas {
                         function (c) {
 
                           return `
+
                             <div
                               class="
                                 swatch
@@ -3152,6 +3414,7 @@ canvas {
                               "
                               title="${c.name}"
                             ></div>
+
                           `;
                         }
                       ).join("")
@@ -3178,6 +3441,7 @@ canvas {
 
 
                           return `
+
                             <div
                               class="
                                 size-dot
@@ -3195,6 +3459,7 @@ canvas {
                               "
                               title="${s.name}"
                             ></div>
+
                           `;
                         }
                       ).join("")
@@ -3202,9 +3467,7 @@ canvas {
 
 
                     <div
-                      style="
-                        flex:1
-                      "
+                      style="flex:1"
                     ></div>
 
 
@@ -3270,29 +3533,29 @@ canvas {
               drawer
 
                 ? `
+
                   <p
                     class="hint"
-                    style="
-                      margin:8px 0 0;
-                    "
+                    style="margin:8px 0 0;"
                   >
                     Você está desenhando —
                     não pode enviar palpites.
                   </p>
+
                 `
 
                 : alreadyCorrect
 
                   ? `
+
                     <p
                       class="hint"
-                      style="
-                        margin:8px 0 0;
-                      "
+                      style="margin:8px 0 0;"
                     >
                       Você acertou!
                       Aguarde a próxima rodada. 🎉
                     </p>
+
                   `
 
                   : `
@@ -3307,9 +3570,7 @@ canvas {
                         autocomplete="off"
                       />
 
-                      <button
-                        id="guess-btn"
-                      >
+                      <button id="guess-btn">
                         Enviar
                       </button>
 
@@ -3402,17 +3663,18 @@ canvas {
         );
 
 
-      const go =
-        function () {
+      function go() {
 
-          const v =
-            input.value;
+        const value =
+          input.value;
 
-          input.value =
-            "";
+        input.value =
+          "";
 
-          sendGuess(v);
-        };
+        sendGuess(
+          value
+        );
+      }
 
 
       btn.addEventListener(
@@ -3429,7 +3691,6 @@ canvas {
             e.key ===
             "Enter"
           ) {
-
             go();
           }
         }
@@ -3451,11 +3712,18 @@ canvas {
   }
 
 
-  /* =========================
-     FINAL DA RODADA
-  ========================= */
+  /* =========================================================
+     FIM DA RODADA
+  ========================================================= */
 
   function renderRoundEnd() {
+
+    /*
+     * Aqui todos podem ver a palavra.
+     *
+     * E ela é exatamente meta.currentWord,
+     * que foi criada no início daquela rodada.
+     */
 
     app.innerHTML = `
 
@@ -3499,9 +3767,9 @@ canvas {
   }
 
 
-  /* =========================
-     FIM DE JOGO
-  ========================= */
+  /* =========================================================
+     FIM DO JOGO
+  ========================================================= */
 
   function renderGameEnd() {
 
@@ -3509,7 +3777,7 @@ canvas {
       playerIds()
         .slice()
         .sort(
-          function (a, b) {
+          function (a,b) {
 
             return (
               (
@@ -3583,16 +3851,20 @@ canvas {
           isHost()
 
             ? `
+
               <button id="again-btn">
                 Jogar novamente
               </button>
+
             `
 
             : `
+
               <span class="hint">
                 Aguardando o anfitrião
                 reiniciar...
               </span>
+
             `
         }
 
@@ -3639,56 +3911,71 @@ canvas {
   }
 
 
-  /* =========================
-     LIMPAR SALA
-     PARA TESTES
-  ========================= */
-
-  /*
-    Para limpar a sala de testes, use o Firebase Console:
-    Realtime Database -> Dados -> game -> excluir.
-  */
-
-
-  /* =========================
+  /* =========================================================
      BOOT
-  ========================= */
+  ========================================================= */
 
   async function boot() {
 
-    meta =
-      await readMeta();
-
-
-    if (!meta) {
+    try {
 
       meta =
-        defaultMeta();
-    }
+        await readMeta();
+
+      if (!meta) {
+        meta =
+          defaultMeta();
+      }
 
 
-    metaVersionSeen =
-      JSON.stringify(
-        meta
+      metaVersionSeen =
+        JSON.stringify(meta);
+
+
+      strokes =
+        await readStrokes();
+
+
+      if (strokes) {
+
+        strokesVersionSeen =
+          JSON.stringify(
+            strokes.strokes || []
+          );
+      }
+
+
+      render();
+
+      startPolling();
+
+    } catch (e) {
+
+      console.error(
+        "Erro ao iniciar:",
+        e
       );
 
 
-    strokes =
-      await readStrokes();
+      meta =
+        defaultMeta();
 
 
-    if (strokes) {
+      renderLanding();
 
-      strokesVersionSeen =
-        JSON.stringify(
-          strokes.strokes || []
+
+      const box =
+        document.querySelector(
+          ".status-box"
         );
+
+
+      if (box) {
+
+        box.innerHTML =
+          "⚠️ Não foi possível conectar ao Firebase.";
+      }
     }
-
-
-    render();
-
-    startPolling();
   }
 
 
