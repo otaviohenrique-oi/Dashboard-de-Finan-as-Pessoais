@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -236,10 +235,17 @@ button.danger {
   border-radius:10px;
   min-width:90px;
   text-align:center;
+  transition:color .2s ease;
 }
 
 .timer.low {
   color:var(--pink);
+  animation:pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity:1; }
+  50% { opacity:.55; }
 }
 
 .word-banner {
@@ -369,6 +375,9 @@ canvas {
 
 .score-row .name {
   flex:1;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 .score-row .pts {
@@ -379,6 +388,10 @@ canvas {
 
 .score-row.drawing {
   outline:1px solid var(--teal);
+}
+
+.score-row.you {
+  border-color:rgba(255,197,61,.35);
 }
 
 .chat {
@@ -475,6 +488,12 @@ canvas {
   font-size:13px;
 }
 
+.status-box.error {
+  background:rgba(226,59,59,.1);
+  border:1px solid rgba(226,59,59,.3);
+  color:#ffb3b3;
+}
+
 .admin-box {
   margin-top:18px;
   padding:12px;
@@ -488,6 +507,15 @@ canvas {
   font-family:'Kalam',cursive;
   font-size:18px;
   margin-bottom:8px;
+}
+
+.empty-chat {
+  color:var(--ink-dim);
+  font-size:13px;
+  font-style:italic;
+  text-align:center;
+  margin-top:auto;
+  margin-bottom:auto;
 }
 
 @media(max-width:640px) {
@@ -519,15 +547,12 @@ canvas {
   <div class="brand">
     <div class="dot"></div>
 
-```
-<div>
-  <h1>Desenha &amp; Adivinha</h1>
-  <p>
-    até 4 jogadores · todo mundo desenha, todo mundo adivinha
-  </p>
-</div>
-```
-
+    <div>
+      <h1>Desenha &amp; Adivinha</h1>
+      <p>
+        até 4 jogadores · todo mundo desenha, todo mundo adivinha
+      </p>
+    </div>
   </div>
 
   <div id="app"></div>
@@ -576,10 +601,10 @@ canvas {
     "livro","lápis","tesoura","sapato","camiseta","bandeira",
     "fantasma","bruxa","dinossauro","dragão","sereia","unicórnio",
     "pirata","astronauta","palhaço","abelha","coelho","urso",
-    "tubarão","polvo","caracol","bicicleta","skate","trem",
+    "tubarão","polvo","caracol","skate","trem",
     "helicóptero","ambulância","bombeiro","policial","médico",
     "sanduíche","pipoca","chocolate","melancia","morango","abacaxi",
-    "sushi","sorvete","hambúrguer","batata","pizza","controle",
+    "sushi","batata","controle",
     "videogame","televisão","fone","mouse","teclado","internet",
     "celular","cama","mesa","cadeira","sofá","geladeira","chuveiro",
     "escova","espelho","mochila","guarda-roupa","óculos de sol",
@@ -701,6 +726,7 @@ canvas {
   let strokesWriteInFlight = false;
 
   let kickedHandled = false;
+  let pollErrorStreak = 0;
 
   const app = document.getElementById("app");
 
@@ -847,6 +873,7 @@ canvas {
       .slice(-60);
   }
 
+
   async function addChat(message) {
 
     const key =
@@ -855,7 +882,7 @@ canvas {
       Math.random().toString(36).slice(2,8);
 
     await firebaseRequest(
-      CHAT_PATH + "/" + encodeURIComponent(key) + ".json",
+      CHAT_PATH.replace(".json", "") + "/" + key + ".json",
       {
         method:"PUT",
         body:JSON.stringify(message)
@@ -875,7 +902,8 @@ canvas {
   async function markCorrect(id) {
 
     await firebaseRequest(
-      GUESSES_PATH + "/" +
+      GUESSES_PATH.replace(".json", "") +
+      "/" +
       encodeURIComponent(id) +
       ".json",
       {
@@ -1012,6 +1040,14 @@ canvas {
 
   async function leaveGame() {
 
+    if (
+      meta &&
+      meta.phase === "playing" &&
+      !confirm("Tem certeza que quer sair? A partida está em andamento.")
+    ) {
+      return;
+    }
+
     try {
 
       const fresh = await readMeta();
@@ -1035,6 +1071,8 @@ canvas {
       console.error("Erro ao sair:",e);
 
     } finally {
+
+      stopPolling();
 
       me.name = null;
       meta = null;
@@ -1604,7 +1642,7 @@ canvas {
 
         await addChat({
           correct:true,
-          text:"🎉 " + myName + " acertou!",
+          text:"🎉 " + myName + " acertou! (+" + pts + ")",
           ts:Date.now()
         });
 
@@ -1702,6 +1740,14 @@ canvas {
       );
   }
 
+  function stopPolling() {
+
+    if (!pollTimer) return;
+
+    clearInterval(pollTimer);
+    pollTimer = null;
+  }
+
   async function pollTick() {
 
     try {
@@ -1717,6 +1763,8 @@ canvas {
         readChat(),
         readCorrectGuessers()
       ]);
+
+      pollErrorStreak = 0;
 
       let changed = false;
 
@@ -1821,6 +1869,8 @@ canvas {
           "Você foi removido da sala pelo anfitrião."
         );
 
+        stopPolling();
+
         me.name = null;
         meta = null;
         strokes = null;
@@ -1840,10 +1890,25 @@ canvas {
 
     } catch (e) {
 
+      pollErrorStreak++;
+
       console.error(
         "Erro no polling:",
         e
       );
+
+      if (pollErrorStreak === 3) {
+
+        const box =
+          document.querySelector(".status-box");
+
+        if (box) {
+
+          box.classList.add("error");
+          box.textContent =
+            "⚠️ Problemas de conexão com o Firebase. Tentando novamente...";
+        }
+      }
     }
   }
 
@@ -2352,6 +2417,47 @@ canvas {
      DESENHO
   ========================================================= */
 
+  async function flushStrokes() {
+
+    if (
+      !strokes ||
+      !amIDrawer()
+    ) {
+      return;
+    }
+
+    if (strokesWriteInFlight) return;
+
+    strokesWriteInFlight = true;
+
+    try {
+
+      const snapshot = {
+        round:strokes.round,
+        strokes:strokes.strokes,
+        drawerId:me.id
+      };
+
+      await writeStrokes(snapshot);
+
+      strokesVersionSeen =
+        JSON.stringify(
+          snapshot.strokes || []
+        );
+
+    } catch (e) {
+
+      console.error(
+        "Erro ao salvar desenho:",
+        e
+      );
+
+    } finally {
+
+      strokesWriteInFlight = false;
+    }
+  }
+
   function setupCanvasEvents() {
 
     const canvas = getCanvas();
@@ -2455,79 +2561,13 @@ canvas {
       };
 
 
-    canvas.addEventListener(
-      "mousedown",
-      start
-    );
+    canvas.onmousedown = start;
+    canvas.onmousemove = move;
+    window.onmouseup = end;
 
-    canvas.addEventListener(
-      "mousemove",
-      move
-    );
-
-    window.addEventListener(
-      "mouseup",
-      end
-    );
-
-    canvas.addEventListener(
-      "touchstart",
-      start,
-      {passive:false}
-    );
-
-    canvas.addEventListener(
-      "touchmove",
-      move,
-      {passive:false}
-    );
-
-    canvas.addEventListener(
-      "touchend",
-      end
-    );
-  }
-
-
-  async function flushStrokes() {
-
-    if (
-      !strokes ||
-      !amIDrawer()
-    ) {
-      return;
-    }
-
-    if (strokesWriteInFlight) return;
-
-    strokesWriteInFlight = true;
-
-    try {
-
-      const snapshot = {
-        round:strokes.round,
-        strokes:strokes.strokes,
-        drawerId:me.id
-      };
-
-      await writeStrokes(snapshot);
-
-      strokesVersionSeen =
-        JSON.stringify(
-          snapshot.strokes || []
-        );
-
-    } catch (e) {
-
-      console.error(
-        "Erro ao salvar desenho:",
-        e
-      );
-
-    } finally {
-
-      strokesWriteInFlight = false;
-    }
+    canvas.ontouchstart = start;
+    canvas.ontouchmove = move;
+    canvas.ontouchend = end;
   }
 
 
@@ -2695,8 +2735,10 @@ canvas {
 
       } finally {
 
-        btn.disabled = false;
-        btn.textContent = "Entrar";
+        if (btn.isConnected) {
+          btn.disabled = false;
+          btn.textContent = "Entrar";
+        }
       }
     }
 
@@ -2934,6 +2976,7 @@ canvas {
                 class="
                   score-row
                   ${drawing ? "drawing" : ""}
+                  ${id === me.id ? "you" : ""}
                 "
               >
 
@@ -2979,7 +3022,16 @@ canvas {
 
   function chatHtml() {
 
-    return (chat || [])
+    if (!chat || !chat.length) {
+
+      return `
+        <div class="empty-chat">
+          Os palpites e mensagens vão aparecer aqui.
+        </div>
+      `;
+    }
+
+    return chat
       .map(function(m) {
 
         if (m.system) {
@@ -3386,10 +3438,12 @@ canvas {
           function() {
 
             activeTool = "brush";
+            isDrawing = false;
+            currentStroke = null;
+
             render();
           }
         );
-
 
       document
         .getElementById("bucket-btn")
@@ -3398,6 +3452,9 @@ canvas {
           function() {
 
             activeTool = "bucket";
+            isDrawing = false;
+            currentStroke = null;
+
             render();
           }
         );
@@ -3711,7 +3768,8 @@ canvas {
 
       if (box) {
 
-        box.innerHTML =
+        box.classList.add("error");
+        box.textContent =
           "⚠️ Não foi possível conectar ao Firebase.";
       }
     }
