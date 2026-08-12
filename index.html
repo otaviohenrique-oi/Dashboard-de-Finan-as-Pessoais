@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -23,9 +24,7 @@
   --radius:14px;
 }
 
-* {
-  box-sizing:border-box;
-}
+* { box-sizing:border-box; }
 
 html,body {
   margin:0;
@@ -33,11 +32,7 @@ html,body {
 }
 
 body {
-  background:radial-gradient(
-    circle at 20% -10%,
-    #223744 0%,
-    var(--bg) 55%
-  );
+  background:radial-gradient(circle at 20% -10%,#223744 0%,var(--bg) 55%);
   color:var(--ink);
   font-family:'Space Grotesk',sans-serif;
   min-height:100vh;
@@ -49,7 +44,7 @@ h1,h2,h3,.marker {
 }
 
 .wrap {
-  max-width:980px;
+  max-width:1100px;
   margin:0 auto;
 }
 
@@ -65,9 +60,8 @@ h1,h2,h3,.marker {
   height:14px;
   border-radius:50%;
   background:var(--pink);
-  box-shadow:
-    18px 0 0 var(--yellow),
-    36px 0 0 var(--teal);
+  box-shadow:18px 0 0 var(--yellow),36px 0 0 var(--teal);
+  margin-right:36px;
 }
 
 .brand h1 {
@@ -123,7 +117,7 @@ button {
   cursor:pointer;
   background:var(--yellow);
   color:#22160A;
-  transition:transform .12s ease;
+  transition:transform .12s ease,opacity .12s ease;
 }
 
 button:hover:not(:disabled) {
@@ -153,6 +147,11 @@ button.pink {
 button.teal {
   background:var(--teal);
   color:#052824;
+}
+
+button.danger {
+  background:#E23B3B;
+  color:white;
 }
 
 .player-list {
@@ -193,6 +192,15 @@ button.teal {
   margin-left:2px;
 }
 
+.kick-btn {
+  font-family:'Space Grotesk',sans-serif;
+  font-size:11px;
+  padding:4px 8px;
+  border-radius:7px;
+  background:#6b2737;
+  color:white;
+}
+
 .hint {
   color:var(--ink-dim);
   font-size:13px;
@@ -226,7 +234,7 @@ button.teal {
   border:1px solid var(--line);
   padding:4px 16px;
   border-radius:10px;
-  min-width:64px;
+  min-width:90px;
   text-align:center;
 }
 
@@ -259,12 +267,12 @@ button.teal {
 }
 
 .canvas-col {
-  flex:2 1 420px;
+  flex:2 1 520px;
   min-width:300px;
 }
 
 .side-col {
-  flex:1 1 260px;
+  flex:1 1 280px;
   min-width:240px;
   display:flex;
   flex-direction:column;
@@ -300,7 +308,7 @@ canvas {
 .tools {
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:8px;
   flex-wrap:wrap;
   margin-top:10px;
 }
@@ -311,6 +319,7 @@ canvas {
   border-radius:50%;
   border:2px solid transparent;
   cursor:pointer;
+  flex-shrink:0;
 }
 
 .swatch.active {
@@ -323,10 +332,22 @@ canvas {
   background:var(--ink);
   cursor:pointer;
   border:2px solid transparent;
+  flex-shrink:0;
 }
 
 .size-dot.active {
   border-color:var(--yellow);
+}
+
+.tool-btn {
+  min-width:42px;
+  padding:8px 10px;
+  font-size:14px;
+}
+
+.tool-btn.active {
+  outline:2px solid var(--teal);
+  background:#31525e;
 }
 
 .scoreboard {
@@ -365,7 +386,7 @@ canvas {
   border:1px solid var(--line);
   border-radius:10px;
   padding:10px;
-  height:220px;
+  height:260px;
   display:flex;
   flex-direction:column;
 }
@@ -382,6 +403,7 @@ canvas {
 .chat-msg {
   font-size:13.5px;
   line-height:1.4;
+  word-break:break-word;
 }
 
 .chat-msg .who {
@@ -453,6 +475,21 @@ canvas {
   font-size:13px;
 }
 
+.admin-box {
+  margin-top:18px;
+  padding:12px;
+  border-radius:10px;
+  background:rgba(255,197,61,.06);
+  border:1px solid rgba(255,197,61,.16);
+}
+
+.admin-title {
+  color:var(--yellow);
+  font-family:'Kalam',cursive;
+  font-size:18px;
+  margin-bottom:8px;
+}
+
 @media(max-width:640px) {
   .brand h1 {
     font-size:24px;
@@ -466,8 +503,13 @@ canvas {
   .card {
     padding:16px;
   }
+
+  .canvas-col {
+    min-width:100%;
+  }
 }
 </style>
+
 </head>
 
 <body>
@@ -477,12 +519,15 @@ canvas {
   <div class="brand">
     <div class="dot"></div>
 
-    <div>
-      <h1>Desenha &amp; Adivinha</h1>
-      <p>
-        até 4 jogadores · todo mundo desenha, todo mundo adivinha
-      </p>
-    </div>
+```
+<div>
+  <h1>Desenha &amp; Adivinha</h1>
+  <p>
+    até 4 jogadores · todo mundo desenha, todo mundo adivinha
+  </p>
+</div>
+```
+
   </div>
 
   <div id="app"></div>
@@ -501,10 +546,14 @@ canvas {
 
   const META_PATH = "/game/meta.json";
   const STROKES_PATH = "/game/strokes.json";
+  const CHAT_PATH = "/game/chat.json";
+  const GUESSES_PATH = "/game/correctGuessers.json";
 
-  const POLL_MS = 1100;
+  const POLL_MS = 900;
 
-  const ROUND_DURATION = 70;
+  // 5 MINUTOS
+  const ROUND_DURATION = 300;
+
   const ROUND_END_PAUSE = 5;
 
   const MAX_PLAYERS = 4;
@@ -515,86 +564,26 @@ canvas {
   ========================================================= */
 
   const WORDS = [
-    "gato",
-    "cachorro",
-    "sol",
-    "lua",
-    "estrela",
-    "árvore",
-    "casa",
-    "carro",
-    "bicicleta",
-    "avião",
-    "barco",
-    "guarda-chuva",
-    "chapéu",
-    "óculos",
-    "relógio",
-    "coração",
-    "flor",
-    "peixe",
-    "pássaro",
-    "borboleta",
-    "elefante",
-    "girafa",
-    "leão",
-    "macaco",
-    "cobra",
-    "aranha",
-    "robô",
-    "foguete",
-    "castelo",
-    "coroa",
-    "chave",
-    "porta",
-    "janela",
-    "escada",
-    "ponte",
-    "montanha",
-    "praia",
-    "ilha",
-    "vulcão",
-    "arco-íris",
-    "nuvem",
-    "raio",
-    "fogo",
-    "gelo",
-    "neve",
-    "pizza",
-    "hambúrguer",
-    "sorvete",
-    "bolo",
-    "maçã",
-    "banana",
-    "uva",
-    "café",
-    "futebol",
-    "violão",
-    "piano",
-    "câmera",
-    "telefone",
-    "computador",
-    "livro",
-    "lápis",
-    "tesoura",
-    "sapato",
-    "camiseta",
-    "bandeira",
-    "fantasma",
-    "bruxa",
-    "dinossauro",
-    "dragão",
-    "sereia",
-    "unicórnio",
-    "pirata",
-    "astronauta",
-    "palhaço",
-    "abelha",
-    "coelho",
-    "urso",
-    "tubarão",
-    "polvo",
-    "caracol"
+    "gato","cachorro","sol","lua","estrela","árvore","casa",
+    "carro","bicicleta","avião","barco","guarda-chuva","chapéu",
+    "óculos","relógio","coração","flor","peixe","pássaro",
+    "borboleta","elefante","girafa","leão","macaco","cobra",
+    "aranha","robô","foguete","castelo","coroa","chave","porta",
+    "janela","escada","ponte","montanha","praia","ilha","vulcão",
+    "arco-íris","nuvem","raio","fogo","gelo","neve","pizza",
+    "hambúrguer","sorvete","bolo","maçã","banana","uva","café",
+    "futebol","violão","piano","câmera","telefone","computador",
+    "livro","lápis","tesoura","sapato","camiseta","bandeira",
+    "fantasma","bruxa","dinossauro","dragão","sereia","unicórnio",
+    "pirata","astronauta","palhaço","abelha","coelho","urso",
+    "tubarão","polvo","caracol","bicicleta","skate","trem",
+    "helicóptero","ambulância","bombeiro","policial","médico",
+    "sanduíche","pipoca","chocolate","melancia","morango","abacaxi",
+    "sushi","sorvete","hambúrguer","batata","pizza","controle",
+    "videogame","televisão","fone","mouse","teclado","internet",
+    "celular","cama","mesa","cadeira","sofá","geladeira","chuveiro",
+    "escova","espelho","mochila","guarda-roupa","óculos de sol",
+    "dinheiro","moeda","presente","balão","vela","festa"
   ];
 
 
@@ -603,31 +592,37 @@ canvas {
   ========================================================= */
 
   const COLORS = [
-    { name:"preto", hex:"#20211D" },
-    { name:"vermelho", hex:"#E23B3B" },
-    { name:"laranja", hex:"#FF8A3D" },
-    { name:"amarelo", hex:"#FFC53D" },
-    { name:"verde", hex:"#39B36B" },
-    { name:"azul", hex:"#3E8AE0" },
-    { name:"rosa", hex:"#FF5C8A" },
-    { name:"roxo", hex:"#B490F0" }
+    {name:"preto",hex:"#20211D"},
+    {name:"cinza",hex:"#737373"},
+    {name:"branco",hex:"#FFFFFF"},
+    {name:"vermelho",hex:"#E23B3B"},
+    {name:"vermelho escuro",hex:"#9E2020"},
+    {name:"laranja",hex:"#FF8A3D"},
+    {name:"laranja escuro",hex:"#C95B18"},
+    {name:"amarelo",hex:"#FFC53D"},
+    {name:"dourado",hex:"#D99B00"},
+    {name:"verde",hex:"#39B36B"},
+    {name:"verde escuro",hex:"#197A43"},
+    {name:"azul claro",hex:"#59C7FF"},
+    {name:"azul",hex:"#3E8AE0"},
+    {name:"azul escuro",hex:"#24518D"},
+    {name:"ciano",hex:"#2FD4C4"},
+    {name:"rosa",hex:"#FF5C8A"},
+    {name:"rosa claro",hex:"#FF9FBD"},
+    {name:"roxo",hex:"#B490F0"},
+    {name:"roxo escuro",hex:"#7046A8"},
+    {name:"marrom",hex:"#8B5A35"}
   ];
 
   const AVATAR_COLORS = [
-    "#FFC53D",
-    "#FF5C8A",
-    "#2FD4C4",
-    "#B490F0",
-    "#FF8A3D",
-    "#3E8AE0",
-    "#39B36B",
-    "#E23B3B"
+    "#FFC53D","#FF5C8A","#2FD4C4","#B490F0",
+    "#FF8A3D","#3E8AE0","#39B36B","#E23B3B"
   ];
 
   const SIZES = [
-    { name:"fino", v:0.006 },
-    { name:"médio", v:0.012 },
-    { name:"grosso", v:0.024 }
+    {name:"fino",v:0.006},
+    {name:"médio",v:0.012},
+    {name:"grosso",v:0.024}
   ];
 
   const ERASER_COLOR = "#FDFBF3";
@@ -638,71 +633,38 @@ canvas {
   ========================================================= */
 
   function uid() {
-
-    if (
-      window.crypto &&
-      crypto.randomUUID
-    ) {
+    if (window.crypto && crypto.randomUUID) {
       return crypto.randomUUID();
     }
 
-    return "p-" +
-      Math.random()
-        .toString(36)
-        .slice(2,10);
+    return "p-" + Math.random().toString(36).slice(2,10);
   }
-
 
   function hashColor(str) {
-
     let h = 0;
 
-    for (
-      let i = 0;
-      i < str.length;
-      i++
-    ) {
-      h =
-        (h * 31 +
-        str.charCodeAt(i)) >>> 0;
+    for (let i = 0; i < str.length; i++) {
+      h = (h * 31 + str.charCodeAt(i)) >>> 0;
     }
 
-    return AVATAR_COLORS[
-      h % AVATAR_COLORS.length
-    ];
+    return AVATAR_COLORS[h % AVATAR_COLORS.length];
   }
-
 
   function initials(name) {
-
-    return (
-      name || "?"
-    )
-      .trim()
-      .slice(0,2)
-      .toUpperCase();
+    return (name || "?").trim().slice(0,2).toUpperCase();
   }
-
 
   function escapeHtml(s) {
-
-    return String(s || "")
-      .replace(
-        /[&<>"']/g,
-        function (c) {
-
-          return {
-            "&":"&amp;",
-            "<":"&lt;",
-            ">":"&gt;",
-            '"':"&quot;",
-            "'":"&#39;"
-          }[c];
-
-        }
-      );
+    return String(s || "").replace(/[&<>"']/g, function (c) {
+      return {
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#39;"
+      }[c];
+    });
   }
-
 
   const me = {
     id:uid(),
@@ -711,17 +673,20 @@ canvas {
 
 
   /* =========================================================
-     ESTADO LOCAL
+     ESTADO
   ========================================================= */
 
   let meta = null;
   let strokes = null;
+  let chat = [];
+  let correctGuessers = {};
 
   let metaVersionSeen = null;
   let strokesVersionSeen = null;
+  let chatVersionSeen = null;
+  let guessesVersionSeen = null;
 
   let pollTimer = null;
-
   let transitioning = false;
 
   let isDrawing = false;
@@ -730,63 +695,51 @@ canvas {
   let activeColor = COLORS[0].hex;
   let activeSize = SIZES[1].v;
 
+  let activeTool = "brush";
+
   let lastStrokeWrite = 0;
   let strokesWriteInFlight = false;
 
-  const app =
-    document.getElementById("app");
+  let kickedHandled = false;
+
+  const app = document.getElementById("app");
 
 
   /* =========================================================
      FIREBASE
   ========================================================= */
 
-  async function firebaseRequest(
-    path,
-    options = {}
-  ) {
+  async function firebaseRequest(path, options = {}) {
 
-    const controller =
-      new AbortController();
+    const controller = new AbortController();
 
-    const timeout =
-      setTimeout(
-        () => controller.abort(),
-        8000
-      );
+    const timeout = setTimeout(
+      () => controller.abort(),
+      8000
+    );
 
     try {
 
-      const response =
-        await fetch(
-          FIREBASE_DB_URL + path,
-          {
-            ...options,
-            headers:{
-              "Content-Type":
-                "application/json",
-              ...(options.headers || {})
-            },
-            signal:
-              controller.signal
-          }
-        );
+      const response = await fetch(
+        FIREBASE_DB_URL + path,
+        {
+          ...options,
+          headers:{
+            "Content-Type":"application/json",
+            ...(options.headers || {})
+          },
+          signal:controller.signal
+        }
+      );
 
       if (!response.ok) {
 
-        const text =
-          await response
-            .text()
-            .catch(() => "");
+        const text = await response.text().catch(() => "");
 
         throw new Error(
           "Firebase HTTP " +
           response.status +
-          (
-            text
-              ? ": " + text
-              : ""
-          )
+          (text ? ": " + text : "")
         );
       }
 
@@ -794,10 +747,7 @@ canvas {
 
     } catch (e) {
 
-      if (
-        e.name ===
-        "AbortError"
-      ) {
+      if (e.name === "AbortError") {
         throw new Error(
           "O Firebase demorou mais de 8 segundos para responder."
         );
@@ -806,97 +756,56 @@ canvas {
       throw e;
 
     } finally {
-
       clearTimeout(timeout);
     }
   }
-
 
   function defaultMeta() {
 
     return {
       players:{},
-
       phase:"lobby",
-
       round:0,
-
       maxRounds:0,
-
       drawOrder:[],
-
       currentDrawerId:null,
-
       currentWord:null,
-
       lastWords:[],
-
       roundStartAt:0,
-
-      roundEndAt:0,
-
-      correctGuessers:[],
-
-      chat:[]
+      roundEndAt:0
     };
   }
 
-
   async function readMeta() {
 
-    const remote =
-      await firebaseRequest(
-        META_PATH
-      );
+    const remote = await firebaseRequest(META_PATH);
+    const base = defaultMeta();
 
-    const base =
-      defaultMeta();
-
-    if (
-      !remote ||
-      typeof remote !== "object"
-    ) {
+    if (!remote || typeof remote !== "object") {
       return base;
     }
 
     return {
       ...base,
       ...remote,
-
       players:
         remote.players &&
         typeof remote.players === "object"
           ? remote.players
           : {},
-
       drawOrder:
         Array.isArray(remote.drawOrder)
           ? remote.drawOrder
           : [],
-
       lastWords:
         Array.isArray(remote.lastWords)
           ? remote.lastWords
-          : [],
-
-      correctGuessers:
-        Array.isArray(
-          remote.correctGuessers
-        )
-          ? remote.correctGuessers
-          : [],
-
-      chat:
-        Array.isArray(remote.chat)
-          ? remote.chat
           : []
     };
   }
 
-
   async function writeMeta(next) {
-
-    return await firebaseRequest(
+    return firebaseRequest(
       META_PATH,
       {
         method:"PUT",
@@ -905,22 +814,83 @@ canvas {
     );
   }
 
-
-  async function readStrokes() {
-
-    return await firebaseRequest(
-      STROKES_PATH
+  async function patchMeta(changes) {
+    return firebaseRequest(
+      META_PATH,
+      {
+        method:"PATCH",
+        body:JSON.stringify(changes)
+      }
     );
   }
 
+  async function readStrokes() {
+    return firebaseRequest(STROKES_PATH);
+  }
 
   async function writeStrokes(next) {
-
-    return await firebaseRequest(
+    return firebaseRequest(
       STROKES_PATH,
       {
         method:"PUT",
         body:JSON.stringify(next)
+      }
+    );
+  }
+
+  async function readChat() {
+    const data = await firebaseRequest(CHAT_PATH);
+    if (!data || typeof data !== "object") return [];
+
+    return Object.values(data)
+      .sort((a,b) => (a.ts || 0) - (b.ts || 0))
+      .slice(-60);
+  }
+
+  async function addChat(message) {
+
+    const key =
+      Date.now().toString(36) +
+      "-" +
+      Math.random().toString(36).slice(2,8);
+
+    await firebaseRequest(
+      CHAT_PATH + "/" + encodeURIComponent(key) + ".json",
+      {
+        method:"PUT",
+        body:JSON.stringify(message)
+      }
+    );
+  }
+
+  async function readCorrectGuessers() {
+    const data =
+      await firebaseRequest(GUESSES_PATH);
+
+    return data && typeof data === "object"
+      ? data
+      : {};
+  }
+
+  async function markCorrect(id) {
+
+    await firebaseRequest(
+      GUESSES_PATH + "/" +
+      encodeURIComponent(id) +
+      ".json",
+      {
+        method:"PUT",
+        body:"true"
+      }
+    );
+  }
+
+  async function clearCorrectGuessers() {
+    await firebaseRequest(
+      GUESSES_PATH,
+      {
+        method:"PUT",
+        body:"{}"
       }
     );
   }
@@ -931,68 +901,37 @@ canvas {
   ========================================================= */
 
   function playerIds() {
-
     return Object.keys(
       (meta && meta.players) || {}
     );
   }
 
-
   function sortedByJoin() {
-
-    return playerIds()
-      .sort(
-        function (a,b) {
-
-          return (
-            (
-              meta.players[a]
-                .joinedAt || 0
-            ) -
-            (
-              meta.players[b]
-                .joinedAt || 0
-            )
-          );
-        }
+    return playerIds().sort(function(a,b) {
+      return (
+        (meta.players[a].joinedAt || 0) -
+        (meta.players[b].joinedAt || 0)
       );
+    });
   }
-
 
   function hostId() {
-
-    const ids =
-      sortedByJoin();
-
-    return ids.length
-      ? ids[0]
-      : null;
+    const ids = sortedByJoin();
+    return ids.length ? ids[0] : null;
   }
-
 
   function isHost() {
-
-    return (
-      me.id === hostId()
-    );
+    return me.id === hostId();
   }
-
 
   function amIDrawer() {
-
     return !!(
       meta &&
-      meta.currentDrawerId ===
-      me.id
+      meta.currentDrawerId === me.id
     );
   }
 
-
-  function playerNameFromMeta(
-    m,
-    id
-  ) {
-
+  function playerNameFromMeta(m,id) {
     return (
       m.players &&
       m.players[id]
@@ -1008,23 +947,14 @@ canvas {
 
   function pickWord(avoid = []) {
 
-    const pool =
-      WORDS.filter(
-        function (word) {
-          return !avoid.includes(word);
-        }
-      );
+    const pool = WORDS.filter(
+      word => !avoid.includes(word)
+    );
 
-    const list =
-      pool.length
-        ? pool
-        : WORDS;
+    const list = pool.length ? pool : WORDS;
 
     return list[
-      Math.floor(
-        Math.random() *
-        list.length
-      )
+      Math.floor(Math.random() * list.length)
     ];
   }
 
@@ -1035,13 +965,10 @@ canvas {
 
   async function joinGame(name) {
 
-    const fresh =
-      await readMeta();
+    const fresh = await readMeta();
 
     const ids =
-      Object.keys(
-        fresh.players || {}
-      );
+      Object.keys(fresh.players || {});
 
     if (
       !fresh.players[me.id] &&
@@ -1053,39 +980,28 @@ canvas {
       );
 
       me.name = null;
-
       render();
-
       return;
     }
 
-
     fresh.players[me.id] = {
-
       name:name,
-
       score:
-        fresh.players[me.id]?.score ||
-        0,
-
+        fresh.players[me.id]?.score || 0,
       joinedAt:
         fresh.players[me.id]?.joinedAt ||
         Date.now()
     };
 
+    await writeMeta(fresh);
 
-    meta =
-      await writeMeta(
-        fresh
-      );
+    me.name = name;
+    kickedHandled = false;
 
-
-    metaVersionSeen =
-      JSON.stringify(meta);
-
+    meta = fresh;
+    metaVersionSeen = JSON.stringify(meta);
 
     render();
-
     startPolling();
   }
 
@@ -1098,48 +1014,33 @@ canvas {
 
     try {
 
-      const fresh =
-        await readMeta();
+      const fresh = await readMeta();
 
-      if (!fresh) {
-        return;
-      }
+      if (!fresh) return;
 
-      delete fresh.players[
-        me.id
-      ];
+      delete fresh.players[me.id];
 
       fresh.drawOrder =
-        (
-          fresh.drawOrder || []
-        ).filter(
-          id => id !== me.id
-        );
+        (fresh.drawOrder || [])
+          .filter(id => id !== me.id);
 
-      if (
-        fresh.currentDrawerId ===
-        me.id
-      ) {
-        fresh.currentDrawerId =
-          null;
+      if (fresh.currentDrawerId === me.id) {
+        fresh.currentDrawerId = null;
       }
 
-      await writeMeta(
-        fresh
-      );
+      await writeMeta(fresh);
 
     } catch (e) {
 
-      console.error(
-        "Erro ao sair:",
-        e
-      );
+      console.error("Erro ao sair:",e);
 
     } finally {
 
       me.name = null;
       meta = null;
       strokes = null;
+      chat = [];
+      correctGuessers = {};
 
       render();
     }
@@ -1147,122 +1048,142 @@ canvas {
 
 
   /* =========================================================
+     EXPULSAR
+  ========================================================= */
+
+  async function kickPlayer(id) {
+
+    if (!isHost()) return;
+
+    if (id === me.id) return;
+
+    const p = meta.players?.[id];
+
+    if (!p) return;
+
+    const ok = confirm(
+      "Expulsar " + p.name + " da sala?"
+    );
+
+    if (!ok) return;
+
+    try {
+
+      const fresh = await readMeta();
+
+      if (!isHost()) return;
+
+      delete fresh.players[id];
+
+      fresh.drawOrder =
+        (fresh.drawOrder || [])
+          .filter(x => x !== id);
+
+      if (fresh.currentDrawerId === id) {
+
+        const remaining =
+          fresh.drawOrder.filter(
+            x => fresh.players[x]
+          );
+
+        fresh.currentDrawerId =
+          remaining.length
+            ? remaining[0]
+            : null;
+      }
+
+      await writeMeta(fresh);
+
+      await addChat({
+        system:true,
+        text:p.name + " foi removido pelo anfitrião.",
+        ts:Date.now()
+      });
+
+      meta = fresh;
+
+      render();
+
+    } catch (e) {
+
+      console.error("Erro ao expulsar:",e);
+
+      alert(
+        "Não foi possível expulsar o jogador."
+      );
+    }
+  }
+
+
+  /* =========================================================
      INICIAR JOGO
-     SOMENTE O HOST
   ========================================================= */
 
   async function startGame() {
 
-    if (!isHost()) {
-      return;
-    }
-
-    if (transitioning) {
-      return;
-    }
+    if (!isHost() || transitioning) return;
 
     transitioning = true;
 
     try {
 
-      const fresh =
-        await readMeta();
+      const fresh = await readMeta();
 
       const ids =
-        Object.keys(
-          fresh.players || {}
-        );
+        Object.keys(fresh.players || {});
 
       if (ids.length < 2) {
-
-        alert(
-          "É necessário pelo menos 2 jogadores."
-        );
-
+        alert("É necessário pelo menos 2 jogadores.");
         return;
       }
 
       if (ids.length > MAX_PLAYERS) {
-
-        alert(
-          "O jogo permite no máximo 4 jogadores."
-        );
-
+        alert("O jogo permite no máximo 4 jogadores.");
         return;
       }
 
-
       const order =
         ids.slice().sort(
-          () =>
-            Math.random() - 0.5
+          () => Math.random() - 0.5
         );
 
+      const word = pickWord([]);
 
-      const word =
-        pickWord([]);
+      fresh.phase = "playing";
+      fresh.round = 1;
+      fresh.maxRounds = order.length * 2;
+      fresh.drawOrder = order;
+      fresh.currentDrawerId = order[0];
+      fresh.currentWord = word;
+      fresh.lastWords = [word];
+      fresh.roundStartAt = Date.now();
+      fresh.roundEndAt = 0;
 
+      Object.values(fresh.players).forEach(
+        p => p.score = 0
+      );
 
-      /*
-       * IMPORTANTE:
-       * A palavra é escolhida UMA ÚNICA VEZ.
-       * Todos os jogadores recebem esta mesma
-       * informação através de meta.currentWord.
-       */
+      await clearCorrectGuessers();
 
-      fresh.phase =
-        "playing";
-
-      fresh.round =
-        1;
-
-      fresh.maxRounds =
-        order.length * 2;
-
-      fresh.drawOrder =
-        order;
-
-      fresh.currentDrawerId =
-        order[0];
-
-      fresh.currentWord =
-        word;
-
-      fresh.lastWords =
-        [word];
-
-      fresh.roundStartAt =
-        Date.now();
-
-      fresh.roundEndAt =
-        0;
-
-      fresh.correctGuessers =
-        [];
-
-      fresh.chat = [
+      await firebaseRequest(
+        CHAT_PATH,
         {
-          system:true,
-          text:
-            "Rodada 1: " +
-            playerNameFromMeta(
-              fresh,
-              order[0]
-            ) +
-            " vai desenhar!",
-          ts:Date.now()
-        }
-      ];
-
-
-      Object.values(
-        fresh.players
-      ).forEach(
-        function (p) {
-          p.score = 0;
+          method:"PUT",
+          body:"{}"
         }
       );
 
+      await addChat({
+        system:true,
+        text:
+          "Rodada 1: " +
+          playerNameFromMeta(
+            fresh,
+            order[0]
+          ) +
+          " vai desenhar!",
+        ts:Date.now()
+      });
 
       await writeStrokes({
         round:1,
@@ -1270,11 +1191,7 @@ canvas {
         drawerId:order[0]
       });
 
-
-      await writeMeta(
-        fresh
-      );
-
+      await writeMeta(fresh);
 
       meta = fresh;
 
@@ -1284,29 +1201,24 @@ canvas {
         drawerId:order[0]
       };
 
-      metaVersionSeen =
-        JSON.stringify(meta);
+      correctGuessers = {};
+      chat = [];
 
+      metaVersionSeen = JSON.stringify(meta);
       strokesVersionSeen =
-        JSON.stringify(
-          strokes.strokes
-        );
+        JSON.stringify(strokes.strokes);
 
       render();
 
     } catch (e) {
 
-      console.error(
-        "Erro ao iniciar:",
-        e
-      );
+      console.error("Erro ao iniciar:",e);
 
       alert(
         "Não foi possível iniciar a partida."
       );
 
     } finally {
-
       transitioning = false;
     }
   }
@@ -1314,36 +1226,17 @@ canvas {
 
   /* =========================================================
      FINALIZAR RODADA
-     SOMENTE O HOST
   ========================================================= */
 
-  async function endRoundNow(
-    reason
-  ) {
+  async function endRoundNow(reason) {
 
-    /*
-     * ESTA É UMA DAS CORREÇÕES PRINCIPAIS.
-     *
-     * Antes, todos os jogadores podiam executar
-     * esta função ao mesmo tempo.
-     *
-     * Agora somente o host pode alterar a fase.
-     */
-
-    if (!isHost()) {
-      return;
-    }
-
-    if (transitioning) {
-      return;
-    }
+    if (!isHost() || transitioning) return;
 
     transitioning = true;
 
     try {
 
-      const fresh =
-        await readMeta();
+      const fresh = await readMeta();
 
       if (
         !fresh ||
@@ -1352,44 +1245,20 @@ canvas {
         return;
       }
 
-
-      /*
-       * Não escolhemos uma nova palavra aqui.
-       *
-       * currentWord continua sendo exatamente
-       * a palavra daquela rodada.
-       */
-
-      fresh.phase =
-        "round-end";
-
+      fresh.phase = "round-end";
       fresh.roundEndAt =
         Date.now() +
         ROUND_END_PAUSE * 1000;
 
+      await addChat({
+        system:true,
+        text:reason,
+        ts:Date.now()
+      });
 
-      fresh.chat =
-        (
-          fresh.chat || []
-        )
-          .concat([
-            {
-              system:true,
-              text:reason,
-              ts:Date.now()
-            }
-          ])
-          .slice(-40);
+      await writeMeta(fresh);
 
-
-      await writeMeta(
-        fresh
-      );
-
-
-      meta =
-        fresh;
-
+      meta = fresh;
       metaVersionSeen =
         JSON.stringify(meta);
 
@@ -1411,31 +1280,17 @@ canvas {
 
   /* =========================================================
      PRÓXIMA RODADA
-     SOMENTE O HOST
   ========================================================= */
 
   async function advanceRound() {
 
-    /*
-     * SOMENTE O HOST pode avançar.
-     * Isso impede que 2, 3 ou 4 navegadores
-     * escolham palavras diferentes.
-     */
-
-    if (!isHost()) {
-      return;
-    }
-
-    if (transitioning) {
-      return;
-    }
+    if (!isHost() || transitioning) return;
 
     transitioning = true;
 
     try {
 
-      const fresh =
-        await readMeta();
+      const fresh = await readMeta();
 
       if (
         !fresh ||
@@ -1444,134 +1299,72 @@ canvas {
         return;
       }
 
-
       const nextRound =
         (fresh.round || 0) + 1;
 
+      if (nextRound > fresh.maxRounds) {
 
-      /*
-       * Se acabou o número de rodadas,
-       * termina o jogo.
-       */
+        fresh.phase = "game-end";
+        fresh.roundEndAt = 0;
 
-      if (
-        nextRound >
-        fresh.maxRounds
-      ) {
+        await writeMeta(fresh);
 
-        fresh.phase =
-          "game-end";
-
-        fresh.roundEndAt =
-          0;
-
-        await writeMeta(
-          fresh
-        );
-
-        meta =
-          fresh;
-
+        meta = fresh;
         render();
 
         return;
       }
 
+      const order = fresh.drawOrder || [];
 
-      const order =
-        fresh.drawOrder || [];
+      if (!order.length) return;
 
+      const activeOrder =
+        order.filter(
+          id => fresh.players?.[id]
+        );
 
-      if (!order.length) {
-        return;
-      }
-
-
-      /*
-       * A ordem é fixa durante a partida.
-       *
-       * Rodada:
-       * 1 -> jogador 1
-       * 2 -> jogador 2
-       * 3 -> jogador 3
-       * ...
-       * depois volta para jogador 1.
-       */
+      if (!activeOrder.length) return;
 
       const nextDrawer =
-        order[
+        activeOrder[
           (nextRound - 1) %
-          order.length
+          activeOrder.length
         ];
-
-
-      /*
-       * A NOVA palavra é criada somente aqui,
-       * uma vez, pelo host.
-       */
 
       const word =
         pickWord(
-          (
-            fresh.lastWords || []
-          ).slice(-6)
+          (fresh.lastWords || []).slice(-8)
         );
 
-
-      fresh.phase =
-        "playing";
-
-      fresh.round =
-        nextRound;
-
-      fresh.currentDrawerId =
-        nextDrawer;
-
-      fresh.currentWord =
-        word;
+      fresh.phase = "playing";
+      fresh.round = nextRound;
+      fresh.currentDrawerId = nextDrawer;
+      fresh.currentWord = word;
 
       fresh.lastWords =
-        (
-          fresh.lastWords || []
-        )
+        (fresh.lastWords || [])
           .concat([word])
-          .slice(-8);
+          .slice(-10);
 
-      fresh.roundStartAt =
-        Date.now();
+      fresh.roundStartAt = Date.now();
+      fresh.roundEndAt = 0;
 
-      fresh.roundEndAt =
-        0;
+      await clearCorrectGuessers();
 
-      fresh.correctGuessers =
-        [];
-
-
-      fresh.chat =
-        (
-          fresh.chat || []
-        )
-          .concat([
-            {
-              system:true,
-              text:
-                "Rodada " +
-                nextRound +
-                ": " +
-                playerNameFromMeta(
-                  fresh,
-                  nextDrawer
-                ) +
-                " vai desenhar!",
-              ts:Date.now()
-            }
-          ])
-          .slice(-40);
-
-
-      /*
-       * Primeiro limpamos o quadro.
-       */
+      await addChat({
+        system:true,
+        text:
+          "Rodada " +
+          nextRound +
+          ": " +
+          playerNameFromMeta(
+            fresh,
+            nextDrawer
+          ) +
+          " vai desenhar!",
+        ts:Date.now()
+      });
 
       await writeStrokes({
         round:nextRound,
@@ -1579,18 +1372,9 @@ canvas {
         drawerId:nextDrawer
       });
 
+      await writeMeta(fresh);
 
-      /*
-       * Depois publicamos o estado da nova rodada.
-       */
-
-      await writeMeta(
-        fresh
-      );
-
-
-      meta =
-        fresh;
+      meta = fresh;
 
       strokes = {
         round:nextRound,
@@ -1598,13 +1382,13 @@ canvas {
         drawerId:nextDrawer
       };
 
+      correctGuessers = {};
+
       metaVersionSeen =
         JSON.stringify(meta);
 
       strokesVersionSeen =
-        JSON.stringify(
-          strokes.strokes
-        );
+        JSON.stringify(strokes.strokes);
 
       render();
 
@@ -1624,82 +1408,43 @@ canvas {
 
   /* =========================================================
      JOGAR NOVAMENTE
-     SOMENTE O HOST
   ========================================================= */
 
   async function playAgain() {
 
-    if (!isHost()) {
-      return;
-    }
-
-    if (transitioning) {
-      return;
-    }
+    if (!isHost() || transitioning) return;
 
     transitioning = true;
 
     try {
 
-      const fresh =
-        await readMeta();
+      const fresh = await readMeta();
 
-      if (!fresh) {
-        return;
-      }
-
-
-      /*
-       * Volta ao lobby.
-       * Os mesmos jogadores continuam na sala.
-       */
-
-      fresh.phase =
-        "lobby";
-
-      fresh.round =
-        0;
-
-      fresh.maxRounds =
-        0;
-
-      fresh.drawOrder =
-        [];
-
-      fresh.currentDrawerId =
-        null;
-
-      fresh.currentWord =
-        null;
-
-      fresh.lastWords =
-        [];
-
-      fresh.roundStartAt =
-        0;
-
-      fresh.roundEndAt =
-        0;
-
-      fresh.correctGuessers =
-        [];
-
-      fresh.chat =
-        [];
-
+      fresh.phase = "lobby";
+      fresh.round = 0;
+      fresh.maxRounds = 0;
+      fresh.drawOrder = [];
+      fresh.currentDrawerId = null;
+      fresh.currentWord = null;
+      fresh.lastWords = [];
+      fresh.roundStartAt = 0;
+      fresh.roundEndAt = 0;
 
       Object.values(
         fresh.players || {}
       ).forEach(
-        function (p) {
-          p.score = 0;
-        }
+        p => p.score = 0
       );
 
+      await clearCorrectGuessers();
 
-      /*
-       * Limpa o desenho.
-       */
+      await firebaseRequest(
+        CHAT_PATH,
+        {
+          method:"PUT",
+          body:"{}"
+        }
+      );
 
       await writeStrokes({
         round:0,
@@ -1707,28 +1452,17 @@ canvas {
         drawerId:null
       });
 
+      await writeMeta(fresh);
 
-      await writeMeta(
-        fresh
-      );
-
-
-      meta =
-        fresh;
-
+      meta = fresh;
       strokes = {
         round:0,
         strokes:[],
         drawerId:null
       };
 
-      metaVersionSeen =
-        JSON.stringify(meta);
-
-      strokesVersionSeen =
-        JSON.stringify(
-          strokes.strokes
-        );
+      correctGuessers = {};
+      chat = [];
 
       render();
 
@@ -1744,7 +1478,6 @@ canvas {
       );
 
     } finally {
-
       transitioning = false;
     }
   }
@@ -1756,239 +1489,200 @@ canvas {
 
   async function sendGuess(text) {
 
-    text =
-      text.trim();
+    text = text.trim();
 
-    if (!text) {
-      return;
-    }
+    if (!text) return;
 
+    try {
 
-    const fresh =
-      await readMeta();
-
-
-    if (
-      !fresh ||
-      fresh.phase !== "playing"
-    ) {
-      return;
-    }
-
-
-    /*
-     * Desenhista não pode adivinhar.
-     */
-
-    if (
-      fresh.currentDrawerId ===
-      me.id
-    ) {
-      return;
-    }
-
-
-    /*
-     * Quem já acertou não pode mandar
-     * mais palpites.
-     */
-
-    if (
-      (
-        fresh.correctGuessers || []
-      ).includes(me.id)
-    ) {
-      return;
-    }
-
-
-    const normalizedText =
-      text
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(
-          /[\u0300-\u036f]/g,
-          ""
-        );
-
-
-    const normalizedWord =
-      (
-        fresh.currentWord || ""
-      )
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(
-          /[\u0300-\u036f]/g,
-          ""
-        );
-
-
-    const isCorrect =
-      normalizedText ===
-      normalizedWord;
-
-
-    const myName =
-      fresh.players?.[me.id]?.name ||
-      "Alguém";
-
-
-    if (isCorrect) {
-
-      const elapsed =
-        (
-          Date.now() -
-          fresh.roundStartAt
-        ) / 1000;
-
-
-      const remaining =
-        Math.max(
-          0,
-          ROUND_DURATION -
-          elapsed
-        );
-
-
-      const pts =
-        Math.max(
-          15,
-          Math.round(
-            100 *
-            (
-              remaining /
-              ROUND_DURATION
-            )
-          )
-        );
-
+      // Lê o estado atual para não usar palavra antiga
+      const fresh = await readMeta();
 
       if (
-        !fresh.players[me.id]
+        !fresh ||
+        fresh.phase !== "playing"
       ) {
         return;
       }
 
-
-      fresh.players[me.id].score =
-        (
-          fresh.players[me.id].score ||
-          0
-        ) + pts;
-
-
-      if (
-        fresh.players[
-          fresh.currentDrawerId
-        ]
-      ) {
-
-        fresh.players[
-          fresh.currentDrawerId
-        ].score =
-          (
-            fresh.players[
-              fresh.currentDrawerId
-            ].score || 0
-          ) +
-          Math.round(
-            pts / 2
-          );
+      if (fresh.currentDrawerId === me.id) {
+        return;
       }
 
+      const latestGuesses =
+        await readCorrectGuessers();
 
-      fresh.correctGuessers =
-        (
-          fresh.correctGuessers || []
-        ).concat([me.id]);
+      if (latestGuesses[me.id]) {
+        return;
+      }
 
+      const normalizedText =
+        text
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g,"")
+          .trim();
 
-      fresh.chat =
-        (
-          fresh.chat || []
-        )
-          .concat([
-            {
-              correct:true,
-              text:
-                "🎉 " +
-                myName +
-                " acertou!",
-              ts:Date.now()
-            }
-          ])
-          .slice(-40);
+      const normalizedWord =
+        (fresh.currentWord || "")
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g,"")
+          .trim();
 
-    } else {
+      const isCorrect =
+        normalizedText === normalizedWord;
 
-      fresh.chat =
-        (
-          fresh.chat || []
-        )
-          .concat([
-            {
-              playerId:me.id,
-              who:myName,
-              text:text,
-              ts:Date.now()
-            }
-          ])
-          .slice(-40);
-    }
+      const myName =
+        fresh.players?.[me.id]?.name ||
+        "Alguém";
 
+      if (isCorrect) {
 
-    await writeMeta(
-      fresh
-    );
+        /*
+         * IMPORTANTE:
+         * Os acertos são gravados separadamente.
+         * Assim um jogador não apaga o acerto de outro.
+         */
 
+        const elapsed =
+          (Date.now() - fresh.roundStartAt) / 1000;
 
-    meta =
-      fresh;
+        const remaining =
+          Math.max(
+            0,
+            ROUND_DURATION - elapsed
+          );
 
-    metaVersionSeen =
-      JSON.stringify(meta);
+        const pts =
+          Math.max(
+            15,
+            Math.round(
+              100 *
+              (remaining / ROUND_DURATION)
+            )
+          );
 
-    render();
+        await markCorrect(me.id);
 
+        /*
+         * Atualiza o placar do jogador.
+         * PATCH impede que os outros jogadores
+         * sejam apagados.
+         */
 
-    /*
-     * Se todos os jogadores que não desenham
-     * acertaram, o host encerra a rodada.
-     */
+        const currentPlayer =
+          fresh.players?.[me.id];
 
-    if (isCorrect) {
+        if (!currentPlayer) return;
 
-      const nonDrawers =
-        Object.keys(
-          fresh.players || {}
-        ).filter(
-          id =>
-            id !==
-            fresh.currentDrawerId
+        await patchMeta({
+          ["players/" + me.id + "/score"]:
+            (currentPlayer.score || 0) + pts
+        });
+
+        /*
+         * Pontos para o desenhista.
+         */
+
+        if (
+          fresh.currentDrawerId &&
+          fresh.players[fresh.currentDrawerId]
+        ) {
+
+          const drawer =
+            fresh.players[fresh.currentDrawerId];
+
+          await patchMeta({
+            ["players/" +
+             fresh.currentDrawerId +
+             "/score"]:
+              (drawer.score || 0) +
+              Math.round(pts / 2)
+          });
+        }
+
+        await addChat({
+          correct:true,
+          text:"🎉 " + myName + " acertou!",
+          ts:Date.now()
+        });
+
+        /*
+         * Espera um instante para o Firebase
+         * registrar todos os acertos.
+         */
+
+        await new Promise(
+          resolve => setTimeout(resolve,120)
         );
 
-
-      const allCorrect =
-        nonDrawers.length > 0 &&
-        nonDrawers.every(
-          id =>
-            (
-              fresh.correctGuessers || []
-            ).includes(id)
-        );
-
-
-      if (allCorrect) {
+        /*
+         * SOMENTE O HOST verifica se todos acertaram.
+         */
 
         if (isHost()) {
 
-          await endRoundNow(
-            "Todo mundo acertou! 🎉"
-          );
+          const latestMeta =
+            await readMeta();
 
+          const latestCorrect =
+            await readCorrectGuessers();
+
+          const playersWhoNeedToGuess =
+            Object.keys(
+              latestMeta.players || {}
+            ).filter(
+              id =>
+                id !==
+                latestMeta.currentDrawerId
+            );
+
+          const everyoneGuessed =
+            playersWhoNeedToGuess.length > 0 &&
+            playersWhoNeedToGuess.every(
+              id => latestCorrect[id] === true
+            );
+
+          if (
+            everyoneGuessed &&
+            latestMeta.phase === "playing"
+          ) {
+
+            await endRoundNow(
+              "🎉 Todo mundo acertou!"
+            );
+          }
         }
+
+      } else {
+
+        /*
+         * Cada mensagem tem sua própria chave no Firebase.
+         * Portanto uma mensagem não apaga outra.
+         */
+
+        await addChat({
+          playerId:me.id,
+          who:myName,
+          text:text,
+          ts:Date.now()
+        });
       }
+
+      meta = await readMeta();
+      correctGuessers =
+        await readCorrectGuessers();
+      chat = await readChat();
+
+      render();
+
+    } catch (e) {
+
+      console.error(
+        "Erro ao enviar palpite:",
+        e
+      );
     }
   }
 
@@ -1999,9 +1693,7 @@ canvas {
 
   function startPolling() {
 
-    if (pollTimer) {
-      return;
-    }
+    if (pollTimer) return;
 
     pollTimer =
       setInterval(
@@ -2010,62 +1702,75 @@ canvas {
       );
   }
 
-
   async function pollTick() {
 
     try {
 
       const [
         m,
-        s
+        s,
+        c,
+        g
       ] = await Promise.all([
         readMeta(),
-        readStrokes()
+        readStrokes(),
+        readChat(),
+        readCorrectGuessers()
       ]);
 
-
       let changed = false;
-
 
       if (m) {
 
         const v =
           JSON.stringify(m);
 
-        if (
-          v !==
-          metaVersionSeen
-        ) {
+        if (v !== metaVersionSeen) {
 
-          metaVersionSeen =
-            v;
-
-          meta =
-            m;
-
+          metaVersionSeen = v;
+          meta = m;
           changed = true;
         }
       }
 
+      /*
+       * CORREÇÃO DOS TRAÇOS:
+       *
+       * Enquanto o desenhista está desenhando,
+       * não substituímos imediatamente o desenho local
+       * por uma versão antiga vinda do Firebase.
+       *
+       * Isso evita o traço "sumir".
+       */
 
       if (s) {
 
-        const v =
+        const remoteVersion =
           JSON.stringify(
             s.strokes || []
           );
 
+        const remoteRound =
+          s.round;
+
+        const localRound =
+          strokes?.round;
+
+        const shouldAccept =
+          !amIDrawer() ||
+          !isDrawing ||
+          remoteRound !== localRound;
 
         if (
-          v !==
-          strokesVersionSeen
+          remoteVersion !==
+          strokesVersionSeen &&
+          shouldAccept
         ) {
 
           strokesVersionSeen =
-            v;
+            remoteVersion;
 
-          strokes =
-            s;
+          strokes = s;
 
           changed = true;
 
@@ -2073,11 +1778,63 @@ canvas {
         }
       }
 
+      if (c) {
+
+        const v =
+          JSON.stringify(c);
+
+        if (v !== chatVersionSeen) {
+
+          chatVersionSeen = v;
+          chat = c;
+          changed = true;
+        }
+      }
+
+      if (g) {
+
+        const v =
+          JSON.stringify(g);
+
+        if (v !== guessesVersionSeen) {
+
+          guessesVersionSeen = v;
+          correctGuessers = g;
+          changed = true;
+        }
+      }
+
+      /*
+       * Se fui expulso, volto para a tela inicial.
+       */
+
+      if (
+        me.name &&
+        meta &&
+        !meta.players?.[me.id] &&
+        !kickedHandled
+      ) {
+
+        kickedHandled = true;
+
+        alert(
+          "Você foi removido da sala pelo anfitrião."
+        );
+
+        me.name = null;
+        meta = null;
+        strokes = null;
+        chat = [];
+        correctGuessers = {};
+
+        render();
+
+        return;
+      }
 
       if (changed) {
         render();
       }
-
 
       checkTimers();
 
@@ -2097,19 +1854,11 @@ canvas {
 
   function checkTimers() {
 
-    if (!meta) {
-      return;
-    }
+    if (!meta) return;
 
+    const now = Date.now();
 
-    const now =
-      Date.now();
-
-
-    if (
-      meta.phase ===
-      "playing"
-    ) {
+    if (meta.phase === "playing") {
 
       const remaining =
         (
@@ -2117,35 +1866,23 @@ canvas {
           ROUND_DURATION * 1000
         ) - now;
 
-
-      /*
-       * IMPORTANTE:
-       * somente o host pode finalizar.
-       */
-
       if (
         remaining <= 0 &&
         isHost()
       ) {
 
         endRoundNow(
-          "Tempo esgotado!"
+          "⏰ Tempo esgotado!"
         );
       }
 
     } else if (
-      meta.phase ===
-      "round-end"
+      meta.phase === "round-end"
     ) {
-
-      /*
-       * somente o host pode avançar.
-       */
 
       if (
         meta.roundEndAt &&
-        now >=
-        meta.roundEndAt &&
+        now >= meta.roundEndAt &&
         isHost()
       ) {
 
@@ -2153,10 +1890,8 @@ canvas {
       }
     }
 
-
     updateTimerDisplay();
   }
-
 
   function updateTimerDisplay() {
 
@@ -2165,16 +1900,13 @@ canvas {
         "timer-val"
       );
 
-
     if (
       !el ||
       !meta ||
-      meta.phase !==
-      "playing"
+      meta.phase !== "playing"
     ) {
       return;
     }
-
 
     const remaining =
       Math.max(
@@ -2188,30 +1920,31 @@ canvas {
         )
       );
 
+    const min =
+      Math.floor(remaining / 60);
+
+    const sec =
+      remaining % 60;
 
     el.textContent =
-      remaining;
-
+      min + ":" +
+      String(sec).padStart(2,"0");
 
     if (el.parentElement) {
 
-      el.parentElement
-        .classList
-        .toggle(
-          "low",
-          remaining <= 12
-        );
+      el.parentElement.classList.toggle(
+        "low",
+        remaining <= 30
+      );
     }
   }
-
 
   setInterval(
     function () {
 
       if (
         meta &&
-        meta.phase ===
-        "playing"
+        meta.phase === "playing"
       ) {
         updateTimerDisplay();
       }
@@ -2226,160 +1959,96 @@ canvas {
   ========================================================= */
 
   function getCanvas() {
-
-    return document.getElementById(
-      "board"
-    );
+    return document.getElementById("board");
   }
 
-
-  function canvasPos(
-    evt,
-    canvas
-  ) {
+  function canvasPos(evt,canvas) {
 
     const rect =
       canvas.getBoundingClientRect();
-
 
     const cx =
       evt.touches
         ? evt.touches[0].clientX
         : evt.clientX;
 
-
     const cy =
       evt.touches
         ? evt.touches[0].clientY
         : evt.clientY;
 
-
-    let x =
-      (cx - rect.left) /
-      rect.width;
-
-
-    let y =
-      (cy - rect.top) /
-      rect.height;
-
-
-    x =
-      Math.min(
-        1,
-        Math.max(
-          0,
-          x
-        )
-      );
-
-
-    y =
-      Math.min(
-        1,
-        Math.max(
-          0,
-          y
-        )
-      );
-
-
     return {
-      x:x,
-      y:y
+      x:Math.min(
+        1,
+        Math.max(
+          0,
+          (cx - rect.left) / rect.width
+        )
+      ),
+      y:Math.min(
+        1,
+        Math.max(
+          0,
+          (cy - rect.top) / rect.height
+        )
+      )
     };
   }
 
 
+  /* =========================================================
+     RENDERIZAÇÃO DOS TRAÇOS
+  ========================================================= */
+
   function drawAllStrokes() {
 
-    const canvas =
-      getCanvas();
+    const canvas = getCanvas();
 
-
-    if (!canvas) {
-      return;
-    }
-
+    if (!canvas) return;
 
     const ctx =
-      canvas.getContext(
-        "2d"
-      );
+      canvas.getContext("2d");
 
+    const W = canvas.width;
+    const H = canvas.height;
 
-    const W =
-      canvas.width;
+    ctx.clearRect(0,0,W,H);
 
-    const H =
-      canvas.height;
-
-
-    ctx.clearRect(
-      0,
-      0,
-      W,
-      H
-    );
-
-
-    ctx.fillStyle =
-      ERASER_COLOR;
-
-
-    ctx.fillRect(
-      0,
-      0,
-      W,
-      H
-    );
-
+    ctx.fillStyle = ERASER_COLOR;
+    ctx.fillRect(0,0,W,H);
 
     const list =
-      (
-        strokes &&
-        strokes.strokes
-      ) || [];
+      (strokes && strokes.strokes) || [];
 
+    list.forEach(function(st) {
 
-    list.forEach(
-      function (st) {
+      /*
+       * Pincel
+       */
 
-        if (
-          !st.points ||
-          !st.points.length
-        ) {
-          return;
-        }
-
+      if (
+        st.type === "stroke" &&
+        st.points &&
+        st.points.length
+      ) {
 
         ctx.beginPath();
 
-        ctx.lineJoin =
-          "round";
-
-        ctx.lineCap =
-          "round";
-
-        ctx.strokeStyle =
-          st.color;
-
+        ctx.lineJoin = "round";
+        ctx.lineCap = "round";
+        ctx.strokeStyle = st.color;
         ctx.lineWidth =
           Math.max(
             1,
             st.size * W
           );
 
-
         ctx.moveTo(
           st.points[0].x * W,
           st.points[0].y * H
         );
 
-
-        if (
-          st.points.length === 1
-        ) {
+        if (st.points.length === 1) {
 
           ctx.lineTo(
             st.points[0].x * W + .1,
@@ -2401,32 +2070,281 @@ canvas {
           }
         }
 
-
         ctx.stroke();
-      }
-    );
-  }
 
+        return;
+      }
+
+      /*
+       * Ponto
+       */
+
+      if (
+        st.type === "dot"
+      ) {
+
+        ctx.beginPath();
+
+        ctx.fillStyle = st.color;
+
+        ctx.arc(
+          st.x * W,
+          st.y * H,
+          Math.max(1,st.size * W / 2),
+          0,
+          Math.PI * 2
+        );
+
+        ctx.fill();
+
+        return;
+      }
+
+      /*
+       * BALDE
+       *
+       * O balde é salvo como uma imagem PNG.
+       * Isso garante que todos os jogadores vejam
+       * exatamente o mesmo preenchimento.
+       */
+
+      if (
+        st.type === "fill" &&
+        st.image
+      ) {
+
+        const img = new Image();
+
+        img.onload = function() {
+
+          ctx.drawImage(
+            img,
+            0,
+            0,
+            W,
+            H
+          );
+        };
+
+        img.src = st.image;
+      }
+
+    });
+  }
 
   function resizeCanvasBacking() {
 
-    const canvas =
-      getCanvas();
+    const canvas = getCanvas();
+
+    if (!canvas) return;
+
+    canvas.width = 700;
+    canvas.height = 440;
+
+    drawAllStrokes();
+  }
 
 
-    if (!canvas) {
+  /* =========================================================
+     BALDE
+  ========================================================= */
+
+  function floodFill(canvas,x,y,color) {
+
+    const ctx =
+      canvas.getContext("2d");
+
+    const W = canvas.width;
+    const H = canvas.height;
+
+    const image =
+      ctx.getImageData(
+        0,
+        0,
+        W,
+        H
+      );
+
+    const data = image.data;
+
+    const startIndex =
+      (y * W + x) * 4;
+
+    const targetR = data[startIndex];
+    const targetG = data[startIndex + 1];
+    const targetB = data[startIndex + 2];
+    const targetA = data[startIndex + 3];
+
+    const temp =
+      document.createElement("canvas");
+
+    temp.width = W;
+    temp.height = H;
+
+    const tctx =
+      temp.getContext("2d");
+
+    tctx.putImageData(image,0,0);
+
+    const fillColor =
+      hexToRgba(color);
+
+    /*
+     * Se já é a mesma cor, não faz nada.
+     */
+
+    if (
+      targetR === fillColor[0] &&
+      targetG === fillColor[1] &&
+      targetB === fillColor[2]
+    ) {
+      return temp;
+    }
+
+    const stack = [[x,y]];
+
+    function matches(px,py) {
+
+      if (
+        px < 0 ||
+        py < 0 ||
+        px >= W ||
+        py >= H
+      ) {
+        return false;
+      }
+
+      const i =
+        (py * W + px) * 4;
+
+      return (
+        Math.abs(data[i] - targetR) <= 10 &&
+        Math.abs(data[i+1] - targetG) <= 10 &&
+        Math.abs(data[i+2] - targetB) <= 10 &&
+        Math.abs(data[i+3] - targetA) <= 10
+      );
+    }
+
+    while (stack.length) {
+
+      const point =
+        stack.pop();
+
+      const px = point[0];
+      const py = point[1];
+
+      if (!matches(px,py)) continue;
+
+      const i =
+        (py * W + px) * 4;
+
+      data[i] = fillColor[0];
+      data[i+1] = fillColor[1];
+      data[i+2] = fillColor[2];
+      data[i+3] = 255;
+
+      stack.push([px+1,py]);
+      stack.push([px-1,py]);
+      stack.push([px,py+1]);
+      stack.push([px,py-1]);
+    }
+
+    image.data.set(data);
+
+    tctx.putImageData(image,0,0);
+
+    return temp;
+  }
+
+  function hexToRgba(hex) {
+
+    const h =
+      hex.replace("#","");
+
+    const value =
+      parseInt(h,16);
+
+    return [
+      (value >> 16) & 255,
+      (value >> 8) & 255,
+      value & 255,
+      255
+    ];
+  }
+
+
+  /* =========================================================
+     SALVAR BALDE
+  ========================================================= */
+
+  async function useBucket(evt) {
+
+    if (
+      !amIDrawer() ||
+      !meta ||
+      meta.phase !== "playing"
+    ) {
       return;
     }
 
+    const canvas = getCanvas();
 
-    canvas.width =
-      700;
+    if (!canvas) return;
 
-    canvas.height =
-      440;
+    const p =
+      canvasPos(evt,canvas);
 
+    const x =
+      Math.floor(
+        p.x * canvas.width
+      );
+
+    const y =
+      Math.floor(
+        p.y * canvas.height
+      );
+
+    /*
+     * O canvas já contém todos os traços atuais.
+     */
+
+    const result =
+      floodFill(
+        canvas,
+        x,
+        y,
+        activeColor
+      );
+
+    if (!result) return;
+
+    const image =
+      result.toDataURL(
+        "image/png"
+      );
+
+    const fillStroke = {
+      type:"fill",
+      color:activeColor,
+      image:image
+    };
+
+    if (!strokes) {
+
+      strokes = {
+        round:meta.round,
+        strokes:[],
+        drawerId:me.id
+      };
+    }
+
+    strokes.strokes =
+      (strokes.strokes || [])
+        .concat([fillStroke]);
 
     drawAllStrokes();
+
+    await flushStrokes();
   }
 
 
@@ -2436,87 +2354,63 @@ canvas {
 
   function setupCanvasEvents() {
 
-    const canvas =
-      getCanvas();
+    const canvas = getCanvas();
 
-
-    if (!canvas) {
-      return;
-    }
-
+    if (!canvas) return;
 
     const start =
-      function (e) {
+      function(e) {
 
         if (
           !amIDrawer() ||
           !meta ||
-          meta.phase !==
-          "playing"
+          meta.phase !== "playing"
         ) {
           return;
         }
 
-
         e.preventDefault();
 
+        if (activeTool === "bucket") {
 
-        isDrawing =
-          true;
+          useBucket(e);
+          return;
+        }
 
+        isDrawing = true;
 
         const p =
-          canvasPos(
-            e,
-            canvas
-          );
-
+          canvasPos(e,canvas);
 
         currentStroke = {
-
-          color:
-            activeColor,
-
-          size:
-            activeSize,
-
+          type:"stroke",
+          color:activeColor,
+          size:activeSize,
           points:[p]
         };
 
-
         if (
           !strokes ||
-          strokes.round !==
-          meta.round
+          strokes.round !== meta.round
         ) {
 
           strokes = {
-
-            round:
-              meta.round,
-
+            round:meta.round,
             strokes:[],
-
-            drawerId:
-              me.id
+            drawerId:me.id
           };
         }
 
-
         strokes.strokes =
-          (
-            strokes.strokes || []
-          ).concat([
-            currentStroke
-          ]);
-
+          (strokes.strokes || [])
+            .concat([currentStroke]);
 
         drawAllStrokes();
       };
 
 
     const move =
-      function (e) {
+      function(e) {
 
         if (
           !isDrawing ||
@@ -2525,38 +2419,23 @@ canvas {
           return;
         }
 
-
         e.preventDefault();
 
-
         const p =
-          canvasPos(
-            e,
-            canvas
-          );
+          canvasPos(e,canvas);
 
-
-        currentStroke.points.push(
-          p
-        );
-
+        currentStroke.points.push(p);
 
         drawAllStrokes();
 
-
-        const now =
-          Date.now();
-
+        const now = Date.now();
 
         if (
-          now -
-          lastStrokeWrite >
-          110 &&
+          now - lastStrokeWrite > 100 &&
           !strokesWriteInFlight
         ) {
 
-          lastStrokeWrite =
-            now;
+          lastStrokeWrite = now;
 
           flushStrokes();
         }
@@ -2564,18 +2443,13 @@ canvas {
 
 
     const end =
-      function () {
+      function() {
 
-        if (!isDrawing) {
-          return;
-        }
+        if (!isDrawing) return;
 
+        isDrawing = false;
 
-        isDrawing =
-          false;
-
-        currentStroke =
-          null;
+        currentStroke = null;
 
         flushStrokes();
       };
@@ -2596,17 +2470,16 @@ canvas {
       end
     );
 
-
     canvas.addEventListener(
       "touchstart",
       start,
-      { passive:false }
+      {passive:false}
     );
 
     canvas.addEventListener(
       "touchmove",
       move,
-      { passive:false }
+      {passive:false}
     );
 
     canvas.addEventListener(
@@ -2625,28 +2498,23 @@ canvas {
       return;
     }
 
+    if (strokesWriteInFlight) return;
 
-    strokesWriteInFlight =
-      true;
-
+    strokesWriteInFlight = true;
 
     try {
 
-      await writeStrokes({
-        round:
-          strokes.round,
+      const snapshot = {
+        round:strokes.round,
+        strokes:strokes.strokes,
+        drawerId:me.id
+      };
 
-        strokes:
-          strokes.strokes,
-
-        drawerId:
-          me.id
-      });
-
+      await writeStrokes(snapshot);
 
       strokesVersionSeen =
         JSON.stringify(
-          strokes.strokes || []
+          snapshot.strokes || []
         );
 
     } catch (e) {
@@ -2658,37 +2526,27 @@ canvas {
 
     } finally {
 
-      strokesWriteInFlight =
-        false;
+      strokesWriteInFlight = false;
     }
   }
 
 
   async function clearCanvas() {
 
-    if (!amIDrawer()) {
-      return;
-    }
-
+    if (!amIDrawer()) return;
 
     strokes = {
-
-      round:
-        meta.round,
-
+      round:meta.round,
       strokes:[],
-
-      drawerId:
-        me.id
+      drawerId:me.id
     };
-
 
     drawAllStrokes();
 
+    await writeStrokes(strokes);
 
-    await writeStrokes(
-      strokes
-    );
+    strokesVersionSeen =
+      JSON.stringify([]);
   }
 
 
@@ -2726,21 +2584,12 @@ canvas {
 
   function render() {
 
-    if (!me.name) {
+    if (!me.name || !meta) {
       renderLanding();
       return;
     }
 
-
-    if (!meta) {
-      renderLanding();
-      return;
-    }
-
-
-    switch (
-      meta.phase
-    ) {
+    switch(meta.phase) {
 
       case "lobby":
         renderLobby();
@@ -2771,7 +2620,6 @@ canvas {
   function renderLanding() {
 
     app.innerHTML = `
-
       <div class="card">
 
         <h2 style="margin-top:0;">
@@ -2806,49 +2654,28 @@ canvas {
       </div>
     `;
 
-
     const input =
-      document.getElementById(
-        "name-input"
-      );
-
+      document.getElementById("name-input");
 
     const btn =
-      document.getElementById(
-        "join-btn"
-      );
-
+      document.getElementById("join-btn");
 
     async function go() {
 
       const name =
         input.value.trim();
 
-
       if (!name) {
-
         input.focus();
-
         return;
       }
 
-
-      btn.disabled =
-        true;
-
-      btn.textContent =
-        "Entrando...";
-
-
-      me.name =
-        name;
-
+      btn.disabled = true;
+      btn.textContent = "Entrando...";
 
       try {
 
-        await joinGame(
-          name
-        );
+        await joinGame(name);
 
       } catch (e) {
 
@@ -2857,47 +2684,30 @@ canvas {
           e
         );
 
-        me.name =
-          null;
+        me.name = null;
 
         alert(
           "Não foi possível entrar no jogo.\n\n" +
-          (e.message ||
-            "Erro desconhecido")
+          (e.message || "Erro desconhecido")
         );
 
         render();
 
       } finally {
 
-        btn.disabled =
-          false;
-
-        btn.textContent =
-          "Entrar";
+        btn.disabled = false;
+        btn.textContent = "Entrar";
       }
     }
 
-
-    btn.addEventListener(
-      "click",
-      go
-    );
-
+    btn.addEventListener("click",go);
 
     input.addEventListener(
       "keydown",
-      function (e) {
-
-        if (
-          e.key ===
-          "Enter"
-        ) {
-          go();
-        }
+      function(e) {
+        if (e.key === "Enter") go();
       }
     );
-
 
     input.focus();
   }
@@ -2909,67 +2719,58 @@ canvas {
 
   function renderLobby() {
 
-    const ids =
-      sortedByJoin();
-
-
-    const host =
-      hostId();
-
+    const ids = sortedByJoin();
+    const host = hostId();
 
     const playersHtml =
-      ids.map(
-        function (id) {
+      ids.map(function(id) {
 
-          const p =
-            meta.players[id];
+        const p = meta.players[id];
+        const color = hashColor(id);
 
+        return `
+          <div class="chip">
 
-          const color =
-            hashColor(id);
-
-
-          return `
-
-            <div class="chip">
-
-              <div
-                class="avatar"
-                style="background:${color}"
-              >
-                ${escapeHtml(
-                  initials(p.name)
-                )}
-              </div>
-
-              <span>
-                ${escapeHtml(p.name)}
-
-                ${
-                  id === me.id
-                    ? " (você)"
-                    : ""
-                }
-              </span>
-
-              ${
-                id === host
-                  ? `
-                    <span class="host-badge">
-                      ★ anfitrião
-                    </span>
-                  `
-                  : ""
-              }
-
+            <div
+              class="avatar"
+              style="background:${color}"
+            >
+              ${escapeHtml(initials(p.name))}
             </div>
-          `;
-        }
-      ).join("");
 
+            <span>
+              ${escapeHtml(p.name)}
+              ${id === me.id ? " (você)" : ""}
+            </span>
+
+            ${
+              id === host
+                ? `
+                  <span class="host-badge">
+                    ★ anfitrião
+                  </span>
+                `
+                : ""
+            }
+
+            ${
+              isHost() && id !== me.id
+                ? `
+                  <button
+                    class="kick-btn"
+                    data-kick="${id}"
+                  >
+                    expulsar
+                  </button>
+                `
+                : ""
+            }
+
+          </div>
+        `;
+      }).join("");
 
     app.innerHTML = `
-
       <div class="card">
 
         <h2 style="margin-top:0;">
@@ -2989,6 +2790,25 @@ canvas {
 
         </div>
 
+        ${
+          isHost()
+            ? `
+              <div class="admin-box">
+
+                <div class="admin-title">
+                  👑 Controles do anfitrião
+                </div>
+
+                <div class="hint">
+                  Você pode expulsar jogadores antes
+                  de iniciar a partida.
+                </div>
+
+              </div>
+            `
+            : ""
+        }
+
         <div
           class="join-row"
           style="margin-top:20px;"
@@ -2996,30 +2816,20 @@ canvas {
 
           ${
             isHost()
-
               ? `
                 <button
                   id="start-btn"
-                  ${
-                    ids.length < 2
-                      ? "disabled"
-                      : ""
-                  }
+                  ${ids.length < 2 ? "disabled" : ""}
                 >
                   Iniciar jogo
                 </button>
               `
-
               : `
                 <span class="hint">
                   Aguardando
-                  ${
-                    escapeHtml(
-                      meta.players[
-                        host
-                      ]?.name || ""
-                    )
-                  }
+                  ${escapeHtml(
+                    meta.players[host]?.name || ""
+                  )}
                   iniciar...
                 </span>
               `
@@ -3036,20 +2846,17 @@ canvas {
 
         ${
           ids.length < 2
-
             ? `
               <p class="hint">
-                Precisa de pelo menos
-                2 jogadores para começar.
+                Precisa de pelo menos 2 jogadores
+                para começar.
               </p>
             `
-
             : `
               <p class="hint">
-                ${ids.length}
-                jogador(es) prontos.
-                Cada jogador desenha
-                2 vezes.
+                ${ids.length} jogador(es) prontos.
+                Cada jogador desenha 2 vezes.
+                Cada rodada dura 5 minutos.
               </p>
             `
         }
@@ -3057,35 +2864,39 @@ canvas {
       </div>
     `;
 
-
     const start =
-      document.getElementById(
-        "start-btn"
-      );
-
+      document.getElementById("start-btn");
 
     if (start) {
-
       start.addEventListener(
         "click",
         startGame
       );
     }
 
-
     const leave =
-      document.getElementById(
-        "leave-btn"
-      );
-
+      document.getElementById("leave-btn");
 
     if (leave) {
-
       leave.addEventListener(
         "click",
         leaveGame
       );
     }
+
+    document
+      .querySelectorAll("[data-kick]")
+      .forEach(btn => {
+
+        btn.addEventListener(
+          "click",
+          function() {
+            kickPlayer(
+              btn.dataset.kick
+            );
+          }
+        );
+      });
   }
 
 
@@ -3098,93 +2909,63 @@ canvas {
     const ids =
       playerIds()
         .slice()
-        .sort(
-          function (a,b) {
+        .sort(function(a,b) {
 
-            return (
-              (
-                meta.players[b]
-                  .score || 0
-              ) -
-              (
-                meta.players[a]
-                  .score || 0
-              )
-            );
-          }
-        );
-
+          return (
+            (meta.players[b].score || 0) -
+            (meta.players[a].score || 0)
+          );
+        });
 
     return `
-
       <div class="scoreboard">
 
         ${
-          ids.map(
-            function (id) {
+          ids.map(function(id) {
 
-              const p =
-                meta.players[id];
+            const p = meta.players[id];
+            const color = hashColor(id);
 
+            const drawing =
+              meta.currentDrawerId === id;
 
-              const color =
-                hashColor(id);
-
-
-              const drawing =
-                meta.currentDrawerId ===
-                id;
-
-
-              return `
+            return `
+              <div
+                class="
+                  score-row
+                  ${drawing ? "drawing" : ""}
+                "
+              >
 
                 <div
-                  class="
-                    score-row
-                    ${drawing ? "drawing" : ""}
+                  class="avatar"
+                  style="
+                    background:${color};
+                    width:22px;
+                    height:22px;
+                    font-size:11px;
                   "
                 >
+                  ${escapeHtml(initials(p.name))}
+                </div>
 
-                  <div
-                    class="avatar"
-                    style="
-                      background:${color};
-                      width:22px;
-                      height:22px;
-                      font-size:11px;
-                    "
-                  >
-                    ${escapeHtml(
-                      initials(p.name)
-                    )}
-                  </div>
+                <div class="name">
 
-                  <div class="name">
+                  ${escapeHtml(p.name)}
 
-                    ${escapeHtml(p.name)}
+                  ${id === me.id ? " (você)" : ""}
 
-                    ${
-                      id === me.id
-                        ? " (você)"
-                        : ""
-                    }
-
-                    ${
-                      drawing
-                        ? " ✏️"
-                        : ""
-                    }
-
-                  </div>
-
-                  <div class="pts">
-                    ${p.score || 0}
-                  </div>
+                  ${drawing ? " ✏️" : ""}
 
                 </div>
-              `;
-            }
-          ).join("")
+
+                <div class="pts">
+                  ${p.score || 0}
+                </div>
+
+              </div>
+            `;
+          }).join("")
         }
 
       </div>
@@ -3198,45 +2979,40 @@ canvas {
 
   function chatHtml() {
 
-    return (
-      meta.chat || []
-    )
-      .map(
-        function (m) {
+    return (chat || [])
+      .map(function(m) {
 
-          if (m.system) {
-
-            return `
-              <div class="chat-msg system">
-                ${escapeHtml(m.text)}
-              </div>
-            `;
-          }
-
-
-          if (m.correct) {
-
-            return `
-              <div class="chat-msg correct">
-                ${escapeHtml(m.text)}
-              </div>
-            `;
-          }
-
+        if (m.system) {
 
           return `
-            <div class="chat-msg">
-
-              <span class="who">
-                ${escapeHtml(m.who)}:
-              </span>
-
+            <div class="chat-msg system">
               ${escapeHtml(m.text)}
-
             </div>
           `;
         }
-      )
+
+        if (m.correct) {
+
+          return `
+            <div class="chat-msg correct">
+              ${escapeHtml(m.text)}
+            </div>
+          `;
+        }
+
+        return `
+          <div class="chat-msg">
+
+            <span class="who">
+              ${escapeHtml(m.who)}:
+            </span>
+
+            ${escapeHtml(m.text)}
+
+          </div>
+        `;
+
+      })
       .join("");
   }
 
@@ -3247,16 +3023,12 @@ canvas {
 
   function renderPlaying() {
 
-    const drawer =
-      amIDrawer();
-
+    const drawer = amIDrawer();
 
     const drawerName =
       meta.players[
         meta.currentDrawerId
-      ]?.name ||
-      "???";
-
+      ]?.name || "???";
 
     const remaining =
       Math.max(
@@ -3270,23 +3042,10 @@ canvas {
         )
       );
 
-
     const alreadyCorrect =
-      (
-        meta.correctGuessers || []
-      ).includes(
-        me.id
-      );
-
-
-    /*
-     * SOMENTE o desenhista vê currentWord.
-     *
-     * Os outros veem somente os espaços.
-     */
+      !!correctGuessers[me.id];
 
     let wordDisplay;
-
 
     if (drawer) {
 
@@ -3296,21 +3055,15 @@ canvas {
     } else {
 
       wordDisplay =
-        (
-          meta.currentWord || ""
-        )
+        (meta.currentWord || "")
           .split("")
-          .map(
-            function (ch) {
-
-              return ch === " "
-                ? "  "
-                : "_";
-            }
-          )
+          .map(function(ch) {
+            return ch === " "
+              ? "  "
+              : "_";
+          })
           .join(" ");
     }
-
 
     app.innerHTML = `
 
@@ -3330,9 +3083,7 @@ canvas {
           ${
             drawer
               ? "Sua vez de desenhar!"
-              : escapeHtml(
-                  drawerName
-                ) +
+              : escapeHtml(drawerName) +
                 " está desenhando"
           }
 
@@ -3341,10 +3092,8 @@ canvas {
         <div class="timer">
 
           <span id="timer-val">
-            ${remaining}
+            ${formatTime(remaining)}
           </span>
-
-          s
 
         </div>
 
@@ -3357,9 +3106,7 @@ canvas {
           ${drawer ? "drawer" : ""}
         "
       >
-        ${escapeHtml(
-          wordDisplay
-        )}
+        ${escapeHtml(wordDisplay)}
       </div>
 
 
@@ -3387,37 +3134,32 @@ canvas {
 
             ${
               drawer
-
                 ? `
 
                   <div class="tools">
 
                     ${
-                      COLORS.map(
-                        function (c) {
+                      COLORS.map(function(c) {
 
-                          return `
+                        return `
+                          <div
+                            class="
+                              swatch
+                              ${
+                                c.hex === activeColor
+                                  ? "active"
+                                  : ""
+                              }
+                            "
+                            data-color="${c.hex}"
+                            style="
+                              background:${c.hex}
+                            "
+                            title="${c.name}"
+                          ></div>
+                        `;
 
-                            <div
-                              class="
-                                swatch
-                                ${
-                                  c.hex ===
-                                  activeColor
-                                    ? "active"
-                                    : ""
-                                }
-                              "
-                              data-color="${c.hex}"
-                              style="
-                                background:${c.hex}
-                              "
-                              title="${c.name}"
-                            ></div>
-
-                          `;
-                        }
-                      ).join("")
+                      }).join("")
                     }
 
 
@@ -3426,49 +3168,65 @@ canvas {
                         width:1px;
                         height:22px;
                         background:var(--line);
-                        margin:0 4px;
+                        margin:0 3px;
                       "
                     ></div>
 
 
                     ${
-                      SIZES.map(
-                        function (s) {
+                      SIZES.map(function(s) {
 
-                          const size =
-                            10 +
-                            s.v * 300;
+                        const size =
+                          10 + s.v * 300;
 
+                        return `
+                          <div
+                            class="
+                              size-dot
+                              ${
+                                s.v === activeSize
+                                  ? "active"
+                                  : ""
+                              }
+                            "
+                            data-size="${s.v}"
+                            style="
+                              width:${size}px;
+                              height:${size}px;
+                            "
+                            title="${s.name}"
+                          ></div>
+                        `;
 
-                          return `
-
-                            <div
-                              class="
-                                size-dot
-                                ${
-                                  s.v ===
-                                  activeSize
-                                    ? "active"
-                                    : ""
-                                }
-                              "
-                              data-size="${s.v}"
-                              style="
-                                width:${size}px;
-                                height:${size}px;
-                              "
-                              title="${s.name}"
-                            ></div>
-
-                          `;
-                        }
-                      ).join("")
+                      }).join("")
                     }
 
 
-                    <div
-                      style="flex:1"
-                    ></div>
+                    <button
+                      class="
+                        secondary
+                        tool-btn
+                        ${activeTool === "brush" ? "active" : ""}
+                      "
+                      id="brush-btn"
+                    >
+                      🖌️
+                    </button>
+
+
+                    <button
+                      class="
+                        secondary
+                        tool-btn
+                        ${activeTool === "bucket" ? "active" : ""}
+                      "
+                      id="bucket-btn"
+                    >
+                      🪣
+                    </button>
+
+
+                    <div style="flex:1"></div>
 
 
                     <button
@@ -3480,16 +3238,17 @@ canvas {
 
                   </div>
 
-                `
-
-                : `
-
                   <p class="hint">
-                    Só quem está desenhando
-                    pode usar o quadro.
-                    Tente adivinhar no chat! →
+                    🪣 Selecione o balde e clique dentro
+                    de uma área fechada para preenchê-la.
                   </p>
 
+                `
+                : `
+                  <p class="hint">
+                    Só quem está desenhando pode usar
+                    o quadro. Tente adivinhar no chat! →
+                  </p>
                 `
             }
 
@@ -3531,9 +3290,7 @@ canvas {
 
             ${
               drawer
-
                 ? `
-
                   <p
                     class="hint"
                     style="margin:8px 0 0;"
@@ -3541,25 +3298,18 @@ canvas {
                     Você está desenhando —
                     não pode enviar palpites.
                   </p>
-
                 `
-
                 : alreadyCorrect
-
                   ? `
-
                     <p
                       class="hint"
                       style="margin:8px 0 0;"
                     >
                       Você acertou!
-                      Aguarde a próxima rodada. 🎉
+                      Aguarde os outros jogadores. 🎉
                     </p>
-
                   `
-
                   : `
-
                     <div class="chat-form">
 
                       <input
@@ -3575,7 +3325,6 @@ canvas {
                       </button>
 
                     </div>
-
                   `
             }
 
@@ -3595,106 +3344,110 @@ canvas {
     if (drawer) {
 
       document
-        .querySelectorAll(
-          ".swatch"
-        )
-        .forEach(
-          function (el) {
+        .querySelectorAll(".swatch")
+        .forEach(function(el) {
 
-            el.addEventListener(
-              "click",
-              function () {
+          el.addEventListener(
+            "click",
+            function() {
 
-                activeColor =
-                  el.dataset.color;
+              activeColor =
+                el.dataset.color;
 
-                render();
-              }
-            );
+              render();
+            }
+          );
+        });
+
+
+      document
+        .querySelectorAll(".size-dot")
+        .forEach(function(el) {
+
+          el.addEventListener(
+            "click",
+            function() {
+
+              activeSize =
+                parseFloat(
+                  el.dataset.size
+                );
+
+              render();
+            }
+          );
+        });
+
+
+      document
+        .getElementById("brush-btn")
+        .addEventListener(
+          "click",
+          function() {
+
+            activeTool = "brush";
+            render();
           }
         );
 
 
       document
-        .querySelectorAll(
-          ".size-dot"
-        )
-        .forEach(
-          function (el) {
+        .getElementById("bucket-btn")
+        .addEventListener(
+          "click",
+          function() {
 
-            el.addEventListener(
-              "click",
-              function () {
-
-                activeSize =
-                  parseFloat(
-                    el.dataset.size
-                  );
-
-                render();
-              }
-            );
+            activeTool = "bucket";
+            render();
           }
         );
 
 
       document
-        .getElementById(
-          "clear-btn"
-        )
+        .getElementById("clear-btn")
         .addEventListener(
           "click",
           clearCanvas
         );
 
-    } else if (
-      !alreadyCorrect
-    ) {
+    } else if (!alreadyCorrect) {
 
       const input =
         document.getElementById(
           "guess-input"
         );
 
-
       const btn =
         document.getElementById(
           "guess-btn"
         );
-
 
       function go() {
 
         const value =
           input.value;
 
-        input.value =
-          "";
+        input.value = "";
 
-        sendGuess(
-          value
-        );
+        sendGuess(value);
       }
-
 
       btn.addEventListener(
         "click",
         go
       );
 
-
       input.addEventListener(
         "keydown",
-        function (e) {
+        function(e) {
 
-          if (
-            e.key ===
-            "Enter"
-          ) {
+          if (e.key === "Enter") {
             go();
           }
         }
       );
+
+      input.focus();
     }
 
 
@@ -3703,12 +3456,26 @@ canvas {
         "chat-log"
       );
 
-
     if (log) {
-
       log.scrollTop =
         log.scrollHeight;
     }
+  }
+
+
+  function formatTime(seconds) {
+
+    const min =
+      Math.floor(seconds / 60);
+
+    const sec =
+      seconds % 60;
+
+    return (
+      min +
+      ":" +
+      String(sec).padStart(2,"0")
+    );
   }
 
 
@@ -3717,13 +3484,6 @@ canvas {
   ========================================================= */
 
   function renderRoundEnd() {
-
-    /*
-     * Aqui todos podem ver a palavra.
-     *
-     * E ela é exatamente meta.currentWord,
-     * que foi criada no início daquela rodada.
-     */
 
     app.innerHTML = `
 
@@ -3740,7 +3500,11 @@ canvas {
         </div>
 
         <div class="sub">
-          Próxima rodada em instantes...
+          ${
+            meta.roundEndAt
+              ? "Próxima rodada em instantes..."
+              : ""
+          }
         </div>
 
       </div>
@@ -3776,28 +3540,18 @@ canvas {
     const ids =
       playerIds()
         .slice()
-        .sort(
-          function (a,b) {
+        .sort(function(a,b) {
 
-            return (
-              (
-                meta.players[b]
-                  .score || 0
-              ) -
-              (
-                meta.players[a]
-                  .score || 0
-              )
-            );
-          }
-        );
-
+          return (
+            (meta.players[b].score || 0) -
+            (meta.players[a].score || 0)
+          );
+        });
 
     const winner =
       ids[0]
         ? meta.players[ids[0]]
         : null;
-
 
     app.innerHTML = `
 
@@ -3814,9 +3568,7 @@ canvas {
           ${
             winner
               ? "🏆 " +
-                escapeHtml(
-                  winner.name
-                ) +
+                escapeHtml(winner.name) +
                 " venceu!"
               : ""
           }
@@ -3849,25 +3601,17 @@ canvas {
 
         ${
           isHost()
-
             ? `
-
               <button id="again-btn">
                 Jogar novamente
               </button>
-
             `
-
             : `
-
               <span class="hint">
-                Aguardando o anfitrião
-                reiniciar...
+                Aguardando o anfitrião reiniciar...
               </span>
-
             `
         }
-
 
         <button
           class="secondary"
@@ -3879,30 +3623,24 @@ canvas {
       </div>
     `;
 
-
     const again =
       document.getElementById(
         "again-btn"
       );
 
-
     if (again) {
-
       again.addEventListener(
         "click",
         playAgain
       );
     }
 
-
     const leave =
       document.getElementById(
         "leave-btn2"
       );
 
-
     if (leave) {
-
       leave.addEventListener(
         "click",
         leaveGame
@@ -3919,22 +3657,17 @@ canvas {
 
     try {
 
-      meta =
-        await readMeta();
+      meta = await readMeta();
 
       if (!meta) {
-        meta =
-          defaultMeta();
+        meta = defaultMeta();
       }
-
 
       metaVersionSeen =
         JSON.stringify(meta);
 
-
       strokes =
         await readStrokes();
-
 
       if (strokes) {
 
@@ -3944,6 +3677,17 @@ canvas {
           );
       }
 
+      chat =
+        await readChat();
+
+      chatVersionSeen =
+        JSON.stringify(chat);
+
+      correctGuessers =
+        await readCorrectGuessers();
+
+      guessesVersionSeen =
+        JSON.stringify(correctGuessers);
 
       render();
 
@@ -3956,19 +3700,14 @@ canvas {
         e
       );
 
-
-      meta =
-        defaultMeta();
-
+      meta = defaultMeta();
 
       renderLanding();
-
 
       const box =
         document.querySelector(
           ".status-box"
         );
-
 
       if (box) {
 
